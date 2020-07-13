@@ -9,6 +9,7 @@
     "axios": "^0.19.2",
     "http-proxy-middleware": "^1.0.5",
     "http-proxy-server": "^0.0.6",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.23",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

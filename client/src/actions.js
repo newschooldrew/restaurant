@@ -1,6 +1,19 @@
 import axios from 'axios'
-import {CREATE_USER} from './types'
 
 export const createUser = async user => {
-    const res = await axios.post('/create-user',user)
+    await axios.post('/create-user',user,{ 
+            headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'}
+        })
+    }
+
+export const signInUser = async (user, token) =>{
+    await axios.post('/sign-in-user',user,{ 
+        headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+        }
+    })
 }
