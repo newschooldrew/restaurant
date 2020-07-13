@@ -9,7 +9,8 @@ const Reducer = (state, { type, payload }) => {
     case "SIGN_IN_USER":
         return { 
             ...state, 
-            user: payload
+            user: payload,
+            isAuth: true
         }
 
     default:

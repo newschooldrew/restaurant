@@ -13,23 +13,24 @@ const SignIn = () => {
 
     const handleSubmit = e =>{
         e.preventDefault()
-        const token = '12345'
-        const user = {email, password,token}
-        localStorage.setItem('token',token)
-        signInUser(user,token)
+        const user = {email, password}
+        signInUser(user)
         dispatch({type:"SIGN_IN_USER",payload:user})
         setEmail('')
         setPassword('')
     }
     return (
+        <>
+            <div>Sign In</div>        
         <form>
             <label>Email</label>
-                <input onChange={e => setEmail(e.target.value)} value={email} name="email" type="text" />
-            <label>Password</label>
-                <input onChange={e => setPassword(e.target.value)} value={password} name="password" type="password" />
-            <button onClick={handleSubmit}>Submit</button>
-            <button onClick={checkState}>Check State</button>
-        </form>
+                    <input onChange={e => setEmail(e.target.value)} value={email} name="email" type="text" />
+                <label>Password</label>
+                    <input onChange={e => setPassword(e.target.value)} value={password} name="password" type="password" />
+                <button onClick={handleSubmit}>Submit</button>
+                <button onClick={checkState}>Check State</button>
+            </form>
+        </>
     )
 }
 

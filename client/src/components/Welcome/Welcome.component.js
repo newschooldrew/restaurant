@@ -1,15 +1,23 @@
 import React, {useContext} from 'react'
 import Context from '../../Context'
+import {withRouter} from 'react-router-dom'
 
-const Welcome = () => {
-    const {state} = useContext(Context)
-    const {user} = state;
-    console.log(state)
+const Welcome = ({history}) => {
+    const username = localStorage.getItem('username')
+
+    const signOut = () =>{
+        localStorage.removeItem('token')
+        localStorage.removeItem('username')
+        history.push('/')
+    }
+
+    console.log(username)
     return (
         <div>
-            Welcome, {user}
+            welcome, {username}
+            <button onClick={signOut}>Sign Out</button>
         </div>
     )
 }
 
-export default Welcome
+export default withRouter(Welcome)

@@ -1,6 +1,7 @@
 import {createContext} from 'react'
 const Context = createContext({
-    user:null
+    user:null,
+    isAuth:false
 })
 
 export default Context;

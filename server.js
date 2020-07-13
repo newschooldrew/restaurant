@@ -18,9 +18,7 @@ const app = express();
 app.use(bodyParser.json())
 
 app.get('/get-user',async (req,res,next) =>{
-    const token = req.headers;
-    console.log(token)
-    const user = await User.findOne()
+    console.log("/get-user is being hit");
 })
 
 app.post('/create-user',async(req,res)=>{
@@ -43,6 +41,11 @@ app.post('/create-user',async(req,res)=>{
     res.redirect('/welcome')
 })
 
+const createToken = ({email, password},secret, expiresIn) =>{
+        
+    return jwt.sign({email, password},secret,{expiresIn})
+}
+
 app.post('/sign-in-user',async(req,res)=>{
     const {email,password} = req.body;
     const foundUser = await User.findOne({email})
@@ -55,9 +58,11 @@ app.post('/sign-in-user',async(req,res)=>{
     if(!isValidated){
         throw new Error('invalid password')
     } else{
-        console.log("validated")
-        
+        console.log("validated") 
     }
+    console.log("found user is " + foundUser.token)
+    res.set({'Authorization': `${foundUser.token}`,'username':`${foundUser.email}`}).send("cookie sent")
 })
+
 
 app.listen(5000,() => console.log("server running on port 5000"))

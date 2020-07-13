@@ -6,6 +6,7 @@ import Welcome from '../Welcome/Welcome.component'
 import SignIn from '../SignIn/SignIn'
 import Context from '../../Context'
 import Reducer from '../../Reducer'
+import {getUser} from '../../actions'
 import axios from 'axios'
 
 const App = () => {
@@ -13,15 +14,13 @@ const App = () => {
     const [state,dispatch] = useReducer(Reducer, INITIAL_STATE)
 
     useEffect(()=>{
-        const token = localStorage.getItem("token")
-        axios.post('/get-user',token)
-        axios.post('/get-user',user,{ 
-            headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-            }
-        })
+        const token = localStorage.getItem('token');
+        if(token){
+            console.log("welcome")
+            console.log(token)
+        }else{
+            console.log("please sign in")
+        }
     },[])
 
         return (

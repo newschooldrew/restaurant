@@ -2,6 +2,7 @@ import React, {useState, useContext} from 'react'
 import {createUser} from '../../actions'
 import Context from '../../Context'
 import jwt from 'jsonwebtoken'
+import {Link} from 'react-router-dom'
 
 const SignUp = () => {
     const {state,dispatch} = useContext(Context)
@@ -32,6 +33,8 @@ const SignUp = () => {
     }
 
     return (
+        <>
+            <div>Sign Up</div>
             <form>
                 <label>Email</label>
                     <input onChange={e => setEmail(e.target.value)} value={email} name="email" type="text" />
@@ -40,6 +43,8 @@ const SignUp = () => {
                 <button onClick={handleSubmit}>Submit</button>
                 <button onClick={checkState}>Check State</button>
             </form>
+            <div>Have an account? Click <Link to="/sign-in">Here</Link> </div>
+        </>
     )
 }
 
