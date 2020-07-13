@@ -8,7 +8,7 @@ export const createUser = async user => {
         })
     }
 
-export const signInUser = (user) =>{
+export const signInUser = (user,history) =>{
         axios.post('/sign-in-user',user,{ 
         headers: {
         'Content-Type': 'application/json',
@@ -21,6 +21,7 @@ export const signInUser = (user) =>{
         localStorage.setItem('token',res.headers['authorization'])
         // localStorage.setItem('token',res.headers['authorization'])
         console.log(localStorage.getItem('token'))
+        history.push('/welcome')
     })
 }
 
@@ -33,4 +34,10 @@ export const getUser = () =>{
     }else{
         console.log("please sign in")
     }
+}
+
+export const signOut = history =>{
+    localStorage.removeItem('username')
+    localStorage.removeItem('token')
+    history.push('/')
 }

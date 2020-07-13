@@ -1,21 +1,20 @@
 import React, {useContext} from 'react'
 import Context from '../../Context'
+import {signOut} from '../../actions'
 import {withRouter} from 'react-router-dom'
 
 const Welcome = ({history}) => {
     const username = localStorage.getItem('username')
 
-    const signOut = () =>{
-        localStorage.removeItem('token')
-        localStorage.removeItem('username')
-        history.push('/')
+    const handleSubmit = () =>{
+        signOut(history)
     }
 
     console.log(username)
     return (
         <div>
             welcome, {username}
-            <button onClick={signOut}>Sign Out</button>
+            <button onClick={handleSubmit}>Sign Out</button>
         </div>
     )
 }

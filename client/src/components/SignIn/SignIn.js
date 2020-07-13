@@ -1,8 +1,9 @@
 import React, {useState, useContext} from 'react'
 import {signInUser} from '../../actions'
 import Context from '../../Context'
+import {withRouter} from 'react-router-dom'
 
-const SignIn = () => {
+const SignIn = ({history}) => {
     const {state,dispatch} = useContext(Context)
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
@@ -14,7 +15,7 @@ const SignIn = () => {
     const handleSubmit = e =>{
         e.preventDefault()
         const user = {email, password}
-        signInUser(user)
+        signInUser(user, history)
         dispatch({type:"SIGN_IN_USER",payload:user})
         setEmail('')
         setPassword('')
@@ -34,4 +35,4 @@ const SignIn = () => {
     )
 }
 
-export default SignIn
+export default withRouter(SignIn)
