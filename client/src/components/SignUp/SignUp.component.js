@@ -1,33 +1,44 @@
 import React, {useState, useContext} from 'react'
 import {createUser} from '../../actions'
-import Context from '../../Context'
+import AuthContext from '../../AuthContext'
 import jwt from 'jsonwebtoken'
 import {Link} from 'react-router-dom'
 
 const SignUp = () => {
-    const {state,dispatch} = useContext(Context)
+    const {state,dispatch} = useContext(AuthContext)
+    const [username,setUsername] = useState('')
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
+    const [msg,setMsg] = useState('')
     
     const checkState = () =>{
         console.log(state.user)
     }
 
-    const createToken = ({email, password},secret, expiresIn) =>{
+    const createToken = ({username,email, password},secret, expiresIn) =>{
         
-        return jwt.sign({email, password},secret,{expiresIn})
+        return jwt.sign({username,email, password},secret,{expiresIn})
     }
     
     let token;
     
-    const handleSubmit = e =>{
+    const handleSubmit = async e =>{
         e.preventDefault()
-        token = createToken({email, password},'jk234sf98',"1hr")
-        const user = {email, password,token}
-        localStorage.setItem('token',token)
-        createUser(user)
-        
+
+        token = createToken({username,email, password},'jk234sf98',"1hr")
+        const user = {username,email, password,token}
+        await createUser(user)
+        console.log(localStorage.getItem("sign_up_msg"))
+        if(localStorage.getItem("sign_up_msg")){
+            setMsg("user already exists")
+            
+        } else{
+            localStorage.setItem('username',username)
+            localStorage.setItem('token',token)
+            localStorage.removeItem('sign_up_msg')
+        }
         dispatch({type:"CREATE_USER",payload:user})
+        setUsername('')
         setEmail('')
         setPassword('')
     }
@@ -35,7 +46,10 @@ const SignUp = () => {
     return (
         <>
             <div>Sign Up</div>
+            <div>{msg}</div>
             <form>
+                <label>Username</label>
+                    <input onChange={e => setUsername(e.target.value)} value={username} name="username" type="text" />
                 <label>Email</label>
                     <input onChange={e => setEmail(e.target.value)} value={email} name="email" type="text" />
                 <label>Password</label>

@@ -1,10 +1,16 @@
-import React, {useContext} from 'react'
-import Context from '../../Context'
+import React, {useContext, useEffect} from 'react'
+import AuthContext from '../../AuthContext'
 import {signOut} from '../../actions'
 import {withRouter} from 'react-router-dom'
 
 const Welcome = ({history}) => {
-    const username = localStorage.getItem('username')
+    const {state} = useContext(AuthContext)
+    const {username} = state;
+
+    useEffect(()=>{
+        console.log("welcome is: ")
+        console.log(state.username)
+    },[state])
 
     const handleSubmit = () =>{
         signOut(history)
@@ -13,8 +19,6 @@ const Welcome = ({history}) => {
     console.log(username)
     return (
         <div>
-            welcome, {username}
-            <button onClick={handleSubmit}>Sign Out</button>
         </div>
     )
 }

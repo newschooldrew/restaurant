@@ -4,13 +4,17 @@ const Reducer = (state, { type, payload }) => {
     case "CREATE_USER":
         return { 
             ...state, 
-            user: payload
+            username: payload
         }
     case "SIGN_IN_USER":
         return { 
             ...state, 
-            user: payload,
-            isAuth: true
+            username: payload
+        }
+    case "FETCH_USER":
+        return{
+            ...state,
+            username:payload
         }
 
     default:

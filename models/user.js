@@ -1,15 +1,17 @@
 const mongoose = require('mongoose');
+const PostSchema = require('./post').schema
 const {Schema} = mongoose;
 
 const UserSchema = new Schema({
+    username:String,
     email:String,
     password:String,
-    token:String
-    // posts:[PostSchema],
-    // BlogPosts:[{
-    //     type:Schema.Types.ObjectId,
-    //     ref:"post"
-    // }]
+    token:String,
+    posts:[PostSchema],
+    BlogPosts:[{
+        type:Schema.Types.ObjectId,
+        ref:"post"
+    }]
 })
 
 // UserSchema.pre('remove',function(next){
@@ -22,16 +24,5 @@ const UserSchema = new Schema({
 //     if(!this.isModified('password')){
 //         return next()
 //     }
-    
-//     bcrypt.genSalt(10,(err,salt)=>{
-//         if(err) return next(err)
 
-//         bcrypt.hash(this.password,salt,(err,hash)=>{
-//             if(err) return next(err)
-//             this.password = hash;
-//             next();
-//         })
-//     })
-// })
-
-module.exports = mongoose.model('User',UserSchema)
+module.exports = mongoose.model('user',UserSchema)

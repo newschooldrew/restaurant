@@ -1,42 +1,34 @@
-import React, { Component } from 'react'
-const mongoose = require('mongoose');
-const Post = mongoose.model('post')
+import React,{useState, useEffect,useContext} from 'react'
+import {createPost} from '../../actions'
+import AuthContext from '../../AuthContext'
 
-export default class CreatePost extends Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            title:'',
-            content:''
-        }
-    }
+const CreatePost = () => {
+    const {state} = useContext(AuthContext)
+    useEffect(()=>{
+        console.log("Create post is: ")
+        console.log(state)
 
-    onChange = e =>{
-        const {name, value } = e.target;
-        this.setState({
-            [name]:value
-        })
-    }
+    },[state])
 
-    handleSubmit = e =>{
+    const [title,setTitle] = useState('')
+    const [content,setContent] = useState('')
+
+    const handleSubmit = e =>{
         e.preventDefault()
-        const {title,content} = this.state;
-        const post = new Post({content})
-        post.save()
+        const post = {title,content};
+        createPost(post)
     }
-
-    render() {
-        return (
-            <form>
-                <label>Title</label>
-                    <input type="text" name="title" onChange={this.onChange} value={this.state.title}/>
-                <label>Content</label>
-                    <input type="textarea" name="content" onChange={this.onChange} value={this.state.content} />
-                <button onClick={this.handleSubmit}>
-                    Submit
-                </button>
-            </form>
-            
-        )
-    }
+    return (
+        <form>
+            <label>Title</label>
+                <input type="text" name="title" onChange={e => setTitle(e.target.value)} value={title}/>
+            <label>Content</label>
+                <textarea name="content" onChange={e => setContent(e.target.value)} value={content}></textarea>
+            <button onClick={handleSubmit}>
+                Submit
+            </button>
+        </form>
+    )
 }
+
+export default CreatePost
