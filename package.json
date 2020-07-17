@@ -19,6 +19,7 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.9",
-    "mongoose": "^5.9.22"
+    "mongoose": "^5.9.22",
+    "react-addons-update": "^15.6.2"
   }
 }

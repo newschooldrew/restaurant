@@ -7,11 +7,14 @@ import jwt from 'jsonwebtoken'
 export const AuthProvider = (props) => {
     const [state,dispatch] = useReducer(Reducer, AuthContext)
 
-    
     useEffect(()=>{
         const token = localStorage.getItem('token');
-        const decoded = jwt.verify(token,'jk234sf98')
-        dispatch({type:"FETCH_USER",payload:decoded.username})
+        if(token){
+            const decoded = jwt.verify(token,'jk234sf98',{ignoreExpiration:true})
+            dispatch({type:"FETCH_USER",payload:decoded.username})
+        } else{
+            console.log("you must sign in")
+        }
     },[])
     return(
         <AuthContext.Provider

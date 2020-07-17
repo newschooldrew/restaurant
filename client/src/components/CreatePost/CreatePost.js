@@ -4,6 +4,7 @@ import AuthContext from '../../AuthContext'
 
 const CreatePost = () => {
     const {state} = useContext(AuthContext)
+    const {username} = state;
     useEffect(()=>{
         console.log("Create post is: ")
         console.log(state)
@@ -12,11 +13,16 @@ const CreatePost = () => {
 
     const [title,setTitle] = useState('')
     const [content,setContent] = useState('')
+    const [msg,setMsg] = useState('')
 
-    const handleSubmit = e =>{
+    const handleSubmit = async e =>{
         e.preventDefault()
-        const post = {title,content};
-        createPost(post)
+        const post = {title,content,username};
+        await createPost(post)
+        setTitle('')
+        setContent('')
+        const success = localStorage.getItem('success')
+        setMsg(success)
     }
     return (
         <form>
@@ -27,6 +33,7 @@ const CreatePost = () => {
             <button onClick={handleSubmit}>
                 Submit
             </button>
+            <div>{msg}</div>
         </form>
     )
 }

@@ -54,5 +54,43 @@ export const signOut = history =>{
 }
 
 export const createPost = post =>{
-    axios.post('/create-post', post)
+    axios.post('/create-new-post', post).then(res => {
+        if(res.headers.post === 'success'){
+            localStorage.setItem('success',"Thanks! Post was successfully created")
+        }
+    })
 }
+
+export const fetchPosts = async (username,dispatch) =>{
+    const res = await axios.post('/fetch-posts',{username:username});
+        console.log("fetch posts response is: ")
+        console.log(res.data)
+        dispatch({type:"FETCH_POSTS",payload:res.data})
+    }
+
+export const fetchAllPosts = async (username,dispatch) =>{
+    const res = await axios.get('/fetch-all-posts');
+    console.log("fetch all posts:")
+    console.log(res)
+    dispatch({type:"FETCH_ALL_POSTS",payload:res.data})
+}
+
+export const postComment = (comment,username,id,key,dispatch) =>{
+    const content = {comment,username,id,key}
+    axios.post('/create-comment', content).then(res => {
+        console.log("comment posted")
+        const comments = res.data.comments;
+        // const allComments = res.data
+        // console.log(allComments)
+        dispatch({type:"POST_ALL_COMMENTS",payload:comments})
+    })
+}
+
+// export const fetchAllComments = dispatch =>{
+//     axios.get('/fetch-all-comments').then(res => {
+//         const allComments = res.data
+//         console.log("allComments:")
+//         console.log(allComments)
+//         dispatch({type:"FETCH_ALL_COMMENTS",payload:allComments})
+//     })
+// }

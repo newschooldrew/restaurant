@@ -3,6 +3,8 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const keys = require('./config/keys')
 const User = require('./models/User')
+const Post = require('./models/post')
+// const Comment = require('./models/comment')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const CryptoJS = require("crypto-js");
@@ -17,35 +19,6 @@ mongoose.connection
 
 const app = express();
 app.use(bodyParser.json())
-
-// app.post('/current_user',(req,res) =>{
-//     const token = req.body.token;
-//     console.log("token on localStorage is")
-//     console.log(token)
-//     const currentUser = jwt.verify(token,'jk234sf98')
-//     res.set({"data":currentUser}).send("current user found")
-// })
-
-// app.use(async (req,res,next)=>{
-//     console.log("req.headers are ")
-//     console.log(req)
-//     const token = req.headers['authorization'];
-
-//     if(token !== null){
-//         try{
-//             console.log("user is signed in. token is " + token)
-//             const currentUser = jwt.verify(token,'jk234sf98');
-//             console.log("current user is " + currentUser)
-//         }catch(err){
-//             console.error("JWT error is " + err);
-//           }
-//     }
-//     next()
-// })
-
-app.get('/get-user',async (req,res,next) =>{
-    console.log("/get-user is being hit");
-})
 
 app.post('/create-user',async(req,res)=>{  
     let {username,email,password,token} = req.body;
@@ -78,7 +51,6 @@ app.post('/sign-in-user',async(req,res)=>{
     const foundUser = await User.findOne({email})
     if(!foundUser) {
         res.set({'isError': true}).send("user not found")
-        // res.set({'isError': true}).send("error detected")
     }
 
     const isValidated = await bcrypt.compare(password,foundUser.password);
@@ -93,11 +65,104 @@ app.post('/sign-in-user',async(req,res)=>{
     console.log("found user is " + foundUser.token)
 })
 
-app.post('/create-post',(req,res) =>{
-    const {title,content} = req.body;
-    const post = new Post({content})
-    post.save()
+app.post('/create-new-post', async (req,res) =>{
+    const {title,content,username} = req.body;
+    const foundUser = await User.findOne({username})
+    const user_id = foundUser._id;
+
+    console.log("ID IS:")
+    console.log(user_id)
+
+    const contents = {title,content,author:user_id,username}
+
+    console.log("Contents are ")
+    console.log(contents)
+
+    if(!foundUser) {
+        res.set({'isError': true}).send("user not found")
+    }else{
+        foundUser.save(function(err){
+            const post = new Post(contents)
+            post.save()
+        })
+
+        res.send(foundUser)
+        // res.send(foundUser)
+        // res.set({'post':'success'}).send("post created")
+    }
 })
 
+app.post('/fetch-posts',async (req,res)=>{
+    console.log('fetch posts call was made' )
+    const username = req.body.username;
+    const foundUser = await User.findOne({username})
+    console.log('***************')
+    console.log(foundUser._id)
+    const posts = await Post.find({author:foundUser._id})
+    console.log('***************')
+    console.log(posts)
+    console.log('***************')
+    res.send(posts)
+    // res.set({"misc":`${foundUser}`}).send("done")
+})
+
+app.get('/fetch-all-posts',async (req,res)=>{
+    console.log('fetch all posts call was made' )
+    console.log('***************')
+    const posts = await Post.find({})
+    console.log(posts)
+    console.log('***************')
+    res.send(posts)
+})
+
+app.post('/create-comment',async(req,res) =>{
+    const username = req.body.username;
+    const key = req.body.key;
+    console.log("key is")
+    console.log(req.body.key)
+    console.log("*******************")
+    console.log("id is ")
+    console.log(req.body.id)
+    console.log("*******************")
+    const foundInitialPost = await Post.findById(key)
+    console.log("foundInitialPost:")
+    console.log(foundInitialPost)
+    console.log("comment is ")
+    const req_comment = req.body.comment;
+    const final_comment ={content:req_comment}
+    console.log(req_comment)
+    console.log("*******************")
+
+    // let newComment;
+    // foundPost.save(function(err){
+        // newComment = new Comment({content:req_comment,post:foundPost._id});
+        const foundPost = await Post.findOneAndUpdate(
+            {_id:key},
+            {$push:{comments:final_comment,post:foundInitialPost._id}},
+            {new:true})
+            foundPost.save()
+            // newComment.save()
+            console.log("foundPost:")
+            console.log(foundPost)
+        res.send(foundPost)
+        // console.log("newComment:")
+        // console.log(newComment)
+        // res.send(newComment)
+    // })
+})
+
+// app.get('/fetch-all-comments',async(req,res) =>{
+//     // const foundPost = await Post.findById(key)
+//     const allComments = await Comment.find({})
+//     const consoleValue = allComments.map((comment,i) =>{
+//         console.log("************")
+//         console.log("returning all comments")
+//         console.log(comment.post)
+//         return comment.post
+//     })
+//     console.log("consoleValue:")
+//     console.log(consoleValue)
+//     res.send(allComments)
+// })
 
 app.listen(5000,() => console.log("server running on port 5000"))

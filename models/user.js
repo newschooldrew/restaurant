@@ -7,8 +7,7 @@ const UserSchema = new Schema({
     email:String,
     password:String,
     token:String,
-    posts:[PostSchema],
-    BlogPosts:[{
+    posts:[{
         type:Schema.Types.ObjectId,
         ref:"post"
     }]

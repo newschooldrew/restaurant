@@ -1,21 +1,23 @@
 import React from 'react'
-import {BrowserRouter, Switch,Route} from 'react-router-dom'
+import {BrowserRouter, Switch,Route,Redirect} from 'react-router-dom'
 import SignUp from '../SignUp/SignUp.component'
 import CreatePost from '../CreatePost/CreatePost'
 import Welcome from '../Welcome/Welcome.component'
 import SignIn from '../SignIn/SignIn'
 import Header from '../Header/Header'
+import Posts from '../Posts/Posts'
 
 const App = () => {
-
         return (
             <BrowserRouter>
                         <Header />
                     <Switch>
                         <Route exact path="/" render={() => localStorage.getItem('token') ?  <Welcome /> : <SignUp /> } />
-                        <Route path="/create-post" component={CreatePost} />
-                        <Route path="/sign-in" component={SignIn} />
+                        <Route exact path="/sign-in" render={() => localStorage.getItem('token') ?  <Redirect to="/" /> : <SignIn /> } />
+                        <Route exact path="/create-post" render={() => localStorage.getItem('token') ?  <CreatePost /> : <SignIn /> } />
                         <Route path="/welcome" component={Welcome} />
+                        <Route path="/sign-up" component={SignUp} />
+                        <Route path="/posts" component={Posts} />
                     </Switch>
             </BrowserRouter>
         )

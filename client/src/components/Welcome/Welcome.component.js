@@ -1,25 +1,33 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import AuthContext from '../../AuthContext'
-import {signOut} from '../../actions'
+import {fetchPosts} from '../../actions'
 import {withRouter} from 'react-router-dom'
 
 const Welcome = ({history}) => {
-    const {state} = useContext(AuthContext)
-    const {username} = state;
+    const {state,dispatch} = useContext(AuthContext)
+    const {username,posts} = state;
 
-    useEffect(()=>{
-        console.log("welcome is: ")
-        console.log(state.username)
-    },[state])
+    useEffect(() =>{
+        fetchPosts(username,dispatch)
+    },[username])
 
-    const handleSubmit = () =>{
-        signOut(history)
-    }
-
-    console.log(username)
     return (
-        <div>
-        </div>
+        <>
+            <div>welcome page</div>
+            <br />
+            {posts && posts.map(post =>{
+                
+                return(<div key={post._id}>
+                        <div>{post.title}</div>
+                        <div>{post._id}</div>
+                        <div>{post.content}</div>
+                        <br />
+                        <br />
+                    </div>
+                    )
+            }
+            )}
+        </>
     )
 }
 

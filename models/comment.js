@@ -3,7 +3,11 @@ const Schema = mongoose.Schema;
 
 const CommentSchema = Schema({
     content:String,
-    user:{
+    createdDate:{
+        type:Date,
+        default:Date.now
+    },
+    post:{
         type:Schema.Types.ObjectId,
         ref:"user"
     }
