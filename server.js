@@ -22,13 +22,16 @@ app.use(bodyParser.json())
 
 app.post('/create-user',async(req,res)=>{  
     let {username,email,password,token} = req.body;
+    console.log("username,email,password,token:")
+    console.log(username,email,password,token)
 
     const username_test = await User.findOne({username})
+    console.log("username_test:")
+    console.log(username_test)
     
     if(username_test){
         res.set({'isError': true}).send("user already exists")
     } else{
-    
     bcrypt.genSalt(10,(err,salt)=>{
         console.log("salt is " + salt)
         bcrypt.hash(password,salt,async (err,hash)=>{
@@ -41,7 +44,7 @@ app.post('/create-user',async(req,res)=>{
             await user.save()
         })
     })
-    res.set({'username':username}).redirect('/welcome')
+    res.send(req.body.username)
     }
 })
 
@@ -144,25 +147,17 @@ app.post('/create-comment',async(req,res) =>{
             // newComment.save()
             console.log("foundPost:")
             console.log(foundPost)
-        res.send(foundPost)
+        res.send(final_comment)
         // console.log("newComment:")
         // console.log(newComment)
         // res.send(newComment)
     // })
 })
 
-// app.get('/fetch-all-comments',async(req,res) =>{
-//     // const foundPost = await Post.findById(key)
-//     const allComments = await Comment.find({})
-//     const consoleValue = allComments.map((comment,i) =>{
-//         console.log("************")
-//         console.log("returning all comments")
-//         console.log(comment.post)
-//         return comment.post
-//     })
-//     console.log("consoleValue:")
-//     console.log(consoleValue)
-//     res.send(allComments)
-// })
+app.post('/update-post',async(req,res) =>{
+    console.log("req.body.post_id:")
+    console.log(req.body)
+    res.send("done")
+})
 
 app.listen(5000,() => console.log("server running on port 5000"))

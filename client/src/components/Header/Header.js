@@ -1,4 +1,4 @@
-import React,{useContext} from 'react'
+import React,{useContext,useEffect} from 'react'
 import AuthContext from '../../AuthContext'
 import {signOut} from '../../actions'
 import {withRouter} from 'react-router-dom'
@@ -6,7 +6,11 @@ import {withRouter} from 'react-router-dom'
 const Header = ({history}) => {
     const {state,dispatch} = useContext(AuthContext)
     const {username} = state;
-    console.log(username)
+    useEffect(()=>{
+        // const {state,dispatch} = useContext(AuthContext)
+        const {username} = state;
+        console.log(username)
+    })
 
     const handleSubmit = () =>{
         signOut(history)
@@ -14,14 +18,14 @@ const Header = ({history}) => {
     }
 
     return (
-     <>   
+     <div>   
      {username ?
         <div>
             Hello, {username}
             <button onClick={handleSubmit}>Sign Out</button>
         </div> 
     : <div>Please log in</div>}
-    </>
+    </div>
     )        
 }
 

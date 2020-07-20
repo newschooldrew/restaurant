@@ -6,6 +6,7 @@ import Welcome from '../Welcome/Welcome.component'
 import SignIn from '../SignIn/SignIn'
 import Header from '../Header/Header'
 import Posts from '../Posts/Posts'
+import EditProfile from '../EditProfile/EditProfile'
 
 const App = () => {
         return (
@@ -17,6 +18,7 @@ const App = () => {
                         <Route exact path="/create-post" render={() => localStorage.getItem('token') ?  <CreatePost /> : <SignIn /> } />
                         <Route path="/welcome" component={Welcome} />
                         <Route path="/sign-up" component={SignUp} />
+                        <Route path="/edit-profile" component={EditProfile} />
                         <Route path="/posts" component={Posts} />
                     </Switch>
             </BrowserRouter>

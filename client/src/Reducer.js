@@ -31,15 +31,15 @@ const Reducer = (state, { type, payload }) => {
                 ...state,
                 allPosts:payload
             }               
-    // case  "FETCH_ALL_COMMENTS":
-    //     return{
-    //         ...state,
-    //         allComments:payload
-    //     }
     case "POST_ALL_COMMENTS":
         return{
             ...state,
             allComments:payload
+        }
+    case "COMMENT_CREATE":
+        return{
+            ...state,
+            newComment:payload
         }
     default:
         return state

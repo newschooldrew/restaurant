@@ -1,17 +1,20 @@
 import axios from 'axios'
 
-export const createUser =  user => {
+export const createUser =  (user, dispatch,history) => {
     axios.post('/create-user',user,{ 
             headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json'}
         }).then(res => {
-            console.log(res)
+            const {data} = res;
+            console.log(data)
             if(res.data === 'user already exists'){
                 console.log("user already exists!")
                 localStorage.setItem("sign_up_msg","user already exists")
             }
+            dispatch({type:"CREATE_USER",payload:data})
         })
+        history.push('/welcome')
     }
 
 export const signInUser = (user,history) =>{
@@ -75,22 +78,19 @@ export const fetchAllPosts = async (username,dispatch) =>{
     dispatch({type:"FETCH_ALL_POSTS",payload:res.data})
 }
 
-export const postComment = (comment,username,id,key,dispatch) =>{
+export const postComment = async (comment,username,id,key,dispatch) =>{
     const content = {comment,username,id,key}
-    axios.post('/create-comment', content).then(res => {
-        console.log("comment posted")
-        const comments = res.data.comments;
-        // const allComments = res.data
-        // console.log(allComments)
-        dispatch({type:"POST_ALL_COMMENTS",payload:comments})
-    })
+    const res = await axios.post('/create-comment', content);
+        console.log("newest comment posted")
+        console.log(res.data["content"])
+        const newComment = res.data["content"]
+        dispatch({type:"COMMENT_CREATE",payload:newComment})
 }
 
-// export const fetchAllComments = dispatch =>{
-//     axios.get('/fetch-all-comments').then(res => {
-//         const allComments = res.data
-//         console.log("allComments:")
-//         console.log(allComments)
-//         dispatch({type:"FETCH_ALL_COMMENTS",payload:allComments})
-//     })
-// }
+export const updatePost = post =>{
+    axios.post('/update-post',post).then(res => {
+        const allComments = res.data
+        console.log("allComments:")
+        console.log(allComments)
+    })
+}

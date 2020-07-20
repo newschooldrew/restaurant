@@ -10,7 +10,11 @@ const UserSchema = new Schema({
     posts:[{
         type:Schema.Types.ObjectId,
         ref:"post"
-    }]
+    }],
+    joinedDate:{
+        type:Date,
+        default:Date.now
+    }
 })
 
 // UserSchema.pre('remove',function(next){

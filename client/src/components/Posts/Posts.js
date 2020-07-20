@@ -1,11 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react'
 import AuthContext from '../../AuthContext'
-import {fetchAllPosts,postComment} from '../../actions'
+import {fetchAllPosts,postComment, fetchPosts} from '../../actions'
 import update from 'react-addons-update'
 
 const Posts = () => {
     const {state,dispatch} = useContext(AuthContext)
-    const {username,allPosts,allComments} = state;
+    const {username,allPosts,newComment} = state;
     const [comment, setComment] = useState({})
     const [comment_id, setId] = useState('')
     const [key, setKey] = useState('')
@@ -13,26 +13,24 @@ const Posts = () => {
     console.log(state)
     console.log("allPosts:")
     console.log(allPosts)
+    console.log("newComment:")
+    console.log(newComment)
 
     useEffect(() =>{
         fetchAllPosts(username,dispatch)
 
-    },[username])
-
+    },[username,newComment])
 
     let new_comment;
     const handleChange = e => {
         e.persist()
         setId(e.target.id)
-        // console.log(comment_id)
         setComment({[e.target.id]:e.target.value});
-        // console.log(comment[e.target.id])
         new_comment = comment[e.target.id]
         setKey(e.target.getAttribute('data-mongo-id'))
-        // console.log(key)
     }
     
-    const handleSubmit =  e =>{
+    const handleSubmit =  async e =>{
         console.log(key)
         console.log(e.target.getAttribute('data-mongo-id'))
 
@@ -40,27 +38,19 @@ const Posts = () => {
             $set:e.target.getAttribute('data-mongo-id')
         })
 
-        // console.log(newData)
-
-        // if(key !== e.target.getAttribute('data-mongo-id')){
-        //     console.log("key is different")
-        //     setKey(e.target.getAttribute('data-mongo-id'))
-        // }
         const new_comment = comment[comment_id]
-        console.log(new_comment)
-        console.log(comment_id)
-        postComment(new_comment, username,comment_id,newData,dispatch)
+        await postComment(new_comment, username,comment_id,newData,dispatch)
+        await setComment('');
     }
 
     return (
         <div>
             {allPosts && allPosts.map((post,i) => {
+                console.log("post:")
+                console.log(post)
                 const nestedComments = post.comments;
-                let currentComments = Object.values(nestedComments);
-                const iteratedComments = currentComments.forEach((proj,i) =>{
-                        console.log(proj)
-                })
 
+                let iteratedComments;
                 return(
                 <div>
                 
@@ -70,25 +60,18 @@ const Posts = () => {
                                 <div>{post.content}</div>
                                 <div>Written by:{post.username}</div>
                                 <br />
-                                {iteratedComments}
-                                
-                                {/* {currentComments.length > 0  ? {} :null} */}
-                                {/* {nestedComments[i] ? (<div>{nestedComments[1].content}</div>) :null} */}
-
-                                <br />
-                                {/* <textarea id={_id} onChange={e => setComment(e.target.value)} value={comment || ''}></textarea> */}
+                                <ul>
+                                {post.comments.map(sub =>
+                                    <li>
+                                        {sub.content}
+                                    </li>
+                                    )}
+                                </ul>
                                 <textarea key={post._id} id={i} onChange={handleChange}></textarea>
                             <button data-mongo-id={post._id} onClick={handleSubmit}>Leave a Comment</button>
                             {/* {allComments.map(comment =>{<div>{comment.content}</div>})} */}
 
-                            </div>)
-                {nestedComments.map((comment,i) =>{
-                    console.log(nestedComments)
-
-
-
-                    })}
-                    
+                            </div>)                    
                 }
             )}
 

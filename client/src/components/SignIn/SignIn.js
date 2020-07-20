@@ -19,7 +19,7 @@ const SignIn = ({history}) => {
 
     const handleSubmit = (e) =>{
         e.preventDefault()
-        
+        localStorage.removeItem('sign_in_msg')
         const user = {email, password}
         signInUser(user, history)
              

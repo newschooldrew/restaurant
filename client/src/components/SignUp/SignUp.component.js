@@ -2,9 +2,10 @@ import React, {useState, useContext} from 'react'
 import {createUser} from '../../actions'
 import AuthContext from '../../AuthContext'
 import jwt from 'jsonwebtoken'
+import {withRouter} from 'react-router-dom'
 import {Link} from 'react-router-dom'
 
-const SignUp = () => {
+const SignUp = ({history}) => {
     const {state,dispatch} = useContext(AuthContext)
     const [username,setUsername] = useState('')
     const [email,setEmail] = useState('')
@@ -22,12 +23,12 @@ const SignUp = () => {
     
     let token;
     
-    const handleSubmit = async e =>{
+    const handleSubmit = async (e) =>{
         e.preventDefault()
 
         token = createToken({username,email, password},'jk234sf98',"1hr")
         const user = {username,email, password,token}
-        await createUser(user)
+        await createUser(user,dispatch,history)
         console.log(localStorage.getItem("sign_up_msg"))
         if(localStorage.getItem("sign_up_msg")){
             setMsg("user already exists")
@@ -37,7 +38,7 @@ const SignUp = () => {
             localStorage.setItem('token',token)
             localStorage.removeItem('sign_up_msg')
         }
-        dispatch({type:"CREATE_USER",payload:user})
+        
         setUsername('')
         setEmail('')
         setPassword('')
@@ -62,4 +63,4 @@ const SignUp = () => {
     )
 }
 
-export default SignUp
+export default withRouter(SignUp)
