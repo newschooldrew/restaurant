@@ -5,6 +5,7 @@ export const AuthContext = createContext({
     allPosts:null,
     latestComment:'',
     allComments:null,
-    newComment:null
+    newComment:null,
+    hasUpdatedPost:null
 })
 export default AuthContext;

@@ -21,7 +21,7 @@ const EditProfile = () => {
                 {posts && posts.map((post,i) =>{
                     console.log(post[i])
                 return(
-                    <EditPostModal key={post._id} i={i} title={post.title} content={post.content} />
+                    <EditPostModal key={post._id} i={i} id={post._id} title={post.title} content={post.content} />
                 )}
             )}
         </div>

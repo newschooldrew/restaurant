@@ -41,6 +41,11 @@ const Reducer = (state, { type, payload }) => {
             ...state,
             newComment:payload
         }
+    case "POST_UPDATED":
+        return{
+            ...state,
+            hasUpdatedPost:payload
+        }
     default:
         return state
     }

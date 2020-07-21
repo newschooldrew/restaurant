@@ -87,10 +87,10 @@ export const postComment = async (comment,username,id,key,dispatch) =>{
         dispatch({type:"COMMENT_CREATE",payload:newComment})
 }
 
-export const updatePost = post =>{
+export const updatePost = (post,dispatch) =>{
     axios.post('/update-post',post).then(res => {
-        const allComments = res.data
-        console.log("allComments:")
-        console.log(allComments)
+        console.log("res:")
+        console.log(res.data)
+        dispatch({type:"POST_UPDATED",payload:res.data})
     })
 }

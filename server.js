@@ -17,6 +17,8 @@ mongoose.connection
         console.log('warning' + err)
     })
 
+mongoose.set('useFindAndModify', false);
+
 const app = express();
 app.use(bodyParser.json())
 
@@ -157,7 +159,15 @@ app.post('/create-comment',async(req,res) =>{
 app.post('/update-post',async(req,res) =>{
     console.log("req.body.post_id:")
     console.log(req.body)
-    res.send("done")
+    const {id,title,content} = req.body;
+    console.log(id,title,content)
+    const updatedPost = await Post.findByIdAndUpdate(
+        {_id:id},
+        {$set:{title,content}},
+        {new:true}
+    )
+    updatedPost.save()
+    res.send("this post has been updated")
 })
 
 app.listen(5000,() => console.log("server running on port 5000"))
