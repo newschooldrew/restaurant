@@ -134,26 +134,27 @@ app.post('/create-comment',async(req,res) =>{
     console.log(foundInitialPost)
     console.log("comment is ")
     const req_comment = req.body.comment;
-    const final_comment ={content:req_comment}
     console.log(req_comment)
     console.log("*******************")
+    
+    const foundUser = await User.findOne({username})
+    console.log("foundUser:")
+    const {_id} = foundUser
+    console.log(foundUser)
+    console.log(_id)
+    const postData = {content:req_comment,author:_id,commenter:username}
 
-    // let newComment;
-    // foundPost.save(function(err){
-        // newComment = new Comment({content:req_comment,post:foundPost._id});
         const foundPost = await Post.findOneAndUpdate(
             {_id:key},
-            {$push:{comments:final_comment,post:foundInitialPost._id}},
+            {$push:{comments:postData,post:foundInitialPost._id}},
             {new:true})
+
             foundPost.save()
-            // newComment.save()
+            
             console.log("foundPost:")
             console.log(foundPost)
-        res.send(final_comment)
-        // console.log("newComment:")
-        // console.log(newComment)
-        // res.send(newComment)
-    // })
+            
+            res.send(foundPost)
 })
 
 app.post('/update-post',async(req,res) =>{

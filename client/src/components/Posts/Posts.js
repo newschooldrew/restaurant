@@ -8,7 +8,9 @@ const Posts = () => {
     const {username,allPosts,newComment} = state;
     const [comment, setComment] = useState({})
     const [comment_id, setId] = useState('')
+    const [editMode, setEditMode] = useState(false)
     const [key, setKey] = useState('')
+    
     console.log("state:")
     console.log(state)
     console.log("allPosts:")
@@ -22,6 +24,18 @@ const Posts = () => {
     },[username,newComment])
 
     let new_comment;
+
+    const formatDate = date =>{
+        const newDate = new Date(date).toLocaleDateString('en-US');
+        const newTime = new Date(date).toLocaleTimeString('en-US')
+        return `${newDate} at ${newTime}`
+    }
+
+    const editComment = () =>{
+        console.log("Edit hit")
+        setEditMode(!editMode)
+    }
+
     const handleChange = e => {
         e.persist()
         setId(e.target.id)
@@ -63,7 +77,12 @@ const Posts = () => {
                                 <ul>
                                 {post.comments.map(sub =>
                                     <li>
-                                        {sub.content}
+                                        {post.username == username ? (<a role="button" onClick={editComment}>edit</a>):null}
+                                        {editMode ? (<input type="text" value={sub.content}/>) :(<div>{sub.content}</div> )}
+                                        <div>by: {sub.commenter}</div>
+                                        <div>by: {sub._id}</div>
+                                        <div>Date posted: {formatDate(sub.createdDate)}</div>
+                                        <br />
                                     </li>
                                     )}
                                 </ul>
