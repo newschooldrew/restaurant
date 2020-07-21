@@ -2,13 +2,15 @@ import React, {useContext, useEffect, useState} from 'react'
 import AuthContext from '../../AuthContext'
 import {fetchAllPosts,postComment, fetchPosts} from '../../actions'
 import update from 'react-addons-update'
+import EditComment from '../EditComment/EditComment'
 
 const Posts = () => {
     const {state,dispatch} = useContext(AuthContext)
-    const {username,allPosts,newComment} = state;
+    const {username,allPosts,newComment,editMode} = state;
     const [comment, setComment] = useState({})
     const [comment_id, setId] = useState('')
-    const [editMode, setEditMode] = useState(false)
+    const [edit_id, setEditId] = useState('')
+    // const [editMode, setEditMode] = useState(false)
     const [key, setKey] = useState('')
     
     console.log("state:")
@@ -31,9 +33,13 @@ const Posts = () => {
         return `${newDate} at ${newTime}`
     }
 
-    const editComment = () =>{
+    const editComment = info =>{
+        console.log("info:")
+        console.log(info.sub._id)
         console.log("Edit hit")
-        setEditMode(!editMode)
+        setEditId(info.sub._id)
+        dispatch({type:"TOGGLE_EDIT_MODE",payload:editMode})
+        // setEditMode(!editMode)
     }
 
     const handleChange = e => {
@@ -77,8 +83,8 @@ const Posts = () => {
                                 <ul>
                                 {post.comments.map(sub =>
                                     <li>
-                                        {post.username == username ? (<a role="button" onClick={editComment}>edit</a>):null}
-                                        {editMode ? (<input type="text" value={sub.content}/>) :(<div>{sub.content}</div> )}
+                                        {post.username == username ? (<a role="button" onClick={e => editComment({sub})}>edit</a>):null}
+                                        {editMode && edit_id === sub._id ? (<EditComment id={edit_id} post_id={post._id}content={sub.content} />) :(<div>{sub.content}</div> )}
                                         <div>by: {sub.commenter}</div>
                                         <div>by: {sub._id}</div>
                                         <div>Date posted: {formatDate(sub.createdDate)}</div>

@@ -94,3 +94,7 @@ export const updatePost = (post,dispatch) =>{
         dispatch({type:"POST_UPDATED",payload:res.data})
     })
 }
+
+export const editComment = async comment =>{
+    const res = await axios.post('/edit-comment',comment);
+}

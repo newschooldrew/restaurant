@@ -171,4 +171,11 @@ app.post('/update-post',async(req,res) =>{
     res.send("this post has been updated")
 })
 
+app.post('/edit-comment',(req,res)=>{
+    console.log(req.body)
+    const {post_id,id,content} = req.body;
+    const foundPost = Post.findById({post_id})
+    res.send("done")
+})
+
 app.listen(5000,() => console.log("server running on port 5000"))

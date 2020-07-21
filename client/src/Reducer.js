@@ -46,6 +46,11 @@ const Reducer = (state, { type, payload }) => {
             ...state,
             hasUpdatedPost:payload
         }
+    case "TOGGLE_EDIT_MODE":
+        return{
+            ...state,
+            editMode:!payload
+        }
     default:
         return state
     }
