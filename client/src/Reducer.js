@@ -51,6 +51,11 @@ const Reducer = (state, { type, payload }) => {
             ...state,
             editMode:!payload
         }
+    case "POST_LIKED":
+        return{
+            ...state,
+            postLiked:false
+        }
     default:
         return state
     }

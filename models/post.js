@@ -13,8 +13,16 @@ const PostSchema = Schema({
             default:Date.now
         },
         author:{type:Schema.Types.ObjectId,ref:"user"},
-        commenter:String
-    }]
+        commenter:String,
+        likes:{
+            type:Number,
+            default:0
+        }
+    }],
+    likes:{
+        type:Number,
+        default:0
+    }
 })
 
 module.exports = mongoose.model("post",PostSchema)

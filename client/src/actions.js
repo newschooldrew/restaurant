@@ -98,3 +98,27 @@ export const updatePost = (post,dispatch) =>{
 export const editComment = async comment =>{
     const res = await axios.post('/edit-comment',comment);
 }
+
+export const increaseLike = async id =>{
+    console.log("id:")
+    console.log(id)
+    const res = await axios.post('/increase-like',{id});
+    console.log(res)
+}
+
+export const decreaseLike = async id =>{
+    console.log("id:")
+    console.log(id)
+    const res = await axios.post('/decrease-like',{id});
+    console.log(res)
+}
+
+export const increaseCommentLike = async (idPost,idComment) =>{
+    console.log("idPost,idComment:")
+    console.log(idPost,idComment)
+    const res = await axios.post('/increase-comment-like',{idPost,idComment});
+}
+
+export const decreaseCommentLike = async (idPost,idComment) =>{
+    const res = await axios.post('/decrease-comment-like',{idPost,idComment});
+}

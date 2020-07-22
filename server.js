@@ -186,4 +186,64 @@ app.post('/edit-comment',async (req,res)=>{
     res.send("done")
 })
 
+app.post('/increase-like',async (req,res)=>{
+    const {id} = req.body;
+    console.log("id:")
+    console.log(req.body)
+    const foundPost = await Post.findOneAndUpdate(
+        {_id:id},
+        {$inc:{likes:1}},
+        {new:true}
+    )
+    console.log("foundPost:")
+    console.log(foundPost)
+    console.log("increased like")
+    res.send("increased like")
+})
+
+app.post('/decrease-like',async (req,res)=>{
+    console.log("server received decrease like req")
+    const {id} = req.body;
+    console.log("id:")
+    console.log(req.body)
+    const foundPost = await Post.findOneAndUpdate(
+        {_id:id},
+        {$inc:{likes: -1}},
+        {new:true}
+    )
+    console.log("foundPost after decrease:")
+    console.log(foundPost)
+    console.log("decreased like")
+    res.send("decreased like")
+})
+
+app.post('/increase-comment-like',async (req,res)=>{
+    const {idPost,idComment} = req.body;
+    console.log("increase-comment-like:")
+    console.log(req.body)
+
+    const foundComment = await Post.findOneAndUpdate(
+        { _id: idPost, "comments._id": idComment }, 
+        { $inc: { "comments.$.likes": 1 }},
+        { new: true })
+        foundComment.save()
+        res.send("comment like increased")
+    console.log("foundComment:")
+    console.log(foundComment)
+})
+
+app.post('/decrease-comment-like',async (req,res)=>{
+    const {idPost,idComment} = req.body;
+    console.log("id:")
+    console.log(req.body)
+
+    const foundComment = await Post.findOneAndUpdate(
+        { _id: idPost, "comments._id": idComment }, 
+        { $inc: { "comments.$.likes": -1 }},
+        { new: true })
+    res.send("comment like decreased")
+    console.log("foundComment:")
+    console.log(foundComment)
+})
+
 app.listen(5000,() => console.log("server running on port 5000"))

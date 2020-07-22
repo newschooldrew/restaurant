@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react'
 import AuthContext from '../../AuthContext'
-import {fetchAllPosts,postComment, fetchPosts} from '../../actions'
+import {fetchAllPosts,postComment, increaseLike,decreaseLike,increaseCommentLike,decreaseCommentLike} from '../../actions'
 import update from 'react-addons-update'
 import EditComment from '../EditComment/EditComment'
 
@@ -11,7 +11,8 @@ const Posts = () => {
     const [comment_id, setId] = useState('')
     const [edit_id, setEditId] = useState('')
     const [edit_flag, setEditFlag] = useState(false)
-    // const [editMode, setEditMode] = useState(false)
+    const[likedState,setLikedState] = useState(false)
+    const[commentLikedState,setCommentLikedState] = useState(false)
     const [key, setKey] = useState('')
     
     console.log("state:")
@@ -23,8 +24,8 @@ const Posts = () => {
 
     useEffect(() =>{
         fetchAllPosts(username,dispatch)
-
-    },[username,editMode])
+        console.log(allPosts)
+    },[username,editMode,likedState,commentLikedState,newComment])
 
     let new_comment;
 
@@ -40,7 +41,40 @@ const Posts = () => {
         console.log("Edit hit")
         setEditId(info.sub._id)
         dispatch({type:"TOGGLE_EDIT_MODE",payload:editMode})
-        // setEditMode(!editMode)
+    }
+
+    const handleCommentClick = (postID,commentID) =>{
+        console.log("Test")
+        setCommentLikedState(!commentLikedState)
+        handleCommentLike(increaseCommentLike,decreaseCommentLike,postID,commentID)
+    }
+
+    const handleCommentLike = async (increaseFunction,decreaseFunction,idPost, idComment) =>{
+        if(!commentLikedState){
+            console.log("increase function hit")
+            await increaseFunction(idPost,idComment)
+        } else{
+            console.log("decrease function hit")
+            await decreaseFunction(idPost,idComment)
+        }
+    }
+
+    const handleClick = id =>{
+        console.log("like post hit")
+        setLikedState(!likedState)
+        console.log(likedState)
+        handleLike(increaseLike,decreaseLike,id)
+        dispatch({type:"POST_LIKED",payload:true})
+    }
+
+    const handleLike = async (increaseFunction,decreaseFunction,id) =>{
+        if(!likedState){
+            console.log("increase function hit")
+            await increaseFunction(id)
+        } else{
+            console.log("decrease function hit")
+            await decreaseFunction(id)
+        }
     }
 
     const handleChange = e => {
@@ -70,7 +104,7 @@ const Posts = () => {
 
                 console.log("****************")
                 console.log("comparison:")
-                console.log(typeof post.comments[i].commenter)
+
                 return(
                 <div>
                 
@@ -79,6 +113,8 @@ const Posts = () => {
                                 <div>{post.title}</div>
                                 <div>{post.content}</div>
                                 <div>Written by:{post.username}</div>
+                                <div>Likes:{post.likes}</div>
+                                <button onClick={() =>handleClick(post._id)}>Like Post</button>
                                 <br />
                                 <ul>
                                 {post.comments.map(sub =>
@@ -88,6 +124,8 @@ const Posts = () => {
                                         <div>by: {sub.commenter}</div>
                                         <div>by: {sub._id}</div>
                                         <div>Date posted: {formatDate(sub.createdDate)}</div>
+                                        <div>Comment likes: {sub.likes}</div>
+                                        <button onClick={() =>handleCommentClick(post._id,sub._id)}>Like Comment</button>
                                         <br />
                                     </li>
                                     )}
