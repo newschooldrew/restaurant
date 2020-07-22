@@ -171,10 +171,29 @@ app.post('/update-post',async(req,res) =>{
     res.send("this post has been updated")
 })
 
-app.post('/edit-comment',(req,res)=>{
+app.post('/edit-comment',async (req,res)=>{
     console.log(req.body)
     const {post_id,id,content} = req.body;
-    const foundPost = Post.findById({post_id})
+    // const foundComment = await Post.findOneAndUpdate(
+    //     {_id:post_id},
+    //     {"comment._id":id},
+    //     {$set:{content}},
+    //     {new:true}
+    //     )
+        // const foundComment = await Post.findOneAndUpdate(
+        //     {comments:{$elemMatch:{_id:id}}},
+        //         {$set:{content:content}},
+        //         {new:true}
+        //     )
+        
+        const foundComment = await Post.findOneAndUpdate(
+            { _id: post_id, "comments._id": id }, 
+            { $set: { "comments.$.content": content }},
+            { new: true })
+
+        foundComment.save()
+    console.log("foundComment:")
+    console.log(foundComment)
     res.send("done")
 })
 

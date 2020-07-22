@@ -23,7 +23,7 @@ const Posts = () => {
     useEffect(() =>{
         fetchAllPosts(username,dispatch)
 
-    },[username,newComment])
+    },[username,editMode])
 
     let new_comment;
 
