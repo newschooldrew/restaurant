@@ -10,6 +10,7 @@ const Posts = () => {
     const [comment, setComment] = useState({})
     const [comment_id, setId] = useState('')
     const [edit_id, setEditId] = useState('')
+    const [edit_flag, setEditFlag] = useState(false)
     // const [editMode, setEditMode] = useState(false)
     const [key, setKey] = useState('')
     
@@ -66,11 +67,10 @@ const Posts = () => {
     return (
         <div>
             {allPosts && allPosts.map((post,i) => {
-                console.log("post:")
-                console.log(post)
-                const nestedComments = post.comments;
 
-                let iteratedComments;
+                console.log("****************")
+                console.log("comparison:")
+                console.log(typeof post.comments[i].commenter)
                 return(
                 <div>
                 
@@ -83,8 +83,8 @@ const Posts = () => {
                                 <ul>
                                 {post.comments.map(sub =>
                                     <li>
-                                        {post.username == username ? (<a role="button" onClick={e => editComment({sub})}>edit</a>):null}
-                                        {editMode && edit_id === sub._id ? (<EditComment id={edit_id} post_id={post._id}content={sub.content} />) :(<div>{sub.content}</div> )}
+                                        {sub.commenter == username ? (<a role="button" onClick={e => editComment({sub})}>edit</a>):null}
+                                        {editMode && edit_id === sub._id ? (<EditComment id={edit_id} edit_flag={edit_flag} post_id={post._id}content={sub.content} />) :(<div>{sub.content}</div> )}
                                         <div>by: {sub.commenter}</div>
                                         <div>by: {sub._id}</div>
                                         <div>Date posted: {formatDate(sub.createdDate)}</div>

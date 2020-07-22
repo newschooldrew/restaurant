@@ -139,7 +139,7 @@ app.post('/create-comment',async(req,res) =>{
     
     const foundUser = await User.findOne({username})
     console.log("foundUser:")
-    const {_id} = foundUser
+    const {_id} = foundUser;
     console.log(foundUser)
     console.log(_id)
     const postData = {content:req_comment,author:_id,commenter:username}
@@ -174,18 +174,7 @@ app.post('/update-post',async(req,res) =>{
 app.post('/edit-comment',async (req,res)=>{
     console.log(req.body)
     const {post_id,id,content} = req.body;
-    // const foundComment = await Post.findOneAndUpdate(
-    //     {_id:post_id},
-    //     {"comment._id":id},
-    //     {$set:{content}},
-    //     {new:true}
-    //     )
-        // const foundComment = await Post.findOneAndUpdate(
-        //     {comments:{$elemMatch:{_id:id}}},
-        //         {$set:{content:content}},
-        //         {new:true}
-        //     )
-        
+
         const foundComment = await Post.findOneAndUpdate(
             { _id: post_id, "comments._id": id }, 
             { $set: { "comments.$.content": content }},
