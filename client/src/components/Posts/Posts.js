@@ -3,16 +3,16 @@ import AuthContext from '../../AuthContext'
 import {fetchAllPosts,postComment, increaseLike,decreaseLike,increaseCommentLike,decreaseCommentLike} from '../../actions'
 import update from 'react-addons-update'
 import EditComment from '../EditComment/EditComment'
+import LikeComment from '../LikeComment/LikeComment'
 
 const Posts = () => {
     const {state,dispatch} = useContext(AuthContext)
-    const {username,allPosts,newComment,editMode} = state;
+    const {username,allPosts,newComment,editMode,commentLiked} = state;
     const [comment, setComment] = useState({})
     const [comment_id, setId] = useState('')
     const [edit_id, setEditId] = useState('')
     const [edit_flag, setEditFlag] = useState(false)
     const[likedState,setLikedState] = useState(false)
-    const[commentLikedState,setCommentLikedState] = useState(false)
     const [key, setKey] = useState('')
     
     console.log("state:")
@@ -25,7 +25,7 @@ const Posts = () => {
     useEffect(() =>{
         fetchAllPosts(username,dispatch)
         console.log(allPosts)
-    },[username,editMode,likedState,commentLikedState,newComment])
+    },[username,editMode,likedState,newComment,commentLiked])
 
     let new_comment;
 
@@ -43,28 +43,12 @@ const Posts = () => {
         dispatch({type:"TOGGLE_EDIT_MODE",payload:editMode})
     }
 
-    const handleCommentClick = (postID,commentID) =>{
-        console.log("Test")
-        setCommentLikedState(!commentLikedState)
-        handleCommentLike(increaseCommentLike,decreaseCommentLike,postID,commentID)
-    }
-
-    const handleCommentLike = async (increaseFunction,decreaseFunction,idPost, idComment) =>{
-        if(!commentLikedState){
-            console.log("increase function hit")
-            await increaseFunction(idPost,idComment)
-        } else{
-            console.log("decrease function hit")
-            await decreaseFunction(idPost,idComment)
-        }
-    }
-
     const handleClick = id =>{
         console.log("like post hit")
         setLikedState(!likedState)
         console.log(likedState)
         handleLike(increaseLike,decreaseLike,id)
-        dispatch({type:"POST_LIKED",payload:true})
+        // dispatch({type:"POST_LIKED",payload:true})
     }
 
     const handleLike = async (increaseFunction,decreaseFunction,id) =>{
@@ -117,7 +101,7 @@ const Posts = () => {
                                 <button onClick={() =>handleClick(post._id)}>Like Post</button>
                                 <br />
                                 <ul>
-                                {post.comments.map(sub =>
+                                {post.comments.map((sub,idx) =>
                                     <li>
                                         {sub.commenter == username ? (<a role="button" onClick={e => editComment({sub})}>edit</a>):null}
                                         {editMode && edit_id === sub._id ? (<EditComment id={edit_id} edit_flag={edit_flag} post_id={post._id}content={sub.content} />) :(<div>{sub.content}</div> )}
@@ -125,15 +109,13 @@ const Posts = () => {
                                         <div>by: {sub._id}</div>
                                         <div>Date posted: {formatDate(sub.createdDate)}</div>
                                         <div>Comment likes: {sub.likes}</div>
-                                        <button onClick={() =>handleCommentClick(post._id,sub._id)}>Like Comment</button>
+                                        <LikeComment comment_id={sub._id} idx={idx} favorites={state.favorites} liked={sub.hasBeenLiked} post_id={post._id} sub={sub}/>
                                         <br />
                                     </li>
                                     )}
                                 </ul>
                                 <textarea key={post._id} id={i} onChange={handleChange}></textarea>
                             <button data-mongo-id={post._id} onClick={handleSubmit}>Leave a Comment</button>
-                            {/* {allComments.map(comment =>{<div>{comment.content}</div>})} */}
-
                             </div>)                    
                 }
             )}

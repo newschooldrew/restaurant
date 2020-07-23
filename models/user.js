@@ -14,6 +14,10 @@ const UserSchema = new Schema({
     joinedDate:{
         type:Date,
         default:Date.now
+    },
+    favorites:{
+        type:[Schema.Types.ObjectId],
+        ref:"post"
     }
 })
 

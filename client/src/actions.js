@@ -113,12 +113,25 @@ export const decreaseLike = async id =>{
     console.log(res)
 }
 
-export const increaseCommentLike = async (idPost,idComment) =>{
+export const increaseCommentLike = async (idPost,idComment,username,dispatch) =>{
     console.log("idPost,idComment:")
     console.log(idPost,idComment)
-    const res = await axios.post('/increase-comment-like',{idPost,idComment});
+
+    const res = await axios.post('/increase-comment-like',{idPost,idComment,username});
+    dispatch({type:"COMMENT_LIKED",payload:true})
+
 }
 
-export const decreaseCommentLike = async (idPost,idComment) =>{
-    const res = await axios.post('/decrease-comment-like',{idPost,idComment});
+export const decreaseCommentLike = async (idPost,idComment,username,dispatch) =>{
+    const res = await axios.post('/decrease-comment-like',{idPost,idComment,username});
+    dispatch({type:"COMMENT_DISLIKED",payload:true})
+}
+
+export const fetchFavorites = async (idPost,idComment,username,dispatch) =>{
+    console.log("fetch favorites idPost,idComment:")
+    console.log(idPost,idComment)
+    const res = await axios.post('/fetch-favorites',{idPost,idComment,username});
+    const favorites = res.data.favorites;
+    console.log(favorites)
+    dispatch({type:"FETCH_FAVORITES",payload:favorites})
 }

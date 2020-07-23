@@ -218,32 +218,60 @@ app.post('/decrease-like',async (req,res)=>{
 })
 
 app.post('/increase-comment-like',async (req,res)=>{
-    const {idPost,idComment} = req.body;
+    const {idPost,idComment,username} = req.body;
     console.log("increase-comment-like:")
     console.log(req.body)
 
-    const foundComment = await Post.findOneAndUpdate(
-        { _id: idPost, "comments._id": idComment }, 
-        { $inc: { "comments.$.likes": 1 }},
-        { new: true })
-        foundComment.save()
-        res.send("comment like increased")
-    console.log("foundComment:")
-    console.log(foundComment)
+    const foundComment = await Post.updateOne(
+        { _id: idPost,
+            comments: {
+                $elemMatch:{_id:idComment}
+            }
+        }, 
+        { $inc: { "comments.$.likes": 1 },
+         new: true })
+
+         const addFavorites = await User.findOneAndUpdate(
+            {username},
+            {$addToSet:{favorites:idComment}},
+            {new:true}
+            )
+
+            res.send("foundFavorites")
 })
 
 app.post('/decrease-comment-like',async (req,res)=>{
-    const {idPost,idComment} = req.body;
+    const {idPost,idComment,username} = req.body;
     console.log("id:")
     console.log(req.body)
 
-    const foundComment = await Post.findOneAndUpdate(
-        { _id: idPost, "comments._id": idComment }, 
-        { $inc: { "comments.$.likes": -1 }},
-        { new: true })
+    const foundComment = await Post.updateOne(
+        { _id: idPost,
+            comments: {
+                $elemMatch:{_id:idComment}
+            }
+        }, 
+        { $inc: { "comments.$.likes": -1 },
+         new: true })
+
+    const removeFavorites = await User.findOneAndUpdate(
+        {username},
+        {$pull:{favorites:idComment}})
+
+    console.log("comment like decreased")
     res.send("comment like decreased")
-    console.log("foundComment:")
-    console.log(foundComment)
+
 })
+
+app.post('/fetch-favorites',async (req,res)=>{
+    console.log("fetch favorites:");
+    console.log(req.body);
+    const {username} = req.body;
+    const foundUser = await User.findOne(
+        {username})
+        console.log("foundUser in find like number:")
+        console.log(foundUser)
+        res.send(foundUser)
+    })
 
 app.listen(5000,() => console.log("server running on port 5000"))

@@ -51,11 +51,23 @@ const Reducer = (state, { type, payload }) => {
             ...state,
             editMode:!payload
         }
-    case "POST_LIKED":
+    case "COMMENT_LIKED":
         return{
             ...state,
-            postLiked:false
+            commentLiked:payload,
+            commentDisliked:false
         }
+    case "COMMENT_DISLIKED":
+        return{
+            ...state,
+            commentLiked:false,
+            commentDisliked:payload
+            }
+    case "FETCH_FAVORITES":
+    return{
+        ...state,
+        favorites:payload
+    }
     default:
         return state
     }
