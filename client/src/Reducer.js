@@ -68,6 +68,24 @@ const Reducer = (state, { type, payload }) => {
         ...state,
         favorites:payload
     }
+
+    case "POST_LIKED":
+        return{
+            ...state,
+            postLiked:payload,
+            postDisliked:false
+        }
+    case "POST_DISLIKED":
+            return{
+            ...state,
+            postLiked:false,
+            postDisliked:payload
+            }
+    case "FETCH_INDIVIDUAL_POST":
+                return{
+                ...state,
+                individualPost:payload
+                }        
     default:
         return state
     }

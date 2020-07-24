@@ -11,6 +11,9 @@ export const AuthContext = createContext({
     postLiked:false,
     commentLiked:false,
     commentDisliked:false,
-    favorites:null
+    favorites:null,
+    postLiked:false,
+    postDisliked:false,
+    individualPost:null
 })
 export default AuthContext;

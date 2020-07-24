@@ -21,15 +21,4 @@ const UserSchema = new Schema({
     }
 })
 
-// UserSchema.pre('remove',function(next){
-//         const BlogPost = mongoose.model('post')
-//         BlogPost.remove({_id:{$in:this.BlogPosts}})
-// })
-
-// UserSchema.pre('save',function(next){
-    
-//     if(!this.isModified('password')){
-//         return next()
-//     }
-
 module.exports = mongoose.model('user',UserSchema)

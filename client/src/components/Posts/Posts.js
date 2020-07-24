@@ -1,18 +1,19 @@
 import React, {useContext, useEffect, useState} from 'react'
 import AuthContext from '../../AuthContext'
-import {fetchAllPosts,postComment, increaseLike,decreaseLike,increaseCommentLike,decreaseCommentLike} from '../../actions'
+import {Link} from 'react-router-dom'
+import {fetchAllPosts,postComment, fetchFavorites} from '../../actions'
 import update from 'react-addons-update'
 import EditComment from '../EditComment/EditComment'
 import LikeComment from '../LikeComment/LikeComment'
+import LikePost from '../LikePost/LikePost'
 
-const Posts = () => {
+const Posts = ({match}) => {
     const {state,dispatch} = useContext(AuthContext)
-    const {username,allPosts,newComment,editMode,commentLiked} = state;
+    const {username,allPosts,newComment,editMode,commentLiked,postLiked,postDisliked,favorites} = state;
     const [comment, setComment] = useState({})
     const [comment_id, setId] = useState('')
     const [edit_id, setEditId] = useState('')
     const [edit_flag, setEditFlag] = useState(false)
-    const[likedState,setLikedState] = useState(false)
     const [key, setKey] = useState('')
     
     console.log("state:")
@@ -24,8 +25,8 @@ const Posts = () => {
 
     useEffect(() =>{
         fetchAllPosts(username,dispatch)
-        console.log(allPosts)
-    },[username,editMode,likedState,newComment,commentLiked])
+        fetchFavorites(username,dispatch)
+    },[username,editMode,newComment,commentLiked,postLiked,postDisliked])
 
     let new_comment;
 
@@ -41,24 +42,6 @@ const Posts = () => {
         console.log("Edit hit")
         setEditId(info.sub._id)
         dispatch({type:"TOGGLE_EDIT_MODE",payload:editMode})
-    }
-
-    const handleClick = id =>{
-        console.log("like post hit")
-        setLikedState(!likedState)
-        console.log(likedState)
-        handleLike(increaseLike,decreaseLike,id)
-        // dispatch({type:"POST_LIKED",payload:true})
-    }
-
-    const handleLike = async (increaseFunction,decreaseFunction,id) =>{
-        if(!likedState){
-            console.log("increase function hit")
-            await increaseFunction(id)
-        } else{
-            console.log("decrease function hit")
-            await decreaseFunction(id)
-        }
     }
 
     const handleChange = e => {
@@ -82,23 +65,23 @@ const Posts = () => {
         await setComment('');
     }
 
+    if(!favorites) return (<span>loading...</span>);
+
     return (
         <div>
-            {allPosts && allPosts.map((post,i) => {
-
+            {allPosts && allPosts.map((post,idx) => {
                 console.log("****************")
                 console.log("comparison:")
-
                 return(
                 <div>
                 
                 <br />
                                 <div>{post._id}</div>
-                                <div>{post.title}</div>
+                                <Link to={`${match.url}/${post._id}`}>{post.title}</Link>
                                 <div>{post.content}</div>
                                 <div>Written by:{post.username}</div>
                                 <div>Likes:{post.likes}</div>
-                                <button onClick={() =>handleClick(post._id)}>Like Post</button>
+                                    <LikePost id={post._id} idx={idx} user={post.username}/>
                                 <br />
                                 <ul>
                                 {post.comments.map((sub,idx) =>
@@ -114,7 +97,7 @@ const Posts = () => {
                                     </li>
                                     )}
                                 </ul>
-                                <textarea key={post._id} id={i} onChange={handleChange}></textarea>
+                                <textarea key={post._id} id={idx} onChange={handleChange}></textarea>
                             <button data-mongo-id={post._id} onClick={handleSubmit}>Leave a Comment</button>
                             </div>)                    
                 }

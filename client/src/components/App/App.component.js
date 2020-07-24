@@ -5,7 +5,7 @@ import CreatePost from '../CreatePost/CreatePost'
 import Welcome from '../Welcome/Welcome.component'
 import SignIn from '../SignIn/SignIn'
 import Header from '../Header/Header'
-import Posts from '../Posts/Posts'
+import PostPage from '../../pages/PostPage/PostPage'
 import EditProfile from '../EditProfile/EditProfile'
 
 const App = () => {
@@ -19,7 +19,7 @@ const App = () => {
                         <Route path="/welcome" component={Welcome} />
                         <Route path="/sign-up" component={SignUp} />
                         <Route path="/edit-profile" component={EditProfile} />
-                        <Route path="/posts" component={Posts} />
+                        <Route path="/posts" component={PostPage} />
                     </Switch>
             </BrowserRouter>
         )

@@ -111,6 +111,18 @@ app.post('/fetch-posts',async (req,res)=>{
     // res.set({"misc":`${foundUser}`}).send("done")
 })
 
+app.post('/fetch-specific-post',async (req,res)=>{
+    console.log("fetch-specific-post:");
+    console.log(req.body.postId)
+    const {postId} = req.body;
+    console.log(postId)
+    const foundSpecificPost = await Post.findOne(
+        {_id:postId}
+    )
+    console.log("fetchSpecificPost hit")
+    res.send(foundSpecificPost)
+})
+
 app.get('/fetch-all-posts',async (req,res)=>{
     console.log('fetch all posts call was made' )
     console.log('***************')
@@ -187,23 +199,26 @@ app.post('/edit-comment',async (req,res)=>{
 })
 
 app.post('/increase-like',async (req,res)=>{
-    const {id} = req.body;
+    const {id,username} = req.body;
     console.log("id:")
     console.log(req.body)
     const foundPost = await Post.findOneAndUpdate(
         {_id:id},
         {$inc:{likes:1}},
-        {new:true}
-    )
-    console.log("foundPost:")
-    console.log(foundPost)
+        {new:true})
+
+    const addFavorites = await User.findOneAndUpdate(
+        {username},
+        {$addToSet:{favorites:id}},
+        {new:true})
+
     console.log("increased like")
     res.send("increased like")
 })
 
 app.post('/decrease-like',async (req,res)=>{
     console.log("server received decrease like req")
-    const {id} = req.body;
+    const {id,username} = req.body;
     console.log("id:")
     console.log(req.body)
     const foundPost = await Post.findOneAndUpdate(
@@ -211,9 +226,11 @@ app.post('/decrease-like',async (req,res)=>{
         {$inc:{likes: -1}},
         {new:true}
     )
-    console.log("foundPost after decrease:")
-    console.log(foundPost)
-    console.log("decreased like")
+    const removeFavorites = await User.findOneAndUpdate(
+        {username},
+        {$pull:{favorites:id}},
+        {new:true})
+
     res.send("decreased like")
 })
 
