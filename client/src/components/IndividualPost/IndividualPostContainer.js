@@ -6,11 +6,11 @@ const IndividualPost = lazy(() => import('./IndividualPost'))
 
 const IndividualPostContainer = ({match}) => {
     const {state,dispatch} = useContext(AuthContext)
-    const {individualPost} = state;
+    const {individualPost,commentLiked,commentDisiked,postLiked,postDisliked} = state;
     useEffect(()=>{
         const postId = match.params.postId;
         fetchSpecificPost(postId,dispatch)
-    },[individualPost])
+    },[commentLiked,commentDisiked,postLiked,postDisliked])
     
     if(!individualPost) return (<span>loading...</span>);
 

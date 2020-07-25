@@ -81,7 +81,7 @@ const Posts = ({match}) => {
                                 <div>{post.content}</div>
                                 <div>Written by:{post.username}</div>
                                 <div>Likes:{post.likes}</div>
-                                    <LikePost id={post._id} idx={idx} user={post.username}/>
+                                    <LikePost id={post._id} favorites={favorites} user={post.username}/>
                                 <br />
                                 <ul>
                                 {post.comments.map((sub,idx) =>
@@ -92,7 +92,7 @@ const Posts = ({match}) => {
                                         <div>by: {sub._id}</div>
                                         <div>Date posted: {formatDate(sub.createdDate)}</div>
                                         <div>Comment likes: {sub.likes}</div>
-                                        <LikeComment comment_id={sub._id} idx={idx} favorites={state.favorites} liked={sub.hasBeenLiked} post_id={post._id} sub={sub}/>
+                                        <LikeComment comment_id={sub._id} idx={idx} favorites={favorites} liked={sub.hasBeenLiked} post_id={post._id} sub={sub}/>
                                         <br />
                                     </li>
                                     )}

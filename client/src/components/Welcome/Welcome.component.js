@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react'
 import AuthContext from '../../AuthContext'
 import {fetchPosts} from '../../actions'
-import {withRouter} from 'react-router-dom'
+import {Link,withRouter} from 'react-router-dom'
 
 const Welcome = ({history}) => {
     const {state,dispatch} = useContext(AuthContext)
@@ -15,6 +15,7 @@ const Welcome = ({history}) => {
         <>
             <div>welcome page</div>
             <br />
+            <Link to="/create-post">Create A Post</Link>
             {posts && posts.map(post =>{
                 
                 return(<div key={post._id}>

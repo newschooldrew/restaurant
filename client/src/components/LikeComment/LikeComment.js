@@ -20,8 +20,7 @@ const LikeComment = ({sub,comment_id,post_id,favorites}) => {
 
     },[])
     
-    const handleCommentClick = e =>{
-        const {id} = e.target;
+    const handleCommentClick = () =>{
 
         if(liked == true){
             console.log("previously liked")

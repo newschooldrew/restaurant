@@ -64,8 +64,7 @@ const IndividualPost = ({postInfo}) => {
                                 <div>{postInfo.content}</div>
                                 <div>Written by:{postInfo.username}</div>
                                 <div>Likes:{postInfo.likes}</div>
-                                    <LikePost id={postInfo._id} user={postInfo.username}/>
-                                    {/* idx={idx}  */}
+                                    <LikePost id={postInfo._id} favorites={favorites}/>
                                 <br />
                                 <ul>
                                 {postInfo.comments.map((sub,idx) =>
