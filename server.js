@@ -4,10 +4,12 @@ const mongoose = require('mongoose')
 const keys = require('./config/keys')
 const User = require('./models/User')
 const Post = require('./models/post')
-// const Comment = require('./models/comment')
+const sendEmail = require('./Email')
+const scheduleEmail = require('./schedule-email')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const CryptoJS = require("crypto-js");
+const { prependOnceListener } = require('./models/post')
 require('dotenv').config()
 
 mongoose.connect(keys.mongoUri,{ useNewUrlParser: true ,useUnifiedTopology: true})
@@ -23,9 +25,9 @@ const app = express();
 app.use(bodyParser.json())
 
 app.post('/create-user',async(req,res)=>{  
-    let {username,email,password,token} = req.body;
-    console.log("username,email,password,token:")
-    console.log(username,email,password,token)
+    let {username,email,password,phoneNumber,token} = req.body;
+    console.log("username,email,password,phoneNumber,token:")
+    console.log(username,email,password,phoneNumber,token)
 
     const username_test = await User.findOne({username})
     console.log("username_test:")
@@ -42,8 +44,13 @@ app.post('/create-user',async(req,res)=>{
             if(err) console.log(err)
             password = hash;
 
-            const user = new User({username,email, password,posts:[],token});
+            const user = new User({username,email, password,posts:[], phoneNumber,token});
             await user.save()
+            .then(order =>{
+                console.log("order:")
+                console.log(order)
+                return order.sendSmsNotification("You've created a user", ()=>console.log("something went wrong"))
+            })
         })
     })
     res.send(req.body.username)
@@ -101,8 +108,12 @@ app.post('/fetch-posts',async (req,res)=>{
     console.log('fetch posts call was made' )
     const username = req.body.username;
     const foundUser = await User.findOne({username})
+    try{
     console.log('***************')
     console.log(foundUser._id)
+    } catch(e){
+        console.log("no found user")
+    }
     const posts = await Post.find({author:foundUser._id})
     console.log('***************')
     console.log(posts)

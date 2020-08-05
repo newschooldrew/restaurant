@@ -16,6 +16,8 @@ const Welcome = ({history}) => {
             <div>welcome page</div>
             <br />
             <Link to="/create-post">Create A Post</Link>
+            <br />
+            <Link to="/posts">Look at All Posts</Link>
             {posts && posts.map(post =>{
                 
                 return(<div key={post._id}>

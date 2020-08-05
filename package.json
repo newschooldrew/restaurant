@@ -10,6 +10,7 @@
     "dev": "concurrently \"yarn run server\" \"yarn run client\""
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.2.2",
     "axios": "^0.19.2",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
@@ -20,6 +21,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.5.9",
     "mongoose": "^5.9.22",
-    "react-addons-update": "^15.6.2"
+    "react-addons-update": "^15.6.2",
+    "twilio": "^3.48.2"
   }
 }
