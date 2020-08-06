@@ -68,7 +68,6 @@ const Reducer = (state, { type, payload }) => {
         ...state,
         favorites:payload
     }
-
     case "POST_LIKED":
         return{
             ...state,
@@ -85,6 +84,11 @@ const Reducer = (state, { type, payload }) => {
                 return{
                 ...state,
                 individualPost:payload
+                }        
+    case "FETCH_ALL_MEALS":
+                return{
+                ...state,
+                allMeals:payload
                 }        
     default:
         return state

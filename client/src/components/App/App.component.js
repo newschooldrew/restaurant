@@ -7,6 +7,8 @@ import SignIn from '../SignIn/SignIn'
 import Header from '../Header/Header'
 import PostPage from '../../pages/PostPage/PostPage'
 import EditProfile from '../EditProfile/EditProfile'
+import AllMeals from '../AllMeals/AllMeals'
+import InputMeals from '../InputMeals/InputMeals'
 
 const App = () => {
         return (
@@ -20,6 +22,8 @@ const App = () => {
                         <Route path="/sign-up" component={SignUp} />
                         <Route path="/edit-profile" component={EditProfile} />
                         <Route path="/posts" component={PostPage} />
+                        <Route path="/all-meals" component={AllMeals} />
+                        <Route path="/input-meals" component={InputMeals} />
                     </Switch>
             </BrowserRouter>
         )

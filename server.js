@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 const keys = require('./config/keys')
 const User = require('./models/User')
 const Post = require('./models/post')
+const Meal = require('./models/meal')
 const sendEmail = require('./Email')
 const scheduleEmail = require('./schedule-email')
 const jwt = require('jsonwebtoken')
@@ -93,15 +94,17 @@ app.post('/create-new-post', async (req,res) =>{
     if(!foundUser) {
         res.set({'isError': true}).send("user not found")
     }else{
-        foundUser.save(function(err){
+        foundUser.save(async function(err){
             const post = new Post(contents)
-            post.save()
+            await post.save()
         })
 
         res.send(foundUser)
-        // res.send(foundUser)
-        // res.set({'post':'success'}).send("post created")
     }
+})
+
+app.post('/create-meal',(req,res)=>{
+    
 })
 
 app.post('/fetch-posts',async (req,res)=>{
@@ -120,6 +123,17 @@ app.post('/fetch-posts',async (req,res)=>{
     console.log('***************')
     res.send(posts)
     // res.set({"misc":`${foundUser}`}).send("done")
+})
+
+app.get('/fetch-all-meals',async (req,res)=>{
+    console.log('fetch all meals call was made' )
+
+    const foundMeals = await Meal.find({})
+
+    console.log('***************')
+    console.log(foundMeals)
+    console.log('***************')
+    res.send(foundMeals)
 })
 
 app.post('/fetch-specific-post',async (req,res)=>{
@@ -301,5 +315,22 @@ app.post('/fetch-favorites',async (req,res)=>{
         console.log(foundUser)
         res.send(foundUser)
     })
+
+    app.post('/input-file', (req,res)=>{
+        console.log("req for input file is:");
+        // console.log(req.body);
+        const csvFile = req.body;
+        csvFile.map(csv =>{
+            console.log(csv[0])
+            const title = csv[0];
+            console.log(csv[1])
+            const description = csv[1]
+            const createMealFn = async ()=>{
+                const createMeals = await new Meal({title,description})
+                createMeals.save()
+            }
+            createMealFn()
+        })
+})
 
 app.listen(5000,() => console.log("server running on port 5000"))

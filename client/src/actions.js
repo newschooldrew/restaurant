@@ -71,6 +71,13 @@ export const fetchPosts = async (username,dispatch) =>{
         dispatch({type:"FETCH_POSTS",payload:res.data})
     }
 
+export const fetchAllMeals = async (dispatch) =>{
+    const res = await axios.get('/fetch-all-meals');
+        console.log("fetch posts response is: ")
+        console.log(res.data)
+        dispatch({type:"FETCH_ALL_MEALS",payload:res.data})
+    }
+
 export const fetchSpecificPost = async (postId,dispatch) =>{
     console.log("fetchSpecificPost:")
     console.log(postId)
@@ -144,4 +151,10 @@ export const fetchFavorites = async (username,dispatch) =>{
     console.log(favorites)
     dispatch({type:"FETCH_FAVORITES",payload:favorites})
     return favorites
+}
+
+export const inputMeals = async (csvFile,dispatch) =>{
+    const res = await axios.post('/input-file',csvFile)
+    console.log("inputMeals res:")
+    console.log(res)
 }
