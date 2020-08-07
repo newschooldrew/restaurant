@@ -15,6 +15,8 @@ export const AuthContext = createContext({
     postLiked:false,
     postDisliked:false,
     individualPost:null,
-    allMeals:null
+    allMeals:null,
+    cartItems:null,
+    cartTotal:0
 })
 export default AuthContext;

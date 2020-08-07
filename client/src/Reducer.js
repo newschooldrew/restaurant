@@ -1,3 +1,6 @@
+
+import {addItemToCart} from './utils/cart.utils'
+
 const Reducer = (state, { type, payload }) => {
     switch (type) {
 
@@ -89,6 +92,16 @@ const Reducer = (state, { type, payload }) => {
                 return{
                 ...state,
                 allMeals:payload
+                }        
+    case "ADD_ITEM_TO_CART":
+                return{
+                ...state,
+                cartItems:addItemToCart(state.cartItems,payload)
+                }        
+    case "ADD_ITEMS":
+                return{
+                ...state,
+                cartTotal:payload
                 }        
     default:
         return state

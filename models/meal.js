@@ -7,7 +7,8 @@ const MealSchema = Schema({
     createdAt:{
         type:Date,
         default:Date.now
-    }
+    },
+    price:Number
 })
 
 module.exports = mongoose.model("meal",MealSchema)

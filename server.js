@@ -325,8 +325,10 @@ app.post('/fetch-favorites',async (req,res)=>{
             const title = csv[0];
             console.log(csv[1])
             const description = csv[1]
+            console.log(csv[2])
+            const price = csv[2]
             const createMealFn = async ()=>{
-                const createMeals = await new Meal({title,description})
+                const createMeals = await new Meal({title,description,price})
                 createMeals.save()
             }
             createMealFn()

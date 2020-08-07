@@ -158,3 +158,13 @@ export const inputMeals = async (csvFile,dispatch) =>{
     console.log("inputMeals res:")
     console.log(res)
 }
+
+export const actionItemToCart = (cartItemToAdd,dispatch) =>{
+
+        dispatch({type:"ADD_ITEM_TO_CART",payload:cartItemToAdd})
+    }
+
+export const countAllItems = (cartTotal,dispatch) =>{
+        const total = cartTotal.reduce((acc,cartItem)=> acc + cartItem.quantity,0)
+        dispatch({type:"ADD_ITEMS",payload:total})
+    }

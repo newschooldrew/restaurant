@@ -5,20 +5,24 @@ import {withRouter} from 'react-router-dom'
 
 const Header = ({history}) => {
     const {state,dispatch} = useContext(AuthContext)
-    const {username} = state;
-    useEffect(()=>{
-        // const {state,dispatch} = useContext(AuthContext)
-        const {username} = state;
-        console.log(username)
-    })
-
+    // const {username} = state;
+    const {username,cartItems,cartTotal} = state;
+    let newTotal;
+    
     const handleSubmit = () =>{
         signOut(history)
         dispatch({type:"LOG_OUT",payload:null})
     }
 
+    if(cartItems){
+        newTotal = cartItems.reduce((acc,cartItem) => acc + cartItem.quantity,0)
+        localStorage.setItem('cartTotal',newTotal)
+    }
+    const myTotal = localStorage.getItem("cartTotal")
+    
     return (
-     <div>   
+     <div>  
+         <div>Cart Items: {myTotal}</div> 
      {username ?
         <div>
             Hello, {username}
