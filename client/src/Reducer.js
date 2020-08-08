@@ -1,5 +1,4 @@
-
-import {addItemToCart} from './utils/cart.utils'
+import {addItemToCart,removeItemFromCart} from './utils/cart.utils'
 
 const Reducer = (state, { type, payload }) => {
     switch (type) {
@@ -94,15 +93,26 @@ const Reducer = (state, { type, payload }) => {
                 allMeals:payload
                 }        
     case "ADD_ITEM_TO_CART":
+        let sessionItems = JSON.parse(sessionStorage.getItem('cart'))
+        console.log("sessionItems within reducer")
+        console.log(sessionItems)
                 return{
                 ...state,
-                cartItems:addItemToCart(state.cartItems,payload)
-                }        
-    case "ADD_ITEMS":
+                cartItems:addItemToCart(sessionItems || [],payload)
+                }          
+    case "REMOVE_ITEM_FROM_CART":
+        let sessionItems_1 = JSON.parse(sessionStorage.getItem('cart'))
+        console.log("sessionItems within reducer")
+        console.log(sessionItems_1)
                 return{
                 ...state,
-                cartTotal:payload
-                }        
+                cartItems:removeItemFromCart(sessionItems_1 || [],payload)
+                }          
+    case "UPDATE_CART":
+        return{
+            ...state,
+            cartItems:addItemToCart(payload,[])
+            }           
     default:
         return state
     }

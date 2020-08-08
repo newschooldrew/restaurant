@@ -16,7 +16,8 @@ export const AuthContext = createContext({
     postDisliked:false,
     individualPost:null,
     allMeals:null,
-    cartItems:null,
-    cartTotal:0
+    cartItems:[],
+    cartTotal:0,
+    cart:null
 })
 export default AuthContext;

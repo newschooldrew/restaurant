@@ -1,8 +1,7 @@
-export const addItemToCart = (cartItems = [], cartItemToAdd) =>{
-    if (cartItems == undefined){
-        console.log("cartItems is undefined")
-        cartItems.push(cartItemToAdd)
-    }
+export const addItemToCart = (cartItems, cartItemToAdd) =>{
+    console.log("cartItems in util")
+    console.log(cartItems)
+    console.log(typeof cartItems)
         const existingCartItem = cartItems.find(
             cartItem =>cartItem.id === cartItemToAdd.id
             )
@@ -16,6 +15,28 @@ export const addItemToCart = (cartItems = [], cartItemToAdd) =>{
                     : cartItem
             )
         }
-
-        return [...cartItems,{...cartItemToAdd,quantity:1}]
+        return [...cartItems,{...cartItemToAdd,quantity:1}]   
     }
+
+export const removeItemFromCart = (cartItems,cartItemToRemove) => {
+        // find out if there is an item in the count
+        console.log("cartItems from removeItem fn")
+        console.log(cartItems)
+            const existingCartItem = cartItems.find(
+                    cartItem => cartItem.id === cartItemToRemove.id
+                )
+                // check if quantity is one
+                // you want to keep the values where they dont match
+                if(existingCartItem.quantity === 1){
+                    return cartItems.filter(cartItem => cartItem.id !== cartItemToRemove.id)
+                    }
+                        // bring in cartItem
+                     return  cartItems.map(cartItem => 
+                            cartItem.id == cartItemToRemove.id
+                            ? {...cartItem,quantity: cartItem.quantity - 1}
+                            : cartItem
+                        // otherwise decrease the quantity                
+                        // the new value of quantity is whatever that items quantity is, minus 1
+                            
+                    )
+                }

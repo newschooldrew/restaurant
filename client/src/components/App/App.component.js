@@ -9,6 +9,7 @@ import PostPage from '../../pages/PostPage/PostPage'
 import EditProfile from '../EditProfile/EditProfile'
 import AllMeals from '../AllMeals/AllMeals'
 import InputMeals from '../InputMeals/InputMeals'
+import Checkout from '../Checkout/Checkout'
 
 const App = () => {
         return (
@@ -24,6 +25,7 @@ const App = () => {
                         <Route path="/posts" component={PostPage} />
                         <Route path="/all-meals" component={AllMeals} />
                         <Route path="/input-meals" component={InputMeals} />
+                        <Route path="/checkout" component={Checkout} />
                     </Switch>
             </BrowserRouter>
         )

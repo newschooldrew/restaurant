@@ -4,26 +4,31 @@ import {fetchAllMeals,actionItemToCart,countAllItems} from '../../actions'
 import {Link,withRouter} from 'react-router-dom'
 
 const AllMeals = ({history}) => {
+    let myCachedSession = sessionStorage.getItem('cart')
+    let itemsArr = [];
     const {state,dispatch} = useContext(AuthContext)
-    const {username,allMeals,cartItems} = state;
-
+    const {username,allMeals,cartItems,cart} = state;
+    
     useEffect(() =>{
         fetchAllMeals(dispatch)
-        console.log(cartItems)
-        // countAllItems(cartItems,dispatch)
-        console.log("cartItems:")
-    },[cartItems])
+
+    },[])
     
     const addItemToCart = (id,title,price) =>{
         console.log(state)
         const item = {id,title,price};
-        actionItemToCart(item,dispatch)
+        dispatch({type:"ADD_ITEM_TO_CART",payload:item})
+    }
+    const removeItemFromCart = (id,title,price) =>{
+        console.log(state)
+        const item = {id,title,price};
+        dispatch({type:"REMOVE_ITEM_FROM_CART",payload:item})
     }
     return (
         <>
             <div>AllMeals page</div>
             <br />
-            <Link to="/create-post">Create A Post</Link>
+            <Link to="/checkout">Checkout</Link>
             <br />
             {allMeals && allMeals.map(post =>{
                 const id = post._id;
@@ -33,6 +38,7 @@ const AllMeals = ({history}) => {
                         <div>{post.title}</div>
                         <div>{post.description}</div>
                         <div>{post.price}</div>
+                        <button onClick={() => removeItemFromCart(id,title,price)}>Remove From Cart</button>
                         <button onClick={() => addItemToCart(id,title,price)}>Add To Cart</button>
                         <br />
                         <br />

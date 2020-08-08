@@ -335,4 +335,15 @@ app.post('/fetch-favorites',async (req,res)=>{
         })
 })
 
+app.post('/store-checkout',async (req,res)=>{
+    console.log(req.body)
+    const {item} = req.body;
+    const foundItem = await findOneAndUpdate(
+    {username:username},
+    {$set:item},
+    {new:true}
+    )
+    foundItem
+})
+
 app.listen(5000,() => console.log("server running on port 5000"))

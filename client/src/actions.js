@@ -159,12 +159,8 @@ export const inputMeals = async (csvFile,dispatch) =>{
     console.log(res)
 }
 
-export const actionItemToCart = (cartItemToAdd,dispatch) =>{
-
+export const actionItemToCart = async (cartItemToAdd,dispatch) =>{
+        const res = await axios.post('/storeCheckout',cartItemToAdd)
+        console.log(res)
         dispatch({type:"ADD_ITEM_TO_CART",payload:cartItemToAdd})
-    }
-
-export const countAllItems = (cartTotal,dispatch) =>{
-        const total = cartTotal.reduce((acc,cartItem)=> acc + cartItem.quantity,0)
-        dispatch({type:"ADD_ITEMS",payload:total})
     }
