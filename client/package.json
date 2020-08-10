@@ -14,6 +14,7 @@
     "http-proxy-server": "^0.0.6",
     "jsonwebtoken": "^8.5.1",
     "jwt-simple": "^0.5.6",
+    "material-ui-icons": "^1.0.0-beta.36",
     "mongoose": "^5.9.23",
     "react": "^16.13.1",
     "react-csv-reader": "^3.1.0",
@@ -21,13 +22,21 @@
     "react-file-reader": "^1.1.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "use-persisted-reducer": "^2.1.0"
+    "use-persisted-reducer": "^2.1.0",
+    "nouislider": "14.5.0",
+    "reactstrap": "8.4.1",
+    "react-tagsinput": "3.19.0",
+    "react-select": "3.1.0",
+    "node-sass": "4.14.1",
+    "rellax": "1.12.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
+    "compile-sass": "node-sass src/assets/scss/now-ui-kit.scss src/assets/css/now-ui-kit.css"
   },
   "eslintConfig": {
     "extends": "react-app"

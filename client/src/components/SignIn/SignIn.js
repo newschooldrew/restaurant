@@ -1,7 +1,33 @@
 import React, {useState, useContext, useEffect} from 'react'
 import {signInUser} from '../../actions'
+import Avatar from '@material-ui/core/Avatar';
 import AuthContext from '../../AuthContext'
 import {withRouter} from 'react-router-dom'
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+
+const useStyles = makeStyles(theme => ({
+    paper: {
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    form: {
+      width: '100%', // Fix IE 11 issue.
+      marginTop: theme.spacing(3),
+    },
+    submit: {
+      margin: theme.spacing(3, 0, 2),
+    },
+  }));
+  
 
 const SignIn = ({history}) => {
     const {state,dispatch} = useContext(AuthContext)
@@ -35,18 +61,67 @@ const SignIn = ({history}) => {
             localStorage.removeItem('sign_in_msg')
         }        
     }
+
+    const classes = useStyles();
+
     return (
         <>
-            <div>Sign In</div>        
-        <form>
-            <div>{msg}</div>
-            <label>Email</label><br />
-                    <input onChange={e => setEmail(e.target.value)} value={email} name="email" type="text" />
-                    <br /><label>Password</label><br />
-                    <input onChange={e => setPassword(e.target.value)} value={password} name="password" type="password" />
-                <button onClick={handleSubmit}>Submit</button>
-                <button onClick={checkState}>Check State</button>
+            <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <div className={classes.paper}>
+            <Typography component="h1" variant="h5">
+                Sign in
+            </Typography>
+            <br />
+            <Avatar className={classes.avatar}>
+                <LockOutlinedIcon />
+            </Avatar>
+            <br />
+                <form className={classes.form} noValidate>
+                    <div>{msg}</div>
+                    {/* <label>Email</label><br /> */}
+                    <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    onChange={e => setEmail(e.target.value)} value={email} 
+                />
+                    {/* <input onChange={e => setEmail(e.target.value)} value={email} name="email" type="text" /> */}
+                    {/* <br /><label>Password</label><br /> */}
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password" 
+                        onChange={e => setPassword(e.target.value)} 
+                        value={password}
+                        />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={handleSubmit}
+                        variant="contained"
+                    >
+                        Sign In
+                    </Button>
             </form>
+        </div>
+        
+        </Container>
         </>
     )
 }

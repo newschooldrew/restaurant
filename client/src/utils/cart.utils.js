@@ -18,16 +18,18 @@ export const addItemToCart = (cartItems, cartItemToAdd) =>{
         return [...cartItems,{...cartItemToAdd,quantity:1}]   
     }
 
-export const removeItemFromCart = (cartItems,cartItemToRemove) => {
+export const removeItemFromCart = (cartItems,cartItemToRemove,cartTotal) => {
+        console.log("cartTotal:")
+        console.log(cartTotal)
         // find out if there is an item in the count
         console.log("cartItems from removeItem fn")
         console.log(cartItems)
-            const existingCartItem = cartItems.find(
-                    cartItem => cartItem.id === cartItemToRemove.id
-                )
+        const existingCartItem = cartItems.find(
+            cartItem => cartItem.id === cartItemToRemove.id
+            )
                 // check if quantity is one
                 // you want to keep the values where they dont match
-                if(existingCartItem.quantity === 1){
+                if(existingCartItem && existingCartItem.quantity == 1){
                     return cartItems.filter(cartItem => cartItem.id !== cartItemToRemove.id)
                     }
                         // bring in cartItem
