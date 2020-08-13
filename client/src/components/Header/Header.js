@@ -89,7 +89,7 @@ const Header = ({history}) => {
                     <Typography className={classes.title}>
                         Hello, {username}
                     </Typography> 
-                <Typography edge="start" className={classes.menuButton} color="inherit">Cart Items: {cartItemCount}</Typography>
+                <Button edge="start" onClick={()=>history.push('/checkout')} className={classes.menuButton} color="inherit">Cart Items: {cartItemCount}</Button>
                         <Button color="inherit" onClick={handleSubmit}>
                             Sign Out
                         </Button>

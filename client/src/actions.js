@@ -164,3 +164,11 @@ export const actionItemToCart = async (cartItemToAdd,dispatch) =>{
         console.log(res)
         dispatch({type:"ADD_ITEM_TO_CART",payload:cartItemToAdd})
     }
+
+export const fetchMealById = async (id,dispatch) =>{
+    console.log("id:")
+    console.log(id)
+    const res = await axios.post('/find-meal',{id});
+    console.log(res.data)
+    dispatch({type:"FETCH_MEAL",payload:res.data})
+}

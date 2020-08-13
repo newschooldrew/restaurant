@@ -42,3 +42,15 @@ export const removeItemFromCart = (cartItems,cartItemToRemove,cartTotal) => {
                             
                     )
                 }
+
+export const totalPrice = items =>{
+    console.log("total Price items")
+    console.log(items)
+    return items.reduce((acc,item) => acc + item.quantity * item.price,0)
+}
+
+export const totalItemPrice = item => {
+    console.log("item:")
+    console.log(item)
+    return item.quantity * item.price
+}

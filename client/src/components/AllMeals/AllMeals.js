@@ -43,10 +43,9 @@ const AllMeals = ({history}) => {
     let itemsArr = [];
     const {state,dispatch} = useContext(AuthContext)
     const {username,allMeals,cartItems,cart} = state;
-    
+    console.log(allMeals)
     useEffect(() =>{
         fetchAllMeals(dispatch)
-
     },[])
 
     const [emailFocus, setEmailFocus] = React.useState(false);
@@ -70,7 +69,7 @@ const AllMeals = ({history}) => {
           start: [sliderMin, sliderMax],
           connect: [false, true, false],
           step: 1,
-          range: { min: 30, max: 900 },
+          range: { min: 5, max: 40 },
         }).on("update", function (values) {
           setSliderMin(Math.round(values[0]));
           setSliderMax(Math.round(values[1]));
@@ -187,13 +186,13 @@ const AllMeals = ({history}) => {
                               className="price-left pull-left"
                               id="price-left"
                             >
-                              €{sliderMin}
+                              ${sliderMin}
                             </span>
                             <span
                               className="price-right pull-right"
                               id="price-right"
                             >
-                              €{sliderMax}
+                              ${sliderMax}
                             </span>
                             <div className="clearfix"></div>
                             <div
@@ -455,7 +454,7 @@ const AllMeals = ({history}) => {
                     <Col lg="4" md="6">
                       <Card className="card-product card-plain">
                       <div className="card-image">
-                          <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                          <a onClick={(e) => history.push(`/product-page/${post._id}`)}>
                             <img
                               alt="..."
                               src={require("../../assets/img/polo.jpg")}

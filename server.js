@@ -346,4 +346,16 @@ app.post('/store-checkout',async (req,res)=>{
     foundItem
 })
 
+app.post('/find-meal',async (req,res)=>{
+    console.log("req.body:")
+    console.log(req.body.id)
+    const id = req.body.id;
+    const foundMeal = await Meal.findById(
+        {_id:id}
+    )
+    res.send(foundMeal)
+    console.log("foundMeal:")
+    console.log(foundMeal)
+})
+
 app.listen(5000,() => console.log("server running on port 5000"))

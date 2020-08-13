@@ -124,7 +124,12 @@ const Reducer = (state, { type, payload }) => {
                 return{
                     ...state,
                     cartItems:[]
-                    }   
+                }   
+    case "FETCH_MEAL":
+                return{
+                    ...state,
+                    meal:payload
+                }   
     default:
         return state
     }

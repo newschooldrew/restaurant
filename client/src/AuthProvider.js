@@ -22,14 +22,6 @@ export const AuthProvider = (props) => {
             console.log("you must sign in")
         }
         
-        console.log("cartItems:")
-        console.log(cartItems)
-        if(cartItems){
-            // sessionStorage.setItem('cart',JSON.stringify(cartItems))
-        }
-
-        // dispatch({type:"UPDATE_CART",payload:parsedRes})
-        
     },[cartItems])
     return(
         <AuthContext.Provider

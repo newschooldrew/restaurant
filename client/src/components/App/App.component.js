@@ -10,6 +10,8 @@ import EditProfile from '../EditProfile/EditProfile'
 import AllMeals from '../AllMeals/AllMeals'
 import InputMeals from '../InputMeals/InputMeals'
 import Checkout from '../Checkout/Checkout'
+import ProductPage from '../ProductPage/ProductPage'
+import CheckoutPage from '../Checkout/Checkout'
 
 const App = () => {
         return (
@@ -25,7 +27,9 @@ const App = () => {
                         <Route path="/posts" component={PostPage} />
                         <Route path="/all-meals" component={AllMeals} />
                         <Route path="/input-meals" component={InputMeals} />
-                        <Route path="/checkout" component={Checkout} />
+                        {/* <Route path="/checkout" component={Checkout} /> */}
+                        <Route path="/product-page/:id" component={ProductPage} />
+                        <Route path="/checkout" component={CheckoutPage} />
                     </Switch>
             </BrowserRouter>
         )
