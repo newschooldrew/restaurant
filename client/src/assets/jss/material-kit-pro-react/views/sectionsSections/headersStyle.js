@@ -1,4 +1,4 @@
-import headerLinksStyle from "assets/jss/material-kit-pro-react/components/headerLinksStyle.js";
+import headerLinksStyle from "../../components/headerLinksStyle.js";
 import {
   container,
   mrAuto,
@@ -6,7 +6,7 @@ import {
   blackColor,
   whiteColor,
   hexToRgb
-} from "assets/jss/material-kit-pro-react.js";
+} from "../../../material-kit-pro-react.js";
 
 const headersSection = theme => ({
   ...headerLinksStyle(theme),

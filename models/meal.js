@@ -8,7 +8,8 @@ const MealSchema = Schema({
         type:Date,
         default:Date.now
     },
-    price:Number
+    price:Number,
+    url:String
 })
 
 module.exports = mongoose.model("meal",MealSchema)

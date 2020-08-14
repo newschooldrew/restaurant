@@ -9,9 +9,11 @@ import PostPage from '../../pages/PostPage/PostPage'
 import EditProfile from '../EditProfile/EditProfile'
 import AllMeals from '../AllMeals/AllMeals'
 import InputMeals from '../InputMeals/InputMeals'
-import Checkout from '../Checkout/Checkout'
 import ProductPage from '../ProductPage/ProductPage'
+import Checkout from '../Checkout/Checkout'
 import CheckoutPage from '../Checkout/Checkout'
+import LandingPage from '../LandingPage/LandingPage'
+import EditMealContainer from '../EditMealContainer/EditMealContainer'
 
 const App = () => {
         return (
@@ -30,6 +32,8 @@ const App = () => {
                         {/* <Route path="/checkout" component={Checkout} /> */}
                         <Route path="/product-page/:id" component={ProductPage} />
                         <Route path="/checkout" component={CheckoutPage} />
+                        <Route exact path="/landing-page" component={LandingPage} />
+                        <Route exact path="/edit-meal" component={EditMealContainer} />
                     </Switch>
             </BrowserRouter>
         )

@@ -43,7 +43,6 @@ const AllMeals = ({history}) => {
     let itemsArr = [];
     const {state,dispatch} = useContext(AuthContext)
     const {username,allMeals,cartItems,cart} = state;
-    console.log(allMeals)
     useEffect(() =>{
         fetchAllMeals(dispatch)
     },[])
@@ -59,7 +58,7 @@ const AllMeals = ({history}) => {
       }
     };
     // slider states and functions
-    const [sliderMin, setSliderMin] = React.useState(100);
+    const [sliderMin, setSliderMin] = React.useState(0);
     const [sliderMax, setSliderMax] = React.useState(880);
     React.useEffect(() => {
       if (
@@ -69,7 +68,7 @@ const AllMeals = ({history}) => {
           start: [sliderMin, sliderMax],
           connect: [false, true, false],
           step: 1,
-          range: { min: 5, max: 40 },
+          range: { min: 0, max: 40 },
         }).on("update", function (values) {
           setSliderMin(Math.round(values[0]));
           setSliderMax(Math.round(values[1]));
@@ -115,12 +114,12 @@ const AllMeals = ({history}) => {
     
     const classes = useStyles();
 
-    const addItemToCart = (id,title,price) =>{
+    const addItemToCart = (id,title,price,url) =>{
         console.log(state)
-        const item = {id,title,price};
+        const item = {id,title,price,url};
         dispatch({type:"ADD_ITEM_TO_CART",payload:item})
     }
-    const removeItemFromCart = (id,title,price) =>{
+    const removeItemFromCart = (id,title,price,url) =>{
         console.log(state)
         const item = {id,title,price};
         dispatch({type:"REMOVE_ITEM_FROM_CART",payload:item})
@@ -438,6 +437,7 @@ const AllMeals = ({history}) => {
                 const id = post._id;
                 const title = post.title;
                 const price = post.price;
+                const url = post.url;
                 let myCachedSession = JSON.parse(sessionStorage.getItem('cart'))
                 let qty;
                 let disabled;
@@ -456,8 +456,12 @@ const AllMeals = ({history}) => {
                       <div className="card-image">
                           <a onClick={(e) => history.push(`/product-page/${post._id}`)}>
                             <img
+                              width='120px'
+                              height='160px'
                               alt="..."
-                              src={require("../../assets/img/polo.jpg")}
+                              display="block"
+                              overflow="hidden"
+                              src={post.url}
                             ></img>
                           </a>
                         </div>
@@ -466,28 +470,13 @@ const AllMeals = ({history}) => {
                             <CardText className="card-description">{post.description}</CardText>
                                 <CardTitle className="card-description">${post.price}</CardTitle>
                                 <CardTitle>
-                                    <Button color="primary" size="small" variant="contained"  disabled={!disabled} onClick={() => removeItemFromCart(id,title,price)}>-</Button>
-                                    <Button color="primary" size="small" variant="contained" onClick={() => addItemToCart(id,title,price)}>+</Button>
+                                    <Button color="primary" size="small" variant="contained"  disabled={!disabled} onClick={() => removeItemFromCart(id,title,price,url)}>-</Button>
+                                    <Button color="primary" size="small" variant="contained" onClick={() => addItemToCart(id,title,price,url)}>+</Button>
                                 </CardTitle>
                         </CardBody>
                             <CardFooter>
                                 <CardText className={classes.paper}>Quantity: </CardText>
-                                <CardText className={classes.paper}>{qty ? (<div>{qty.quantity}</div>) : 0}</CardText>
-                                    {/* <Button
-                              className="btn-neutral btn-icon btn-round pull-right"
-                              color="danger"
-                              data-placement="left"
-                              id="tooltip719224088"
-                            >
-                              <i className="now-ui-icons ui-2_favourite-28"></i>
-                            </Button>
-                            <UncontrolledTooltip
-                              delay={0}
-                              placement="left"
-                              target="tooltip719224088"
-                            >
-                              Remove from wishlist
-                            </UncontrolledTooltip> */}
+                                <CardText className={classes.paper}>{qty ? (<>{qty.quantity}</>) : 0}</CardText>
                             </CardFooter>
                         </Card>
                     </Col>

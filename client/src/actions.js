@@ -110,6 +110,13 @@ export const updatePost = (post,dispatch) =>{
         dispatch({type:"POST_UPDATED",payload:res.data})
     })
 }
+export const updateMeal = (meal,dispatch) =>{
+    axios.post('/update-meal',meal).then(res => {
+        console.log("res:")
+        console.log(res.data)
+        dispatch({type:"MEAL_UPDATED",payload:res.data})
+    })
+}
 
 export const editComment = async comment =>{
     const res = await axios.post('/edit-comment',comment);

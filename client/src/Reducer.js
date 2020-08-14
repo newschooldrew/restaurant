@@ -48,6 +48,11 @@ const Reducer = (state, { type, payload }) => {
             ...state,
             hasUpdatedPost:payload
         }
+    case "MEAL_UPDATED":
+        return{
+            ...state,
+            hasUpdatedMeal:payload
+        }
     case "TOGGLE_EDIT_MODE":
         return{
             ...state,

@@ -208,6 +208,20 @@ app.post('/update-post',async(req,res) =>{
     res.send("this post has been updated")
 })
 
+app.post('/update-meal',async(req,res) =>{
+    console.log("req.body.post_id:")
+    console.log(req.body)
+    const {id,title,description,price,url} = req.body;
+    console.log(id,title,description,price,url)
+    const updatedMeal = await Meal.findByIdAndUpdate(
+        {_id:id},
+        {$set:{title,description,price,url}},
+        {new:true}
+    )
+    updatedMeal.save()
+    res.send("this post has been updated")
+})
+
 app.post('/edit-comment',async (req,res)=>{
     console.log(req.body)
     const {post_id,id,content} = req.body;
@@ -327,8 +341,10 @@ app.post('/fetch-favorites',async (req,res)=>{
             const description = csv[1]
             console.log(csv[2])
             const price = csv[2]
+            console.log(csv[3])
+            const url = csv[3]
             const createMealFn = async ()=>{
-                const createMeals = await new Meal({title,description,price})
+                const createMeals = await new Meal({title,description,price,url})
                 createMeals.save()
             }
             createMealFn()

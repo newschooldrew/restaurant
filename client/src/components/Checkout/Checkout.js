@@ -120,6 +120,8 @@ if(!cartItems && !sessionItems) return (<div>loading checkout items</div>)
                       console.log(sessionItems)
                       return(
                         sessionItems.map((item,idx) =>{
+                          console.log("item.url:")
+                          console.log(item.url)
                           console.log("cartItemCount[idx].quantity:")
                           console.log(cartItemCount[idx])
                                           const {id,title,price} = item;
@@ -139,7 +141,7 @@ if(!cartItems && !sessionItems) return (<div>loading checkout items</div>)
                                     tableData={[
                                       [  
                                     <div className={classes.imgContainer} key={1}>
-                                    <img src={product1} alt="..." className={classes.img} />
+                                    <img src={item.url} alt="..." className={classes.img} />
                                       </div>,
                                         <span key={1}>
                                         <a href="#jacket" className={classes.tdNameAnchor}>
@@ -181,7 +183,7 @@ if(!cartItems && !sessionItems) return (<div>loading checkout items</div>)
                                         </div>
                                       </span>,
                                       <span key={1}>
-                                        <small className={classes.tdNumberSmall}>€</small> {totalItemPrice(item)}
+                                        <small className={classes.tdNumberSmall}>$</small> {totalItemPrice(item)}
                                       </span>,
                                       <Tooltip
                                         key={1}
