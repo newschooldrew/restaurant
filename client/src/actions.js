@@ -71,6 +71,13 @@ export const fetchPosts = async (username,dispatch) =>{
         dispatch({type:"FETCH_POSTS",payload:res.data})
     }
 
+    export const fetchProfile = async (username,dispatch) =>{
+        const res = await axios.post('/fetch-profile',{username});
+            console.log("fetch user response is: ")
+            console.log(res.data)
+            dispatch({type:"FETCH_PROFILE",payload:res.data})
+        }
+
 export const fetchAllMeals = async (dispatch) =>{
     const res = await axios.get('/fetch-all-meals');
         console.log("fetch posts response is: ")

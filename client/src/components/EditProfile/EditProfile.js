@@ -1,31 +1,37 @@
-import React,{useContext,useEffect} from 'react'
+import React,{useContext,useEffect,useState} from 'react'
 import AuthContext from '../../AuthContext'
-import {fetchPosts} from '../../actions'
-import {updatePost} from '../../actions'
+import {fetchProfile} from '../../actions'
 import EditPostModal from '../EditRecipeModal/EditPostModal'
+import Sidebar from "../Sidebar/Sidebar.js";
+import routes from "../../routes.js";
 
 const EditProfile = () => {
     const {state,dispatch} = useContext(AuthContext)
-    const {username,posts} = state;
-    console.log("posts:")
-    console.log(posts)
+    const {username,profile} = state;
+    const [sidebarMini,setSidebarMini] = useState(true)
+    const [backgroundColor,setBackgroundColor] = useState('blue')
 
     useEffect(() =>{
-        fetchPosts(username,dispatch)
+        fetchProfile(username,dispatch)
         
     },[username])
 
+      const divStyle = {
+          margin:'8% 0 0 0'
+      }
 
-    return (
-        <div>
-                {posts && posts.map((post,i) =>{
-                    console.log(post[i])
-                return(
-                    <EditPostModal key={post._id} i={i} id={post._id} title={post.title} content={post.content} />
-                )}
-            )}
+console.log("profile:")
+console.log(profile)
+return(
+    <>
+    {profile ? (
+        <div style={divStyle}>
+                <EditPostModal key={profile._id} id={profile._id} email={profile.email} profileName={profile.username} password={profile.password} />  
         </div>
-    )
+            
+        ) : (<div style={divStyle}>loading</div>)
+    }
+    </>)
 }
 
 export default EditProfile

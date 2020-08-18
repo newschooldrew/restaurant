@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
 const Header = ({history}) => {
     const {state,dispatch} = useContext(AuthContext)
@@ -82,14 +83,17 @@ const Header = ({history}) => {
     
     return (
         <div className={classes.root}>
-         <AppBar position="static">
+         <AppBar position="fixed">
          <Toolbar>
                 {username ?
                 <>
                     <Typography className={classes.title}>
                         Hello, {username}
                     </Typography> 
-                <Button edge="start" onClick={()=>history.push('/checkout')} className={classes.menuButton} color="inherit">Cart Items: {cartItemCount}</Button>
+                    <Button edge="start" onClick={()=>history.push('/checkout')} className={classes.menuButton} color="inherit">
+                        <ShoppingCartIcon />
+                        Cart Items: {cartItemCount}
+                    </Button>
                         <Button color="inherit" onClick={handleSubmit}>
                             Sign Out
                         </Button>

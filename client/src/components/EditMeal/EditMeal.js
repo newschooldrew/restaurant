@@ -4,16 +4,10 @@ import {updateMeal} from '../../actions'
 
 const EditMeal = ({id,title,description,price,url}) => {
 
-    const {state,dispatch} = useContext(AuthContext)
-    const {username,hasUpdatedMeal} = state;
-    
+    const {state,dispatch} = useContext(AuthContext);
     const [values,setValues] = useState({title,description,price,url,id})
     const [post_id, setId] = useState('')
     const [msg,setMsg] = useState('')
-
-    useEffect(()=>{
-        setMsg(hasUpdatedMeal)
-    },[hasUpdatedMeal])
 
     const handleChange = (event) => {
         const { name, value,id } = event.target;
@@ -31,8 +25,9 @@ const EditMeal = ({id,title,description,price,url}) => {
         const meal = {title,description,url,price,id};
         await updateMeal(meal,dispatch)
     }
+
     return (
-        <div>
+      <div>
                     <form>
                         {msg && (<div>{msg}</div>)}
                         <label>Title</label>
@@ -47,7 +42,7 @@ const EditMeal = ({id,title,description,price,url}) => {
                             Submit
                         </button>
                     </form>
-        </div>
+              </div>
     )
 }
 

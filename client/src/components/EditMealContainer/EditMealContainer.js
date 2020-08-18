@@ -1,7 +1,7 @@
 import React,{useContext,useEffect} from 'react'
 import AuthContext from '../../AuthContext'
 import {fetchAllMeals} from '../../actions'
-import EditMeal from '../EditMeal/EditMeal'
+import Table from "../Table/Table.js";
 
 const EditMealContainer = () => {
     const {state,dispatch} = useContext(AuthContext)
@@ -14,13 +14,19 @@ const EditMealContainer = () => {
         
     },[username])
 
+    const divStyle = {
+        margin: '8% 0 0 0',
+        overflow:'scroll'
+      };
 
     return (
-        <div>
+        <div style={divStyle}>
                 {allMeals && allMeals.map((meal,i) =>{
                     console.log(meal[i])
-                return(
-                    <EditMeal key={meal._id} i={i} id={meal._id} title={meal.title} description={meal.description} price={meal.price} url={meal.url} />
+                    return(
+                        <div>
+                        <Table dataTable={allMeals} />
+                        </div>
                 )}
             )}
         </div>

@@ -35,7 +35,7 @@ import {
 } from "reactstrap";
 
 // core components
-import ScrollTransparentNavbar from "../Navbars/ScrollTransparentNavbar.js";
+// import ScrollTransparentNavbar from "../Navbars/ScrollTransparentNavbar.js";
 // import EcommerceHeader from "components/Headers/EcommerceHeader.js";
 // import Footer from "components/Footers/Footer.js";
 
@@ -74,16 +74,7 @@ const AllMeals = ({history}) => {
           setSliderMax(Math.round(values[1]));
         });
       }
-  
-      document.body.classList.add("ecommerce-page");
-      document.body.classList.add("sidebar-collapse");
-      document.documentElement.classList.remove("nav-open");
-      window.scrollTo(0, 0);
-      document.body.scrollTop = 0;
-      return function cleanup() {
-        document.body.classList.remove("ecommerce-page");
-        document.body.classList.remove("sidebar-collapse");
-      };
+
     }, []);
 
     const useStyles = makeStyles(theme => ({
@@ -109,6 +100,13 @@ const AllMeals = ({history}) => {
           padding: theme.spacing(.25),
           textAlign: 'center',
           color: theme.palette.text.secondary,
+        },
+        clickable:{
+          cursor:'pointer',
+          width:'200px',
+          height:'160px',
+          objectFit:'cover',
+          borderRadius:'4x'
         }
       }));
     
@@ -132,6 +130,7 @@ const AllMeals = ({history}) => {
             sessionStorage.setItem('cartTotal',0)
         }
     }
+
     return (
         <>
       <div className="wrapper">
@@ -145,7 +144,7 @@ const AllMeals = ({history}) => {
                   <div className="collapse-panel">
                     <CardBody>
                       <Card className="card-refine card-plain">
-                        <CardTitle tag="h4">
+                      <CardTitle tag="h4">
                           Refine{" "}
                           <Button
                             className="btn-icon btn-neutral pull-right"
@@ -161,8 +160,8 @@ const AllMeals = ({history}) => {
                             Reset Filter
                           </UncontrolledTooltip>
                         </CardTitle>
-                        <CardHeader id="headingOne" role="tab">
-                          <h6 className="mb-0">
+                        <CardHeader id="headingTwo" role="tab">
+                          <h6>
                             <a
                               className="text-info"
                               aria-expanded={collapses.includes(1)}
@@ -174,12 +173,85 @@ const AllMeals = ({history}) => {
                                 changeCollapse(1);
                               }}
                             >
-                              Price Range{" "}
+                              Clothing{" "}
                               <i className="now-ui-icons arrows-1_minimal-down"></i>
                             </a>
                           </h6>
                         </CardHeader>
                         <Collapse isOpen={collapses.includes(1)}>
+                          <CardBody>
+                            <FormGroup check>
+                              <Label check>
+                                <Input defaultChecked type="checkbox"></Input>
+                                <span className="form-check-sign"></span>
+                                Entrees
+                              </Label>
+                            </FormGroup>
+                            <FormGroup check>
+                              <Label check>
+                                <Input type="checkbox"></Input>
+                                <span className="form-check-sign"></span>
+                                Lunch
+                              </Label>
+                            </FormGroup>
+                            <FormGroup check>
+                              <Label check>
+                                <Input defaultChecked type="checkbox"></Input>
+                                <span className="form-check-sign"></span>
+                                Appetizers
+                              </Label>
+                            </FormGroup>
+                            <FormGroup check>
+                              <Label check>
+                                <Input type="checkbox"></Input>
+                                <span className="form-check-sign"></span>
+                                Drinks
+                              </Label>
+                            </FormGroup>
+                            <FormGroup check>
+                              <Label check>
+                                <Input defaultChecked type="checkbox"></Input>
+                                <span className="form-check-sign"></span>
+                                Desserts
+                              </Label>
+                            </FormGroup>
+                            <FormGroup check>
+                              <Label check>
+                                <Input type="checkbox"></Input>
+                                <span className="form-check-sign"></span>
+                                Shorts
+                              </Label>
+                            </FormGroup>
+                            <FormGroup check>
+                              <Label check>
+                                <Input type="checkbox"></Input>
+                                <span className="form-check-sign"></span>
+                                Blazers
+                              </Label>
+                            </FormGroup>
+                          </CardBody>
+                        </Collapse>
+                      </Card>
+                      <Card className="card-refine card-plain">
+                        <CardHeader id="headingOne" role="tab">
+                          <h6 className="mb-0">
+                            <a
+                              className="text-info"
+                              aria-expanded={collapses.includes(2)}
+                              data-toggle="collapse"
+                              data-parent="#accordion"
+                              href="#pablo"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                changeCollapse(2);
+                              }}
+                            >
+                              Price Range{" "}
+                              <i className="now-ui-icons arrows-1_minimal-down"></i>
+                            </a>
+                          </h6>
+                        </CardHeader>
+                        <Collapse isOpen={collapses.includes(2)}>
                           <CardBody>
                             <span
                               className="price-left pull-left"
@@ -198,79 +270,6 @@ const AllMeals = ({history}) => {
                               className="slider slider-refine"
                               id="sliderRefine"
                             ></div>
-                          </CardBody>
-                        </Collapse>
-                      </Card>
-                      <Card className="card-refine card-plain">
-                        <CardHeader id="headingTwo" role="tab">
-                          <h6>
-                            <a
-                              className="text-info"
-                              aria-expanded={collapses.includes(2)}
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#pablo"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                changeCollapse(2);
-                              }}
-                            >
-                              Clothing{" "}
-                              <i className="now-ui-icons arrows-1_minimal-down"></i>
-                            </a>
-                          </h6>
-                        </CardHeader>
-                        <Collapse isOpen={collapses.includes(2)}>
-                          <CardBody>
-                            <FormGroup check>
-                              <Label check>
-                                <Input defaultChecked type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Casual Shirts
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Formal Shirts
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input defaultChecked type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Jeans
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Polos
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input defaultChecked type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Pijamas
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Shorts
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Blazers
-                              </Label>
-                            </FormGroup>
                           </CardBody>
                         </Collapse>
                       </Card>
@@ -456,13 +455,10 @@ const AllMeals = ({history}) => {
                       <div className="card-image">
                           <a onClick={(e) => history.push(`/product-page/${post._id}`)}>
                             <img
-                              width='120px'
-                              height='160px'
+                              className={classes.clickable}
                               alt="..."
-                              display="block"
-                              overflow="hidden"
                               src={post.url}
-                            ></img>
+                            />
                           </a>
                         </div>
                         <CardBody>

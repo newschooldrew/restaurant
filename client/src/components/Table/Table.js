@@ -1,197 +1,165 @@
-import React from "react";
-import cx from "classnames";
-import PropTypes from "prop-types";
+/*eslint-disable*/
+import React, { Component } from "react";
 
-// @material-ui/core components
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+// reactstrap components
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Row,
+  Col,
+  Button,
+} from "reactstrap";
 
-import styles from "../../assets/jss/material-kit-pro-react/components/tableStyle.js";
+// core components
+import PanelHeader from "../PanelHeader/PanelHeader.js";
+import ReactTable from "../ReactTable/ReactTable.js";
+import EditMeal from '../EditMeal/EditMeal'
 
-const useStyles = makeStyles(styles);
-
-export default function CustomTable(props) {
-  const {
-    tableHead,
-    tableData,
-    tableHeaderColor,
-    hover,
-    colorsColls,
-    coloredColls,
-    customCellClasses,
-    customClassesForCells,
-    striped,
-    tableShopping,
-    customHeadCellClasses,
-    customHeadClassesForCells
-  } = props;
-  const classes = useStyles();
-  return (
-    <div className={classes.tableResponsive}>
-      <Table className={classes.table}>
-        {tableHead !== undefined ? (
-          <TableHead className={classes[tableHeaderColor]}>
-            <TableRow className={classes.tableRow}>
-              {tableHead.map((prop, key) => {
-                const tableCellClasses =
-                  classes.tableHeadCell +
-                  " " +
-                  classes.tableCell +
-                  " " +
-                  cx({
-                    [customHeadCellClasses[
-                      customHeadClassesForCells.indexOf(key)
-                    ]]: customHeadClassesForCells.indexOf(key) !== -1,
-                    [classes.tableShoppingHead]: tableShopping
-                  });
-                return (
-                  <TableCell className={tableCellClasses} key={key}>
-                    {prop}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          </TableHead>
-        ) : null}
-        <TableBody>
-          {tableData.map((prop, key) => {
-            var rowColor = "";
-            var rowColored = false;
-            if (prop.color !== undefined) {
-              rowColor = prop.color;
-              rowColored = true;
-              prop = prop.data;
-            }
-            const tableRowClasses = cx({
-              [classes.tableRowHover]: hover,
-              [classes[rowColor + "Row"]]: rowColored,
-              [classes.tableStripedRow]: striped && key % 2 === 0
-            });
-            if (prop.total) {
-              return (
-                <TableRow key={key} hover={hover} className={tableRowClasses}>
-                  <TableCell
-                    className={classes.tableCell}
-                    colSpan={prop.colspan}
-                  />
-                  <TableCell
-                    className={classes.tableCell + " " + classes.tableCellTotal}
-                  >
-                    Total
-                  </TableCell>
-                  <TableCell
-                    className={
-                      classes.tableCell + " " + classes.tableCellAmount
-                    }
-                  >
-                    {prop.amount}
-                  </TableCell>
-                  {tableHead.length - (prop.colspan - 0 + 2) > 0 ? (
-                    <TableCell
-                      className={classes.tableCell}
-                      colSpan={tableHead.length - (prop.colspan - 0 + 2)}
-                    />
-                  ) : null}
-                </TableRow>
-              );
-            }
-            if (prop.purchase) {
-              return (
-                <TableRow key={key} hover={hover} className={tableRowClasses}>
-                  <TableCell
-                    className={classes.tableCell}
-                    colSpan={prop.colspan}
-                  />
-                  <TableCell
-                    className={classes.tableCell + " " + classes.tableCellTotal}
-                  >
-                    Total
-                  </TableCell>
-                  <TableCell
-                    className={
-                      classes.tableCell + " " + classes.tableCellAmount
-                    }
-                  >
-                    {prop.amount}
-                  </TableCell>
-                  <TableCell
-                    className={classes.tableCell + " " + classes.right}
-                    colSpan={prop.col.colspan}
-                  >
-                    {prop.col.text}
-                  </TableCell>
-                </TableRow>
-              );
-            }
-            return (
-              <TableRow
-                key={key}
-                hover={hover}
-                className={classes.tableRow + " " + tableRowClasses}
+class ReactTables extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      editItem:null,
+      data: this.props.dataTable.map((prop, key) => {
+        return {
+          id: prop._id,
+          title: prop.title,
+          description: prop.description,
+          price: prop.price,
+          url: prop.url,
+          actions: (
+            // we've added some custom button actions
+            <div className="actions-right">
+              {/* use this button to add a like kind of action */}
+              <Button
+                onClick={() => {
+                  let obj = this.state.data.find((o) => o.id === prop._id);
+                  console.log(obj)
+                  return () => <input value={obj.title} onChange={this.onChangeFct} />
+                  }
+                }
+                className="btn-icon btn-round"
+                color="info"
+                size="sm"
               >
-                {prop.map((prop, key) => {
-                  const tableCellClasses =
-                    classes.tableCell +
-                    " " +
-                    cx({
-                      [classes[colorsColls[coloredColls.indexOf(key)]]]:
-                        coloredColls.indexOf(key) !== -1,
-                      [customCellClasses[customClassesForCells.indexOf(key)]]:
-                        customClassesForCells.indexOf(key) !== -1
-                    });
-                  return (
-                    <TableCell className={tableCellClasses} key={key}>
-                      {prop}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
-  );
+                <i className="fa fa-heart" />
+              </Button>{" "}
+
+              {/* use this button to add a edit kind of action */}
+              <Button
+                onClick={() => {
+                  let obj = this.state.data.find((o) => o.id === key);
+                  this.setState({editItem:obj})
+                }}
+                className="btn-icon btn-round"
+                color="warning"
+                size="sm"
+              >
+                <i className="fa fa-edit" />
+              </Button>{" "}
+
+              {/* use this button to remove the data row */}
+              <Button
+                onClick={() => {
+                  var data = this.state.data;
+                  data.find((o, i) => {
+                    if (o.id === key) {
+                      // here you should add some custom code so you can delete the data
+                      // from this component and from your server as well
+                      data.splice(i, 1);
+                      console.log(data);
+                      return true;
+                    }
+                    return false;
+                  });
+                  this.setState({ data: data });
+                }}
+                className="btn-icon btn-round"
+                color="danger"
+                size="sm"
+              >
+                <i className="fa fa-times" />
+              </Button>{" "}
+              
+            </div>
+          ),
+        };
+      }),
+    };
+  }
+  render() {
+    this.onChangeFct = () => console.log("onChange usually handled by redux");
+    console.log("this.props.dataTable:")
+    console.log(this.props.dataTable[0].title)
+    const  divStyle = {
+      scroll: 'overflow',
+      color:'red'
+    }
+    return (
+      <div >
+        <PanelHeader
+          content={
+            <div className="header text-center">
+              <h2 className="title">View and Edit Your Meals here</h2>
+              <p className="category">
+                . It is a highly flexible tool, based upon the foundations of
+                progressive enhancement on which you can add advanced
+                interaction controls. Please check out their{" "}
+                <a
+                  href="https://react-table.js.org/#/story/readme"
+                  target="_blank"
+                >
+                  full documentation.
+                </a>
+              </p>
+            </div>
+          }
+        />
+        <div className="content">
+          <Row>
+            <Col xs={12} md={12}>
+              <Card>
+                <CardHeader>
+                  <CardTitle tag="h4">React Table</CardTitle>
+                </CardHeader>
+                <CardBody>
+                  <ReactTable
+                    data={this.state.data}
+                    columns={[
+                      {
+                        Header: "Title",
+                        accessor: "title"
+                      },
+                      {
+                        Header: "Description",
+                        accessor: "description",
+                      },
+                      {
+                        Header: "Price",
+                        accessor: "price",
+                      },
+                      {
+                        Header: "URL",
+                        accessor: "url",
+                      },
+                      {
+                        Header: "Actions",
+                        accessor: "actions",
+                        sortable: false,
+                        filterable: false,
+                      },
+                    ]}
+                  />
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </div>
+      </div>
+    );
+  }
 }
 
-CustomTable.defaultProps = {
-  tableHeaderColor: "gray",
-  hover: false,
-  colorsColls: [],
-  coloredColls: [],
-  striped: false,
-  customCellClasses: [],
-  customClassesForCells: [],
-  customHeadCellClasses: [],
-  customHeadClassesForCells: []
-};
-
-CustomTable.propTypes = {
-  tableHeaderColor: PropTypes.oneOf([
-    "warning",
-    "primary",
-    "danger",
-    "success",
-    "info",
-    "rose",
-    "gray"
-  ]),
-  tableHead: PropTypes.arrayOf(PropTypes.string),
-  // Of(PropTypes.arrayOf(PropTypes.node)) || Of(PropTypes.object),
-  tableData: PropTypes.array,
-  hover: PropTypes.bool,
-  coloredColls: PropTypes.arrayOf(PropTypes.number),
-  // Of(["warning","primary","danger","success","info","rose","gray"]) - colorsColls
-  colorsColls: PropTypes.array,
-  customCellClasses: PropTypes.arrayOf(PropTypes.string),
-  customClassesForCells: PropTypes.arrayOf(PropTypes.number),
-  customHeadCellClasses: PropTypes.arrayOf(PropTypes.string),
-  customHeadClassesForCells: PropTypes.arrayOf(PropTypes.number),
-  striped: PropTypes.bool,
-  // this will cause some changes in font
-  tableShopping: PropTypes.bool
-};
+export default ReactTables;

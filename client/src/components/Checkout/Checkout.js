@@ -29,7 +29,8 @@ import Button from "../CustomButtons/Button.js";
 import Card from "../Card/Card.js";
 import CardBody from "../Card/CardBody.js";
 import {totalPrice,totalItemPrice} from '../../utils/cart.utils' 
-
+import StripeButton from '../StripeButton/StripeButton'
+import {withRouter} from 'react-router-dom'
 import shoppingCartStyle from "../../assets/jss/material-kit-pro-react/views/shoppingCartStyle.js";
 
 import product1 from "../../assets/img/product1.jpg";
@@ -38,7 +39,7 @@ import product3 from "../../assets/img/product3.jpg";
 
 const useStyles = makeStyles(shoppingCartStyle);
 
-export default function ShoppingCartPage() {
+function ShoppingCartPage({history}) {
   const {state,dispatch} = useContext(AuthContext)
   const {username,cartItems} = state;
 
@@ -53,6 +54,10 @@ export default function ShoppingCartPage() {
     console.log("add item from cart")
     const item = {id,title,price};
     dispatch({type:"ADD_ITEM_TO_CART",payload:item})
+}
+
+const goBackToShopping = () =>{
+  history.push('/all-meals')
 }
 
 const removeItemFromCart = (id,title,price) =>{
@@ -101,7 +106,7 @@ if(!cartItems && !sessionItems) return (<div>loading checkout items</div>)
                 classes.textCenter
               )}
             >
-              <h2 className={classes.title}>Shopping Page</h2>
+              <h2 className={classes.title}>Your Cart</h2>
             </GridItem>
           </GridContainer>
         </div>
@@ -111,7 +116,8 @@ if(!cartItems && !sessionItems) return (<div>loading checkout items</div>)
                       <div className={classes.container}>
                         <Card plain>
                           <CardBody plain>
-                            <h3 className={classes.cardTitle}>Shopping Cart</h3>
+                            {/* <h3 className={classes.cardTitle}>Shopping Cart</h3> */}
+                            <Button color="info" onClick={() => goBackToShopping()}>Back to Shopping</Button>
                     {(() => {
                     if(sessionItems && sessionItems.length > 0){
                       // let cartItemCount = sessionStorage.getItem('cartTotal')
@@ -235,9 +241,9 @@ if(!cartItems && !sessionItems) return (<div>loading checkout items</div>)
                                           </span>
                                         </Grid>
                                         <Grid item xs={3}>
-                                        <Button color="info" round>
+                                        <StripeButton price={totalPrice(sessionItems||cartItems)} color="info" round>
                                           Complete Purchase <KeyboardArrowRight />
-                                        </Button>
+                                        </StripeButton>
                                         </Grid>
                                       </Grid>
                                       </CardBody>
@@ -245,10 +251,7 @@ if(!cartItems && !sessionItems) return (<div>loading checkout items</div>)
                                     </div>
                                     </div>
                             </div>)}
-
-
-
-
+export default withRouter(ShoppingCartPage)
 
                 {/* // START OF MY JS
 

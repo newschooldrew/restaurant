@@ -1,7 +1,7 @@
 import React from "react";
 
 // reactstrap components
-import { Button, Container } from "reactstrap";
+import { Button } from "reactstrap";
 import { makeStyles } from "@material-ui/core/styles";
 import GridContainer from "../Grid/GridContainer.js";
 import GridItem from "../Grid/GridItem.js";
@@ -32,14 +32,20 @@ function LandingPageHeader({history}) {
     history.push('/all-meals')
   }
 
+  const headerStyle = {
+    backgroundImage: "url(" + require("../../assets/img/bg26.jpg") + ")"
+  }
+
+  const buttonStyle = {
+    marginTop:'-100px'
+  }
+
   return (
     <>
       <div className="page-header page-header-small">
         <div
+        style={headerStyle} 
           className="page-header-image"
-          style={{
-            backgroundImage: "url(" + require("../../assets/img/bg26.jpg") + ")",
-          }}
           ref={pageHeader}
         ></div>
         <div
@@ -49,12 +55,13 @@ function LandingPageHeader({history}) {
           <div className={classes.container}>
             <GridContainer>
               <GridItem xs={12} sm={6} md={6}>
-                <h1 className={classes.title}>Your Restaurant Here</h1>
+                <h1 style={buttonStyle} className={classes.title}>Your Restaurant Here</h1>
                 <h4>
                   Here is a place to showcase your restaurant
                 </h4>
                 <br />
                 <Button
+                  style={buttonStyle}
                   color="danger"
                   size="lg"
                   // target="_blank"

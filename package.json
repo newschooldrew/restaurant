@@ -26,6 +26,7 @@
     "mongoose": "^5.9.22",
     "neat-csv": "^5.2.0",
     "react-addons-update": "^15.6.2",
+    "stripe": "^8.85.0",
     "twilio": "^3.48.2",
     "yargs": "^15.4.1"
   }

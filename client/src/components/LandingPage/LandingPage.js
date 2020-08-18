@@ -37,9 +37,14 @@ function LandingPage() {
       document.body.classList.remove("sidebar-collapse");
     };
   }, []);
+
+  const divStyle = {
+    overflow: 'scroll'
+  }
+
   return (
     <>
-      <div className="wrapper">
+      <div style={divStyle} className="wrapper">
         <LandingPageHeader />
         <div className="section section-about-us">
           <Container>

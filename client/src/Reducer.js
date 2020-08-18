@@ -18,6 +18,11 @@ const Reducer = (state, { type, payload }) => {
             ...state,
             username:payload
         }
+    case "FETCH_PROFILE":
+            return{
+            ...state,
+            profile:payload
+            }        
     case "LOG_OUT":
             return{
                 ...state,

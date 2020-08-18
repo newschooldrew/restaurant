@@ -68,13 +68,15 @@ const styles = {
     position: "relative"
   },
   imgContainer: {
-    width: "120px",
-    maxHeight: "160px",
-    overflow: "hidden",
-    display: "block",
-    "& img": {
-      width: "100%"
-    }
+      width:'150px',
+      height:'175px',
+      objectFit:'cover',
+      borderRadius:'4x',
+    // overflow: "hidden",
+    // display: "block",
+    // "& img": {
+    //   width: "100%"
+    // }
   },
   description: {
     maxWidth: "150px"

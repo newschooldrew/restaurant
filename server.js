@@ -11,6 +11,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const CryptoJS = require("crypto-js");
 const { prependOnceListener } = require('./models/post')
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 require('dotenv').config()
 
 mongoose.connect(keys.mongoUri,{ useNewUrlParser: true ,useUnifiedTopology: true})
@@ -155,6 +156,17 @@ app.get('/fetch-all-posts',async (req,res)=>{
     console.log(posts)
     console.log('***************')
     res.send(posts)
+})
+
+app.post('/fetch-profile',async (req,res)=>{
+    const username = req.body.username;
+    console.log("req:")
+    console.log(username)
+    const profile = await User.findOne(
+        {username})
+        console.log("server profile:")
+        console.log(profile)
+        res.send(profile)
 })
 
 app.post('/create-comment',async(req,res) =>{
@@ -374,4 +386,20 @@ app.post('/find-meal',async (req,res)=>{
     console.log(foundMeal)
 })
 
+app.post('/payment', (req, res) => {
+    const body = {
+      source: req.body.token.id,
+      amount: req.body.amount,
+      currency: 'usd'
+    };
+  console.log("body:")
+  console.log(body)
+    stripe.charges.create(body, (stripeErr, stripeRes) => {
+      if (stripeErr) {
+        res.status(500).send({ error: stripeErr });
+      } else {
+        res.status(200).send({ success: stripeRes });
+      }
+    });
+});
 app.listen(5000,() => console.log("server running on port 5000"))
