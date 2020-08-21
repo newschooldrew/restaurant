@@ -116,8 +116,8 @@ export const postComment = async (comment,username,id,key,dispatch) =>{
         dispatch({type:"COMMENT_CREATE",payload:newComment})
 }
 
-export const createOrder = async (username,price,dispatch) =>{
-    const item = {username,price}
+export const createOrder = async (username,cartTotal,price,dispatch) =>{
+    const item = {username,cartTotal,price}
     const res = await axios.post('/create-order', item);
         console.log("new order created")
         dispatch({type:"CREATE_ORDER",payload:item})
