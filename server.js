@@ -12,6 +12,8 @@ const bcrypt = require('bcrypt')
 const CryptoJS = require("crypto-js");
 const { prependOnceListener } = require('./models/post')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 require('dotenv').config()
 
 mongoose.connect(keys.mongoUri,{ useNewUrlParser: true ,useUnifiedTopology: true})
@@ -104,8 +106,45 @@ app.post('/create-new-post', async (req,res) =>{
     }
 })
 
-app.post('/create-meal',(req,res)=>{
-    
+app.post('/create-order',async (req,res)=>{
+    console.log(req.body)
+    const {username,price} = req.body;
+    console.log("username:")
+    console.log(username)
+    const item = {username,price};
+    console.log(item)
+    const newOrder = await User.findOneAndUpdate(
+        {username},
+        {$push:{orders:price}},
+        {new:true}
+    )
+        newOrder.save()
+        .then(order =>{
+            return order.sendSmsNotification("You've created an order", ()=>console.log("something went wrong"))
+        })
+
+        const msg = {
+            to: 'drewwperez@gmail.com',
+            from: 'drewwperez@gmail.com', // Use the email address or domain you verified above
+            subject: 'Sending with Twilio SendGrid is Fun',
+            text: 'This message was sent from the future at ',
+            html: '<strong>more stuff</strong>'
+          };
+
+          
+            try {
+              // send multiple individual emails to multiple recipients 
+              // where they don't see each other's email addresses
+              await sgMail.send(msg);
+            } catch (error) {
+              console.error(error);
+          
+              if (error.response) {
+                console.error(error.response.body)
+              }
+            }
+
+        res.send("order was created")
 })
 
 app.post('/fetch-posts',async (req,res)=>{
@@ -130,7 +169,6 @@ app.get('/fetch-all-meals',async (req,res)=>{
     console.log('fetch all meals call was made' )
 
     const foundMeals = await Meal.find({})
-
     console.log('***************')
     console.log(foundMeals)
     console.log('***************')
@@ -217,6 +255,20 @@ app.post('/update-post',async(req,res) =>{
         {new:true}
     )
     updatedPost.save()
+    res.send("this post has been updated")
+})
+
+app.post('/update-profile',async(req,res) =>{
+    console.log("req.body.post_id:")
+    console.log(req.body)
+    const {id,profileName,email,password,phoneNumber} = req.body;
+    console.log(profileName,email,password,phoneNumber)
+    const updatedUser = await User.findByIdAndUpdate(
+        {_id:id},
+        {$set:{username:profileName,email,password,phoneNumber}},
+        {new:true}
+    )
+    updatedUser.save()
     res.send("this post has been updated")
 })
 

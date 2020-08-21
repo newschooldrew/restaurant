@@ -107,6 +107,9 @@ const AllMeals = ({history}) => {
           height:'160px',
           objectFit:'cover',
           borderRadius:'4x'
+        },
+        scroll:{
+          overflow:'scroll'
         }
       }));
     
@@ -133,7 +136,7 @@ const AllMeals = ({history}) => {
 
     return (
         <>
-      <div className="wrapper">
+      <div className={"wrapper",classes.scroll}>
         <div className="main">
           <div className="section">
             <Container>

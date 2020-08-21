@@ -140,6 +140,16 @@ const Reducer = (state, { type, payload }) => {
                     ...state,
                     meal:payload
                 }   
+    case "TOGGLE_EDIT_MEAL":
+                return{
+                    ...state,
+                    editMeal:!payload
+                }   
+    case "CREATE_ORDER":
+                return{
+                    ...state,
+                    order:payload
+                }   
     default:
         return state
     }

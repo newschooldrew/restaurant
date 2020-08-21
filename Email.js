@@ -28,14 +28,15 @@ const msg = {
   from: 'drewwperez@gmail.com', // Use the email address or domain you verified above
   subject: 'Sending with Twilio SendGrid is Fun',
   text: 'This message was sent from the future at ' + myDate,
-  html: '<strong>more stuff</strong>',
+  html: '<strong>more stuff</strong>'
+};
   // To send the email in the future!
   // *********************************
-  sendAt: 1596658500,
+  // sendAt: 1596658500,
   // To delete it:
   // create Batch ID https://github.com/sendgrid/sendgrid-nodejs/blob/master/packages/client/USAGE.md#create-a-batch-id
   // batchId: 'MjFlMzYyZGMtZDc1Ny0xMWVhLTgzNDItY2FlM2NhZGFmODQxLTMxYjljMzRlOQ'
-};
+// };
 
 //ES8
 (async () => {

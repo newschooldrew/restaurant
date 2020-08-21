@@ -1,8 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import StripeCheckout from 'react-stripe-checkout';
 import axios from 'axios';
+import {withRouter} from 'react-router-dom'
+import {createOrder} from '../../actions'
+import AuthContext from '../../AuthContext'
 
-const StripeCheckoutButton = ({ price }) => {
+const StripeCheckoutButton = ({ price,history }) => {
+  const {state,dispatch} = useContext(AuthContext)
+  const {username} = state;
   const priceForStripe = price * 100;
   const publishableKey = 'pk_test_i7bJE84QP11alRDH8lY2Twkw00Jl1wYTZb';
 
@@ -15,8 +20,9 @@ const StripeCheckoutButton = ({ price }) => {
         token: token
       }
     })
-      .then(response => {
-        alert('succesful payment');
+      .then(res => {
+        createOrder(username,price,dispatch)
+        history.push('/receipt')
       })
       .catch(error => {
         console.log('Payment Error: ', error);
@@ -42,4 +48,4 @@ const StripeCheckoutButton = ({ price }) => {
   );
 };
 
-export default StripeCheckoutButton;
+export default withRouter(StripeCheckoutButton);

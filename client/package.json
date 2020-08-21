@@ -38,6 +38,7 @@
     "react-stripe-checkout": "^2.6.3",
     "react-table": "^7.5.0",
     "react-tagsinput": "3.19.0",
+    "react-x-editable": "^0.0.10-beta",
     "reactstrap": "8.4.1",
     "rellax": "1.12.1",
     "use-persisted-reducer": "^2.1.0"

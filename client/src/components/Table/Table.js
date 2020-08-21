@@ -15,13 +15,12 @@ import {
 // core components
 import PanelHeader from "../PanelHeader/PanelHeader.js";
 import ReactTable from "../ReactTable/ReactTable.js";
-import EditMeal from '../EditMeal/EditMeal'
 
 class ReactTables extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editItem:null,
+      editMode:false,
       data: this.props.dataTable.map((prop, key) => {
         return {
           id: prop._id,
@@ -37,7 +36,10 @@ class ReactTables extends Component {
                 onClick={() => {
                   let obj = this.state.data.find((o) => o.id === prop._id);
                   console.log(obj)
-                  return () => <input value={obj.title} onChange={this.onChangeFct} />
+                  this.setState({
+                    editMode:!this.state.editMode,
+                    selectedObj:obj
+                  })
                   }
                 }
                 className="btn-icon btn-round"
@@ -91,14 +93,9 @@ class ReactTables extends Component {
   }
   render() {
     this.onChangeFct = () => console.log("onChange usually handled by redux");
-    console.log("this.props.dataTable:")
-    console.log(this.props.dataTable[0].title)
-    const  divStyle = {
-      scroll: 'overflow',
-      color:'red'
-    }
+
     return (
-      <div >
+      <div>
         <PanelHeader
           content={
             <div className="header text-center">
@@ -126,6 +123,8 @@ class ReactTables extends Component {
                 </CardHeader>
                 <CardBody>
                   <ReactTable
+                    editMode={this.state.editMode}
+                    selectedObject={this.state.selectedObj}
                     data={this.state.data}
                     columns={[
                       {

@@ -10,6 +10,7 @@ import CheckoutPage from '../Checkout/Checkout'
 import LandingPage from '../LandingPage/LandingPage'
 import Dashboard from '../Dashboard/Dashboard'
 import Sidebar from '../Sidebar/Sidebar'
+import Receipt from '../Receipt/Receipt'
 import "../../assets/css/demo.css";
 
 const divStyle = {
@@ -24,12 +25,13 @@ const App = () => {
                         <Route exact path="/" render={() => localStorage.getItem('token') ?  <LandingPage /> : <SignUp /> } />
                         <Route exact path="/sign-in" render={() => localStorage.getItem('token') ?  <Redirect to="/" /> : <SignIn /> } />
                         <Route exact path="/create-post" render={() => localStorage.getItem('token') ?  <CreatePost /> : <SignIn /> } />
+                        <Route exact path="/checkout" component={CheckoutPage} />
                         <Route path="/all-meals" component={AllMeals} />
                         <Route path="/sign-up" component={SignUp} />
                         <Route path="/product-page/:id" component={ProductPage} />
-                        <Route path="/checkout" component={CheckoutPage} />
                         <Route path="/admin" component={Dashboard} />
                         <Route path="/sidebar" component={Sidebar} />
+                        <Route path="/receipt" component={Receipt} />
                     </Switch>
             </BrowserRouter>
         )

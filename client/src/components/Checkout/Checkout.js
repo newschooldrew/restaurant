@@ -24,18 +24,14 @@ import Grid from '@material-ui/core/Grid';
 import GridContainer from "../Grid/GridContainer.js";
 import GridItem from "../Grid/GridItem.js";
 // import Footer from "components/Footer/Footer.js";
-import Table from "../Table/Table.js";
+import CheckoutTable from "../CheckoutTable/CheckoutTable.js";
 import Button from "../CustomButtons/Button.js";
 import Card from "../Card/Card.js";
 import CardBody from "../Card/CardBody.js";
-import {totalPrice,totalItemPrice} from '../../utils/cart.utils' 
+import {totalPrice,totalItemPrice} from '../../utils/cart.utils'
 import StripeButton from '../StripeButton/StripeButton'
 import {withRouter} from 'react-router-dom'
 import shoppingCartStyle from "../../assets/jss/material-kit-pro-react/views/shoppingCartStyle.js";
-
-import product1 from "../../assets/img/product1.jpg";
-import product2 from "../../assets/img/product2.jpg";
-import product3 from "../../assets/img/product3.jpg";
 
 const useStyles = makeStyles(shoppingCartStyle);
 
@@ -132,7 +128,7 @@ if(!cartItems && !sessionItems) return (<div>loading checkout items</div>)
                           console.log(cartItemCount[idx])
                                           const {id,title,price} = item;
                                             return(
-                                    <Table
+                                    <CheckoutTable
                                     key={id}
                                       tableHead={[
                                         "",

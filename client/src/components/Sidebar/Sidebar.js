@@ -8,7 +8,6 @@ import PerfectScrollbar from "perfect-scrollbar";
 
 // reactstrap components
 import { Nav, Collapse, Button } from "reactstrap";
-import EditMealContainer from '../EditMealContainer/EditMealContainer'
 // core components
 import avatar from "../../assets/img/bg30.jpg";
 import logo from "../../assets/img/logo-white.svg";

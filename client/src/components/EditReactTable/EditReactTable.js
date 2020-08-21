@@ -45,8 +45,13 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
-function Table({ columns, data, editMode,selectedObject }) {
-  const [editSwitch,setEditSwitch] = useState(editMode)
+function Table({ columns, data }) {
+    let res;
+    data.map(d =>{
+        res = Object.keys(d).map(key => [key,d[key]])
+        return res;
+    })
+//   const [values,setValues] = useState(data)
   const [numberOfRows, setNumberOfRows] = React.useState({
     value: 10,
     label: "10 rows",
@@ -55,6 +60,9 @@ function Table({ columns, data, editMode,selectedObject }) {
     value: 0,
     label: "Page 1",
   });
+  const handleChange =() =>{
+      console.log("fn hit")
+  }
   const filterTypes = React.useMemo(
     () => ({
       // Add a new fuzzyTextFilterFn filter type.
@@ -74,10 +82,6 @@ function Table({ columns, data, editMode,selectedObject }) {
     }),
     []
   );
-
-  useEffect(()=>{
-    console.log(editSwitch)
-  },[])
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -233,27 +237,14 @@ function Table({ columns, data, editMode,selectedObject }) {
           <tbody {...getTableBodyProps()} className="rt-tbody">
     {page.map((row, i) => {
       prepareRow(row);
-      return (
-        <tr
-          {...row.getRowProps()}
-          className={classnames(
-            "rt-tr",
-            { " -odd": i % 2 === 0 },
-            { " -even": i % 2 === 1 }
-          )}
-        >
-            {row.cells.map((cell) => {
+            {row.cells.map((cell,idx) => {
+                // let cellRender = JSON.stringify(cell.render("Cell"))
             return (
-              <td className="rt-td">
-                {cell.render("Cell")}
-              </td>
-            )
+              <input key={idx} className="rt-td" onChange={handleChange} value={cell.render("Cell")} />
+            );
           })
         }
-        </tr>
-      );
-    }
-    )}
+    })}
           </tbody>
         </table>
         <div className="pagination-bottom"></div>

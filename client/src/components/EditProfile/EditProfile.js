@@ -1,7 +1,7 @@
 import React,{useContext,useEffect,useState} from 'react'
 import AuthContext from '../../AuthContext'
 import {fetchProfile} from '../../actions'
-import EditPostModal from '../EditRecipeModal/EditPostModal'
+import EditProfileModal from '../EditProfileModal/EditProfileModal'
 import Sidebar from "../Sidebar/Sidebar.js";
 import routes from "../../routes.js";
 
@@ -17,7 +17,7 @@ const EditProfile = () => {
     },[username])
 
       const divStyle = {
-          margin:'8% 0 0 0'
+          margin:'8px 0 0 0'
       }
 
 console.log("profile:")
@@ -26,7 +26,7 @@ return(
     <>
     {profile ? (
         <div style={divStyle}>
-                <EditPostModal key={profile._id} id={profile._id} email={profile.email} profileName={profile.username} password={profile.password} />  
+                <EditProfileModal key={profile._id} id={profile._id} email={profile.email} profileName={profile.username} password={profile.password} />  
         </div>
             
         ) : (<div style={divStyle}>loading</div>)

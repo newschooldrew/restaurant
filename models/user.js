@@ -21,7 +21,14 @@ const UserSchema = new Schema({
     favorites:{
         type:[Schema.Types.ObjectId],
         ref:"post"
-    }
+    },
+    orders:[{
+        type:Number,
+      createdDate:{
+          type:Date,
+          default:Date.now
+      }
+    }]
 })
 
 UserSchema.methods.sendSmsNotification = function(message, statusCallback) {

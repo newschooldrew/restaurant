@@ -26,8 +26,13 @@ const EditMeal = ({id,title,description,price,url}) => {
         await updateMeal(meal,dispatch)
     }
 
+const divStyle = {
+    margin:'0x 0 0 0',
+    overflow:'scroll'
+}
+
     return (
-      <div>
+      <div style={divStyle}>
                     <form>
                         {msg && (<div>{msg}</div>)}
                         <label>Title</label>
