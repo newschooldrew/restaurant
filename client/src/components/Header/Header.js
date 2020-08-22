@@ -8,11 +8,12 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import CartDropdown from '../CartDropdown/CartDropdown'
 
 const Header = ({history}) => {
     const {state,dispatch} = useContext(AuthContext)
     // const {username} = state;
-    const {username,cartItems} = state;
+    const {username,cartItems,toggleCart} = state;
     let cartItemCount = sessionStorage.getItem('cartTotal')
     let newTotal;
 
@@ -25,19 +26,24 @@ const Header = ({history}) => {
     console.log(cartItems)
     console.log(typeof cartItems)
 
-    let mySession;
-   
+    let sessionCartItems;
+    sessionCartItems = JSON.parse(sessionStorage.getItem('cart'))
     useEffect(() =>{        
-        mySession = sessionStorage.getItem('cart')
-        console.log("mySession:")
-        console.log(mySession)
+        sessionCartItems = JSON.parse(sessionStorage.getItem('cart'))
+        console.log("sessionCartItems:")
+        console.log(typeof sessionCartItems)
+        console.log(sessionCartItems)
         console.log("cartItemCount:")
         console.log(cartItemCount)
         if(cartItemCount == null){
             sessionStorage.setItem('cartTotal',0)
         }
         // sessionStorage.getItem('cart')
-    },[])
+    },[cartItems])
+
+const handleCartClick = () =>{
+    dispatch({type:"TOGGLE_CART",payload:toggleCart})
+}
 
     const useStyles = makeStyles(theme => ({
         root: {
@@ -80,7 +86,8 @@ const Header = ({history}) => {
         }
     }
     const classes = useStyles();
-    
+    console.log("sessionCartItems:")
+    console.log(sessionCartItems)
     return (
         <div className={classes.root}>
          <AppBar position="fixed">
@@ -90,10 +97,11 @@ const Header = ({history}) => {
                     <Typography className={classes.title}>
                         Hello, {username}
                     </Typography> 
-                    <Button edge="start" onClick={()=>history.push('/checkout')} className={classes.menuButton} color="inherit">
+                    <Button edge="start" onClick={handleCartClick} className={classes.menuButton} color="inherit">
                         <ShoppingCartIcon />
                         Cart Items: {cartItemCount}
                     </Button>
+                    {toggleCart ? (<CartDropdown cartItems={sessionCartItems} />):null}
                         <Button color="inherit" onClick={handleSubmit}>
                             Sign Out
                         </Button>

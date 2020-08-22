@@ -38,7 +38,7 @@ const Receipt = () => {
                     cartItems.map((cart,idx) => {
                         console.log(cart.price)
                         return (
-                        <tr>
+                        <tr key={idx}>
                             <td className="text-center">{cart.title}</td>
                             <td className="text-center">{cart.price}</td>
                             <td className="text-center">{cart.quantity}</td>

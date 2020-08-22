@@ -4,14 +4,13 @@ import axios from 'axios';
 import {withRouter} from 'react-router-dom'
 import {createOrder} from '../../actions'
 import AuthContext from '../../AuthContext'
-import publishableKey from process.env.PUBLISHABLE_KEY;
 
 const StripeCheckoutButton = ({ price,history }) => {
   const {state,dispatch} = useContext(AuthContext)
   const {username} = state;
   const cartTotal = JSON.parse(sessionStorage.getItem('cart'))
   const priceForStripe = price * 100;
-  // const publishableKey = 'pk_test_i7bJE84QP11alRDH8lY2Twkw00Jl1wYTZb';
+  const publishableKey = 'pk_test_i7bJE84QP11alRDH8lY2Twkw00Jl1wYTZb'
 
   const onToken = token => {
     axios({
@@ -23,7 +22,7 @@ const StripeCheckoutButton = ({ price,history }) => {
       }
     })
       .then(res => {
-        createOrder(username,cartTotal,price,dispatch)
+        // createOrder(username,cartTotal,price,dispatch)
         history.push('/receipt')
       })
       .catch(error => {

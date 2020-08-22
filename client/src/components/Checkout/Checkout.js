@@ -32,12 +32,21 @@ import {totalPrice,totalItemPrice} from '../../utils/cart.utils'
 import StripeButton from '../StripeButton/StripeButton'
 import {withRouter} from 'react-router-dom'
 import shoppingCartStyle from "../../assets/jss/material-kit-pro-react/views/shoppingCartStyle.js";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import {getPublicStripeKey} from '../../actions'
+import CheckoutForm from './CheckoutForm'
 
 const useStyles = makeStyles(shoppingCartStyle);
 
 function ShoppingCartPage({history}) {
   const {state,dispatch} = useContext(AuthContext)
   const {username,cartItems} = state;
+  const stripePromise = getPublicStripeKey().then(key => {
+    console.log("key:")
+    console.log(key)
+    return loadStripe(key)
+  });
 
   React.useEffect(() => {
     console.log("cartItems:")
@@ -226,7 +235,6 @@ if(!cartItems && !sessionItems) return (<div>loading checkout items</div>)
                                       }else {return <span>No items left in this cart</span>}
                                     })()
                                     }
-                                      <Grid container spacing={1}>    
                                       <Grid item xs={3}></Grid>
                                       <Grid item xs={3}>
                                         <Typography>Total</Typography>                        
@@ -237,202 +245,17 @@ if(!cartItems && !sessionItems) return (<div>loading checkout items</div>)
                                           </span>
                                         </Grid>
                                         <Grid item xs={3}>
-                                        <StripeButton price={totalPrice(sessionItems||cartItems)} color="info" round>
-                                          Complete Purchase <KeyboardArrowRight />
-                                        </StripeButton>
+                                          </Grid>
+                                          <Grid item xs={6}>
+                                        <Elements stripe={stripePromise}>
+                                          <CheckoutForm price={totalPrice(sessionItems||cartItems)} />
+                                        </Elements>
                                         </Grid>
-                                      </Grid>
+                                        <Grid item xs={3}>
+                                          </Grid>
                                       </CardBody>
                                     </Card>
                                     </div>
                                     </div>
                             </div>)}
 export default withRouter(ShoppingCartPage)
-
-                {/* // START OF MY JS
-
-      {
-            (() => {
-                if (cartItems && cartItems.length > 0){
-                    return (
-                        cartItems.map(item =>{
-                            return(
-                            <div className={classes.root}>
-                            <Paper className={classes.paper}>
-                                <Grid container spacing={2}>
-                                    <Grid item>
-                                        <ButtonBase className={classes.image}>
-                                            <img className={classes.img} src="https://res.cloudinary.com/dzdvrgbjd/image/upload/v1589221466/react_j2pgwp.png" />
-                                        </ButtonBase>
-                                    </Grid>
-                                    <Grid item xs={9} sm container>
-                                        <Grid item xs container direction="row" spacing={2}>
-                                                    <Typography gutterBottom  className={classes.grow}>{item.title}</Typography>
-                                                    <Typography gutterBottom  className={classes.grow}>{item.price}</Typography>
-                                                    <Typography gutterBottom  className={classes.grow}>{item.quantity}</Typography>
-                                                    <Button onClick={() => handleClick(item)}>x</Button>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </Paper>
-                                </div>)
-                                }) 
-                    )}
-
-                    else if (sessionItems && sessionItems.length > 0){
-                        return(
-                            sessionItems.map(item =>{
-                                return(
-                                <div className={classes.root}>
-                                <Paper className={classes.paper}>
-                                <Grid container spacing={2}>
-                                    <Grid item>
-                                        <ButtonBase className={classes.image}>
-                                            <img className={classes.img} src="https://res.cloudinary.com/dzdvrgbjd/image/upload/v1589221466/react_j2pgwp.png" />
-                                        </ButtonBase>
-                                    </Grid>
-                                    <Grid item xs={9} sm container>
-                                        <Grid item xs container direction="row" spacing={2}>
-                                            <Typography className={classes.grow}>{item.title}</Typography>
-                                            <Typography className={classes.grow}>{item.price}</Typography>
-                                            <Typography className={classes.grow}>{item.quantity}</Typography>
-                                    <Button onClick={() => handleClick(item)}>x</Button>
-                                    </Grid>
-                                    </Grid>
-                                </Grid>
-                                </Paper>
-                        </div>)
-                            })
-                        )}
-                    else {return <span>No items left in this cart</span>}
-                })()
-                } */}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      {/* <div className={classNames(classes.main, classes.mainRaised)}>
-        <div className={classes.container}>
-          <Card plain>
-            <CardBody plain>
-              <h3 className={classes.cardTitle}>Shopping Cart</h3>
-              <Table
-                tableHead={[
-                  "",
-                  "PRODUCT",
-                  "COLOR",
-                  "SIZE",
-                  "PRICE",
-                  "QTY",
-                  "AMOUNT",
-                  ""
-                ]}
-                tableData={[
-                  [
-                    <div className={classes.imgContainer} key={1}>
-                      <img src={product1} alt="..." className={classes.img} />
-                    </div>,
-                    <span key={1}>
-                      <a href="#jacket" className={classes.tdNameAnchor}>
-                        Spring Jacket
-                      </a>
-                      <br />
-                      <small className={classes.tdNameSmall}>
-                        by Dolce&amp;Gabbana
-                      </small>
-                    </span>,
-                    "Red",
-                    "M",
-                    <span key={1}>
-                      <small className={classes.tdNumberSmall}>€</small> 549
-                    </span>,
-                    <span key={1}>
-                      1{` `}
-                      <div className={classes.buttonGroup}>
-                        <Button
-                          color="info"
-                          size="sm"
-                          round
-                          className={classes.firstButton}
-                        >
-                          <Remove />
-                        </Button>
-                        <Button
-                          color="info"
-                          size="sm"
-                          round
-                          className={classes.lastButton}
-                        >
-                          <Add />
-                        </Button>
-                      </div>
-                    </span>,
-                    <span key={1}>
-                      <small className={classes.tdNumberSmall}>€</small> 549
-                    </span>,
-                    <Tooltip
-                      key={1}
-                      id="close1"
-                      title="Remove item"
-                      placement="left"
-                      classes={{ tooltip: classes.tooltip }}
-                    >
-                      <Button link className={classes.actionButton}>
-                        <Close />
-                      </Button>
-                    </Tooltip>
-                  ],
-                  {
-                    purchase: true,
-                    colspan: "3",
-                    amount: (
-                      <span>
-                        <small>€</small>2,346
-                      </span>
-                    ),
-                    col: {
-                      colspan: 3,
-                      text: (
-                        <Button color="info" round>
-                          Complete Purchase <KeyboardArrowRight />
-                        </Button>
-                      )
-                    }
-                  }
-                ]}
-                tableShopping
-                customHeadCellClasses={[
-                  classes.textCenter,
-                  classes.description,
-                  classes.description,
-                  classes.textRight,
-                  classes.textRight,
-                  classes.textRight
-                ]}
-                customHeadClassesForCells={[0, 2, 3, 4, 5, 6]}
-                customCellClasses={[
-                  classes.tdName,
-                  classes.customFont,
-                  classes.customFont,
-                  classes.tdNumber,
-                  classes.tdNumber + " " + classes.tdNumberAndButtonGroup,
-                  classes.tdNumber + " " + classes.textCenter
-                ]}
-                customClassesForCells={[1, 2, 3, 4, 5, 6]}
-              />
-            </CardBody>
-          </Card>
-        </div>
-      </div>
-    </div>
-  ); */}

@@ -116,13 +116,6 @@ export const postComment = async (comment,username,id,key,dispatch) =>{
         dispatch({type:"COMMENT_CREATE",payload:newComment})
 }
 
-export const createOrder = async (username,cartTotal,price,dispatch) =>{
-    const item = {username,cartTotal,price}
-    const res = await axios.post('/create-order', item);
-        console.log("new order created")
-        dispatch({type:"CREATE_ORDER",payload:item})
-}
-
 export const updatePost = (post,dispatch) =>{
     axios.post('/update-post',post).then(res => {
         console.log("res:")
@@ -206,4 +199,52 @@ export const fetchMealById = async (id,dispatch) =>{
     const res = await axios.post('/find-meal',{id});
     console.log(res.data)
     dispatch({type:"FETCH_MEAL",payload:res.data})
+}
+
+export const getPublicStripeKey = options => {
+    return window
+      .fetch(`/public-key`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      .then(res => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          return null;
+        }
+      })
+      .then(data => {
+        if (!data || data.error) {
+          console.log("API error:", { data });
+          throw Error("API Error");
+        } else {
+          return data.publicKey;
+        }
+      });
+  };
+
+  export const createPaymentIntent = async item => {
+    const {username,actualName,address,city,province,postal_code,price,cartTotal} = item;
+    //   dispatch({type:"CREATE_ORDER",payload:item})
+    const options = {
+        username,
+        actualName,
+        cartTotal,
+        address,
+        city,
+        province,
+        postal_code,
+        price,
+        currency: "USD"
+      };
+    const res = await axios.post('/create-payment-intent',options)
+      return res.data;
+  };
+  
+  export const createOrder = async item =>{
+    const res = await axios.post('/create-order', item);
+        console.log("new order created")
 }

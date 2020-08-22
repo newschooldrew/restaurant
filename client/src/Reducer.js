@@ -150,6 +150,11 @@ const Reducer = (state, { type, payload }) => {
                     ...state,
                     order:payload
                 }   
+    case "TOGGLE_CART":
+                return{
+                    ...state,
+                    toggleCart:!state.toggleCart
+                }   
     default:
         return state
     }

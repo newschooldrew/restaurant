@@ -106,104 +106,6 @@ app.post('/create-new-post', async (req,res) =>{
     }
 })
 
-app.post('/create-order',async (req,res)=>{
-    console.log(req.body)
-    const {username,cartTotal,price} = req.body;
-    console.log("cartTotal:")
-    console.log(cartTotal)
-    console.log(typeof cartTotal)
-    console.log("username:")
-    console.log(username)
-    const item = {username,price};
-    console.log(item)
-    const newOrder = await User.findOneAndUpdate(
-        {username},
-        {$push:{orders:price}},
-        {new:true}
-    )
-    
-    const totalPrice = items =>{
-        console.log("total Price items")
-        console.log(items)
-        let price = items.reduce((acc,item) => acc + item.quantity * item.price,0);
-        return price.toFixed(2);
-    }
-
-    const makeid = length => {
-        var result           = '';
-        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        var charactersLength = characters.length;
-        for ( var i = 0; i < length; i++ ) {
-           result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-        return result;
-     }
-     
-        // newOrder.save()
-        // .then(order =>{
-        //     return order.sendSmsNotification("You've created an order", ()=>console.log("something went wrong"))
-        // })
-
-        const msg = {
-            to: 'drewwperez@gmail.com',
-            from: 'drewwperez@gmail.com', // Use the email address or domain you verified above
-            subject: 'Sending with Twilio SendGrid is Fun',
-            html:`<html>
-            <body>
-                <div style="width: 100%;">
-                    <div style="width: 80%;">
-                        <p style="text-align: center;">Thank you for your order on Thriftbooks.com.
-                            We have processed your order and will ship it to you shortly.
-                            You will receive another email from us with tracking information when your books are shipped.
-                        </p>
-                        <div style="background-color: grey;">
-                            <span style="width: 50%;">
-                                Order Number: ${makeid(12)}
-                                Date: 8/21/2020
-                            </span>
-                            <span style="width: 50%;">
-                                Shipping To
-                                    Andrew Perez
-                                    3700 Bagley Ave Apt 204
-                                    Los Angeles, CA 90034 U.S.A.
-                            </span>
-                        </div>
-                    </div>
-                    <div style="width: 80%;">
-                        <table>
-                            <tr>
-                                <th>Item</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                            </tr>
-                            ${cartTotal.map(item =>{
-                                    return `<tr><td>${item.title}</td><td>${item.price}</td><td>${item.quantity}</td><br/><br/></tr>`
-                                }).join('')}
-                                <tr>Total:${totalPrice(cartTotal)}</tr>
-                        </table>
-                    </div>
-                </div>
-            </body>
-        </html>`
-          };
-
-            try {
-              // send multiple individual emails to multiple recipients 
-              // where they don't see each other's email addresses
-              console.log("pretending to send mail")
-            //   await sgMail.send(msg);
-            } catch (error) {
-              console.error(error);
-          
-              if (error.response) {
-                console.error("error.response.body:")
-                console.error(error.response.body)
-              }
-            }
-
-        res.send("order was created")
-})
-
 app.post('/fetch-posts',async (req,res)=>{
     console.log('fetch posts call was made' )
     const username = req.body.username;
@@ -511,4 +413,228 @@ app.post('/payment', (req, res) => {
       }
     });
 });
+
+app.post("/create-payment-intent", async (req, res) => {
+    console.log(req.body)
+    const {username,actualName,address,city,province,postal_code,cartTotal,price,currency} = req.body;
+console.log("cartTotal:")
+console.log(cartTotal)
+    console.log("username:")
+    console.log(username)
+    const item = {username,price};
+    console.log("price:")
+    console.log(price)
+
+    const options = {
+        amount:price*100,
+        currency
+    }
+
+    console.log("options:")
+    console.log(options)
+    try {
+      const paymentIntent = await stripe.paymentIntents.create(options);
+      res.json(paymentIntent);
+    } catch (err) {
+      res.json(err);
+    }
+  });
+//   
+// 
+// 
+// new line
+app.post('/create-order',async (req,res)=>{
+    console.log("create order: req.body:")
+    console.log(req.body)
+    const {username,actualName,address,city,province,postal_code,cartTotal,price,currency} = req.body;
+const newOrder = await User.findOneAndUpdate(
+    {username},
+    {$push:{orders:price}},
+    {new:true}
+)
+
+const totalPrice = items =>{
+    console.log("total Price items")
+    console.log(items)
+    let price = items.reduce((acc,item) => acc + item.quantity * item.price,0);
+    return price.toFixed(2);
+}
+
+const makeid = length => {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+ 
+    // newOrder.save()
+    // .then(order =>{
+    //     return order.sendSmsNotification("You've created an order", ()=>console.log("something went wrong"))
+    // })
+
+    const msg = {
+        to: 'drewwperez@gmail.com',
+        from: 'drewwperez@gmail.com', // Use the email address or domain you verified above
+        subject: 'Thank you for your order!',
+        html:`<html>
+        <body>
+            <div style="width: 100%;">
+                <div style="width: 80%;">
+                    <p style="text-align: center;">Thank you for your order on myrestaurant.com.
+                        We have processed your order and will ship it to you shortly.
+                        You will receive another email from us with tracking information when your books are shipped.
+                    </p>
+                    <div style="background-color: #faf6ea;">
+                        <span style="width: 50%;">
+                            Order Number: ${makeid(12)}<br>
+                            Date: 8/21/2020<br>
+                        </span>
+                        <span style="width: 50%;">
+                            Shipping To:<br>
+                                ${actualName}<br>
+                                ${address}<br>
+                                ${city}, ${province} ${postal_code}
+                        </span>
+                    </div>
+                </div>
+                <div style="width: 80%;">
+                    <table>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                        </tr>
+                        ${cartTotal.map(item =>{
+                                return `<tr><td>${item.title}</td><td>${item.price}</td><td>${item.quantity}</td><br/><br/></tr>`
+                            }).join('')}
+                            <tr>Total:${totalPrice(cartTotal)}</tr>
+                    </table>
+                </div>
+            </div>
+        </body>
+    </html>`
+      };
+
+        try {
+          // send multiple individual emails to multiple recipients 
+          // where they don't see each other's email addresses
+          console.log("pretending to send mail")
+          await sgMail.send(msg);
+        } catch (error) {
+          console.error(error);
+      
+          if (error.response) {
+            console.error("error.response.body:")
+            console.error(error.response.body)
+          }
+        } 
+    })
+
+//   app.post('/create-order',async (req,res)=>{
+//     console.log(req.body)
+//     const {username,cartTotal,price} = req.body;
+//     console.log("cartTotal:")
+//     console.log(cartTotal)
+//     console.log(typeof cartTotal)
+//     console.log("username:")
+//     console.log(username)
+//     const item = {username,price};
+//     console.log(item)
+//     const newOrder = await User.findOneAndUpdate(
+//         {username},
+//         {$push:{orders:price}},
+//         {new:true}
+//     )
+    
+//     const totalPrice = items =>{
+//         console.log("total Price items")
+//         console.log(items)
+//         let price = items.reduce((acc,item) => acc + item.quantity * item.price,0);
+//         return price.toFixed(2);
+//     }
+
+//     const makeid = length => {
+//         var result           = '';
+//         var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//         var charactersLength = characters.length;
+//         for ( var i = 0; i < length; i++ ) {
+//            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+//         }
+//         return result;
+//      }
+     
+//         // newOrder.save()
+//         // .then(order =>{
+//         //     return order.sendSmsNotification("You've created an order", ()=>console.log("something went wrong"))
+//         // })
+
+//         const msg = {
+//             to: 'drewwperez@gmail.com',
+//             from: 'drewwperez@gmail.com', // Use the email address or domain you verified above
+//             subject: 'Sending with Twilio SendGrid is Fun',
+//             html:`<html>
+//             <body>
+//                 <div style="width: 100%;">
+//                     <div style="width: 80%;">
+//                         <p style="text-align: center;">Thank you for your order on Thriftbooks.com.
+//                             We have processed your order and will ship it to you shortly.
+//                             You will receive another email from us with tracking information when your books are shipped.
+//                         </p>
+//                         <div style="background-color: grey;">
+//                             <span style="width: 50%;">
+//                                 Order Number: ${makeid(12)}
+//                                 Date: 8/21/2020
+//                             </span>
+//                             <span style="width: 50%;">
+//                                 Shipping To
+//                                     Andrew Perez
+//                                     3700 Bagley Ave Apt 204
+//                                     Los Angeles, CA 90034 U.S.A.
+//                             </span>
+//                         </div>
+//                     </div>
+//                     <div style="width: 80%;">
+//                         <table>
+//                             <tr>
+//                                 <th>Item</th>
+//                                 <th>Price</th>
+//                                 <th>Quantity</th>
+//                             </tr>
+//                             ${cartTotal.map(item =>{
+//                                     return `<tr><td>${item.title}</td><td>${item.price}</td><td>${item.quantity}</td><br/><br/></tr>`
+//                                 }).join('')}
+//                                 <tr>Total:${totalPrice(cartTotal)}</tr>
+//                         </table>
+//                     </div>
+//                 </div>
+//             </body>
+//         </html>`
+//           };
+
+//             try {
+//               // send multiple individual emails to multiple recipients 
+//               // where they don't see each other's email addresses
+//               console.log("pretending to send mail")
+//             //   await sgMail.send(msg);
+//             } catch (error) {
+//               console.error(error);
+          
+//               if (error.response) {
+//                 console.error("error.response.body:")
+//                 console.error(error.response.body)
+//               }
+//             }
+
+//         res.send("order was created")
+// })
+
+
+
+app.get("/public-key", (req, res) => {
+    res.send({ publicKey: process.env.PUBLISHABLE_KEY });
+  });
+
 app.listen(5000,() => console.log("server running on port 5000"))
