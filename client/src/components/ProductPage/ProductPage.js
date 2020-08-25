@@ -131,7 +131,7 @@ function ProductPage({match}) {
   return (
     <>
       {/* <ScrollTransparentNavbar /> */}
-      <div className="wrapper">
+      <div className="perfect-scrollbar-off">
 
         <ProductPageHeader />
 

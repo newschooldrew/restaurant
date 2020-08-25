@@ -118,7 +118,7 @@ const CheckoutForm = ({price,history}) => {
           <div className="sr-combo-inputs-row">
           <FormGroup>
           <Row >
-            <Col md={6}>
+            <Col md={3}>
                 <FormGroup>
                 <Label for="name">Name</Label>
                             <input
@@ -134,7 +134,7 @@ const CheckoutForm = ({price,history}) => {
                 </FormGroup>
                 </Col>
 
-                <Col md={6}>
+                <Col md={3}>
                     <FormGroup>
                     <Label for="address">Last Name</Label>
                         <input
@@ -151,7 +151,7 @@ const CheckoutForm = ({price,history}) => {
             </Row>
             
             <Row>
-            <Col md={6}>
+            <Col md={3}>
             <FormGroup>
             <Label for="address">Address</Label>
                         <input
@@ -165,7 +165,7 @@ const CheckoutForm = ({price,history}) => {
                         />
             </FormGroup>
             </Col>
-            <Col md={6}>
+            <Col md={3}>
             <FormGroup>
             <Label for="address">City</Label>
             <input
@@ -181,7 +181,7 @@ const CheckoutForm = ({price,history}) => {
             </Col>
         </Row>
         <Row>
-        <Col md={6}>
+        <Col md={3}>
           <FormGroup>
           <Label for="address">State</Label>
               <input
@@ -196,7 +196,7 @@ const CheckoutForm = ({price,history}) => {
           </FormGroup>
         </Col>
 
-        <Col md={6}>
+        <Col md={3}>
           <FormGroup>
           <Label for="address">Postal Code</Label>
               <input

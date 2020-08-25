@@ -50,9 +50,12 @@ export const getUser = () =>{
     }
 }
 
-export const fetchUser = async profile =>{
-    const res = await axios.post('/fetch-profile')
-
+export const fetchUser = async (username,dispatch) =>{
+    console.log("username:")
+    console.log(username)
+    const res = await axios.post('/fetch-profile',{username})
+    dispatch({type:"FETCH_PROFILE",payload:res.data})
+    console.log("res:")
     console.log(res)
 }
 
@@ -247,4 +250,18 @@ export const getPublicStripeKey = options => {
   export const createOrder = async item =>{
     const res = await axios.post('/create-order', item);
         console.log("new order created")
+}
+
+export const sendSms = async (id,username) =>{
+    const obj = {id,username}
+    const res = await axios.post('/send-sms', {obj});
+        console.log("sms sent!")
+        console.log(res)
+}
+
+export const sendDriver = async (id,username) =>{
+    const obj = {id,username}
+    const res = await axios.post('/send-driver', {obj});
+        console.log("driver sent!")
+        console.log(res)
 }

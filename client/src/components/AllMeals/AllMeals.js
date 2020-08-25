@@ -211,27 +211,6 @@ const AllMeals = ({history}) => {
                                 Drinks
                               </Label>
                             </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input defaultChecked type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Desserts
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Shorts
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Blazers
-                              </Label>
-                            </FormGroup>
                           </CardBody>
                         </Collapse>
                       </Card>
@@ -276,159 +255,6 @@ const AllMeals = ({history}) => {
                           </CardBody>
                         </Collapse>
                       </Card>
-                      <Card className="card-refine card-plain">
-                        <CardHeader id="headingThree" role="tab">
-                          <h6>
-                            <a
-                              className="text-info"
-                              aria-expanded={collapses.includes(3)}
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#pablo"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                changeCollapse(3);
-                              }}
-                            >
-                              Designer{" "}
-                              <i className="now-ui-icons arrows-1_minimal-down"></i>
-                            </a>
-                          </h6>
-                        </CardHeader>
-                        <Collapse isOpen={collapses.includes(3)}>
-                          <CardBody>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                All
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Polo Ralph Lauren
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Wooyoungmi
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Alexander McQueen
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Tom Ford
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                AMI
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Berena
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Thom Sweeney
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Calvin Klein
-                              </Label>
-                            </FormGroup>
-                          </CardBody>
-                        </Collapse>
-                      </Card>
-                      <Card className="card-refine card-plain">
-                        <CardHeader id="headingfour" role="tab">
-                          <h6>
-                            <a
-                              className="text-info"
-                              aria-expanded={collapses.includes(4)}
-                              data-toggle="collapse"
-                              data-parent="#accordion"
-                              href="#pablo"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                changeCollapse(4);
-                              }}
-                            >
-                              Colour{" "}
-                              <i className="now-ui-icons arrows-1_minimal-down"></i>
-                            </a>
-                          </h6>
-                        </CardHeader>
-                        <Collapse isOpen={collapses.includes(4)}>
-                          <CardBody>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Black
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Blue
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Brown
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Gray
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Green
-                              </Label>
-                            </FormGroup>
-                            <FormGroup check>
-                              <Label check>
-                                <Input type="checkbox"></Input>
-                                <span className="form-check-sign"></span>
-                                Purple
-                              </Label>
-                            </FormGroup>
-                          </CardBody>
-                        </Collapse>
-                      </Card>
                     </CardBody>
                   </div>
                 </Col>
@@ -436,6 +262,8 @@ const AllMeals = ({history}) => {
             <Col md="9">
                 <Row>
             {allMeals && allMeals.map(post =>{
+              console.log("all meals post")
+              console.log(post)
                 const id = post._id;
                 const title = post.title;
                 const price = post.price;

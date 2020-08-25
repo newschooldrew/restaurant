@@ -2,6 +2,7 @@ import ViewMealContainer from "./components/ViewMealContainer/ViewMealContainer"
 import EditMealContainer from "./components/EditMealContainer/EditMealContainer";
 import InputMeals from "./components/InputMeals/InputMeals";
 import EditProfile from "./components/EditProfile/EditProfile";
+import ViewProfile from "./components/ViewProfile/ViewProfile";
 
 let routes = [
   {
@@ -14,6 +15,12 @@ let routes = [
         path: "/edit-profile",
         name: "Edit Profile",
         component: EditProfile,
+        layout: "/admin",
+      },{
+        path: "/view-profile",
+        name: "View Profile",
+        icon: "now-ui-icons design_app",
+        component: ViewProfile,
         layout: "/admin",
       }
     ],

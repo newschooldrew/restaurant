@@ -11,7 +11,6 @@ import { Nav, Collapse, Button } from "reactstrap";
 // core components
 import avatar from "../../assets/img/bg30.jpg";
 import logo from "../../assets/img/logo-white.svg";
-import {withRouter} from 'react-router-dom'
 
 var ps;
 
@@ -248,4 +247,4 @@ Sidebar.propTypes = {
   minimizeSidebar: PropTypes.func,
 };
 
-export default withRouter(Sidebar);
+export default Sidebar;

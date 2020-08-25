@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const PostSchema = require('./post').schema
 const {Schema} = mongoose;
 const twilio = require('twilio');
 require('dotenv').config()
@@ -23,11 +22,8 @@ const UserSchema = new Schema({
         ref:"post"
     },
     orders:[{
-        type:Number,
-      createdDate:{
-          type:Date,
-          default:Date.now
-      }
+      type:Schema.Types.ObjectId,
+      ref:'checkout'
     }]
 })
 
