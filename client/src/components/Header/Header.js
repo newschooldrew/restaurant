@@ -1,7 +1,7 @@
-import React,{useContext,useEffect} from 'react'
+import React,{useState,useContext,useEffect} from 'react'
 import AuthContext from '../../AuthContext'
 import AppBar from "@material-ui/core/AppBar";
-import {signOut} from '../../actions'
+import {signOut,fetchAlerts} from '../../actions'
 import {withRouter} from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from "@material-ui/core/Toolbar";
@@ -9,41 +9,60 @@ import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import CartDropdown from '../CartDropdown/CartDropdown'
+import AlertDropdown from '../AlertDropdown/AlertDropdown'
+import NotifyMe from 'react-notification-timeline';
+import { useToasts } from 'react-toast-notifications'
+import io from "socket.io-client";
 
-const Header = ({history}) => {
+const Header = () => {
     const {state,dispatch} = useContext(AuthContext)
-    // const {username} = state;
-    const {username,cartItems,toggleCart} = state;
+    const {username,cartItems,toggleCart,toggleAlertDropDown,alerts} = state;
+    const { addToast } = useToasts()
+    let cartAlerts = JSON.parse(sessionStorage.getItem('orderNotification'))
     let cartItemCount = sessionStorage.getItem('cartTotal')
+    let orderCountItems = sessionStorage.getItem('orderCount')
+    let sessionCartItems = JSON.parse(sessionStorage.getItem('cart'))
+    const [endpoint,setEndpoint] = useState('http://localhost:5001')
+    let socket = io(endpoint);
     let newTotal;
 
+    const getData = item => {
+        console.log("get Data ran");
+        console.log(item)
+        console.log(item.length)
+        if(username == "alert_tester"){
+            sessionStorage.setItem('orderCount',item.length)
+            dispatch({type:"SET_ORDER_COUNT",payload:item.length})
+        }
+      };
+
     const handleSubmit = () =>{
-        signOut(history)
+        signOut()
         dispatch({type:"LOG_OUT",payload:null})
     }
 
-    console.log("cartItems")
-    console.log(cartItems)
-    console.log(typeof cartItems)
+    console.log("cartAlerts")
+    console.log(cartAlerts)
+    console.log(typeof cartAlerts)
 
-    let sessionCartItems;
-    sessionCartItems = JSON.parse(sessionStorage.getItem('cart'))
     useEffect(() =>{        
+        socket.emit("initial_data",cartItems);
+        socket.on("get_data", getData);        
         sessionCartItems = JSON.parse(sessionStorage.getItem('cart'))
         console.log("sessionCartItems:")
         console.log(typeof sessionCartItems)
         console.log(sessionCartItems)
-        console.log("cartItemCount:")
-        console.log(cartItemCount)
         if(cartItemCount == null){
             sessionStorage.setItem('cartTotal',0)
         }
+        showNotification()
         // sessionStorage.getItem('cart')
-    },[cartItems])
+    },[username,cartItems])
 
 const handleCartClick = () =>{
     dispatch({type:"TOGGLE_CART",payload:toggleCart})
 }
+
 
     const useStyles = makeStyles(theme => ({
         root: {
@@ -85,7 +104,23 @@ const handleCartClick = () =>{
             console.log("cartItems is empty")
         }
     }
+    let notifications =[]
+    let orderNotice = {
+          "update":"An order was created",
+          "timestamp":Date.now
+        }
+      
     const classes = useStyles();
+
+    const showNotification = () =>{
+        addToast('An order was created', { appearance: 'success' }, () => console.log("toast shown"))
+    }
+
+    const showAlerts = () =>{
+        fetchAlerts(dispatch)
+        dispatch({type:"TOGGLE_ALERT_DROPDOWN",payload:!toggleAlertDropDown})
+    }
+
     console.log("sessionCartItems:")
     console.log(sessionCartItems)
     return (
@@ -93,10 +128,12 @@ const handleCartClick = () =>{
          <AppBar position="fixed">
          <Toolbar>
                 {username ?
-                <>
+                <>                
                     <Typography className={classes.title}>
                         Hello, {username}
                     </Typography> 
+                    <div onClick={showAlerts}>{orderCountItems}</div>
+                    {toggleAlertDropDown ? (<AlertDropdown alerts={alerts}/>): null}
                     <Button edge="start" onClick={handleCartClick} className={classes.menuButton} color="inherit">
                         <ShoppingCartIcon />
                         Cart Items: {cartItemCount}
@@ -107,10 +144,22 @@ const handleCartClick = () =>{
                         </Button>
                     </>
                 : <Typography className={classes.title}>Please log in</Typography>}
+                
+                <NotifyMe
+                    data={notifications}
+                    storageKey='notific_key'
+                    notific_key='timestamp'
+                    notific_value='update'
+                    heading='Notification Alerts'
+                    sortedByKey={false}
+                    showDate={true}
+                    size={24}
+                    color="yellow"
+                    />
             </Toolbar>
         </AppBar>
     </div>
     )        
 }
 
-export default withRouter(Header)
+export default Header;

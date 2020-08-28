@@ -9,10 +9,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import routes from "../../routes.js";
 import Sidebar from "../Sidebar/Sidebar.js";
 
-
 var ps;
 
 class Dashboard extends React.Component {
+  
   state = {
     sidebarMini: true,
     backgroundColor: "blue",
@@ -58,6 +58,7 @@ class Dashboard extends React.Component {
       icon: "now-ui-icons ui-1_bell-53",
       autoDismiss: 7,
     };
+
     this.notificationAlert.current.notificationAlert(options);
   };
 
@@ -99,6 +100,7 @@ class Dashboard extends React.Component {
     }
     return activeRoute;
   };
+  
   render() {
     return (
       <div className="wrapper">

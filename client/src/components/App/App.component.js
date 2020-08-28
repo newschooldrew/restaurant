@@ -10,7 +10,7 @@ import CheckoutPage from '../Checkout/Checkout'
 import LandingPage from '../LandingPage/LandingPage'
 import Dashboard from '../Dashboard/Dashboard'
 import Receipt from '../Receipt/Receipt'
-import ViewProfile from '../ViewProfile/ViewProfile'
+import ViewAllOrders from '../ViewAllOrders/ViewAllOrders'
 import "../../assets/css/demo.css";
 
 const divStyle = {
@@ -31,6 +31,7 @@ const App = () => {
                         <Route path="/product-page/:id" component={ProductPage} />
                         <Route path="/admin" component={Dashboard} />
                         <Route path="/receipt" component={Receipt} />
+                        <Route path="/view-all-orders" component={ViewAllOrders} />
                     </Switch>
             </BrowserRouter>
         )

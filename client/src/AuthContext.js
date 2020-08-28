@@ -23,6 +23,11 @@ export const AuthContext = createContext({
     editMeal:false,
     order:null,
     toggleCart:false,
-    profile:null
+    profile:null,
+    allOrders:null,
+    orderHit:false,
+    orderCount:0,
+    toggleAlertDropDown:null,
+    alerts:null
 })
 export default AuthContext;

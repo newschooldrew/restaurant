@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 
 const SignIn = ({history}) => {
     const {state,dispatch} = useContext(AuthContext)
-    const [email,setEmail] = useState('')
+    const [username,setUsername] = useState('')
     const [msg,setMsg] = useState('')
     const [password,setPassword] = useState('')
     
@@ -46,12 +46,12 @@ const SignIn = ({history}) => {
     const handleSubmit = (e) =>{
         e.preventDefault()
         localStorage.removeItem('sign_in_msg')
-        const user = {email, password}
+        const user = {username, password}
         signInUser(user, history)
              
-        dispatch({type:"SIGN_IN_USER",payload:email})
+        dispatch({type:"SIGN_IN_USER",payload:user})
         
-        setEmail('')
+        setUsername('')
         setPassword('')
 
         // error messages
@@ -59,7 +59,7 @@ const SignIn = ({history}) => {
             setMsg(localStorage.getItem('sign_in_msg'))
         } else{
             localStorage.removeItem('sign_in_msg')
-        }        
+        }
     }
 
     const classes = useStyles();
@@ -85,12 +85,12 @@ const SignIn = ({history}) => {
                     margin="normal"
                     required
                     fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
+                    id="username"
+                    label="username"
+                    name="username"
+                    autoComplete="username"
                     autoFocus
-                    onChange={e => setEmail(e.target.value)} value={email} 
+                    onChange={e => setUsername(e.target.value)} value={username} 
                 />
                     {/* <input onChange={e => setEmail(e.target.value)} value={email} name="email" type="text" /> */}
                     {/* <br /><label>Password</label><br /> */}

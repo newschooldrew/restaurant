@@ -1,10 +1,15 @@
 const express = require('express')
+const app = express();
+const http = require('http');
+const server = http.createServer(app)
+const io = require("socket.io")(server);
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const keys = require('./config/keys')
 const User = require('./models/User')
 const Post = require('./models/post')
 const Meal = require('./models/meal')
+const Alert = require('./models/alert')
 const Checkout = require('./models/checkout')
 const sendEmail = require('./Email')
 const scheduleEmail = require('./schedule-email')
@@ -14,6 +19,7 @@ const CryptoJS = require("crypto-js");
 const { prependOnceListener } = require('./models/post')
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const sgMail = require('@sendgrid/mail');
+const cors = require('cors');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 require('dotenv').config()
 
@@ -26,8 +32,30 @@ mongoose.connection
 
 mongoose.set('useFindAndModify', false);
 
-const app = express();
+var corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+
+app.use(cors(corsOptions))
 app.use(bodyParser.json())
+
+let orderNotification;
+io.on("connection", (socket) => {
+    console.log("New client connected");
+  
+    socket.on("initial_data", async () => {
+            const allAlerts = await Alert.find({})
+        
+        io.sockets.emit("get_data",allAlerts);
+        // Checkout.find({}).then(docs => {
+        });
+      });
+
+    // socket.on("disconnect", () => {
+    //   console.log("Client disconnected");
+    // });
+// })
 
 app.post('/create-user',async(req,res)=>{  
     let {username,email,password,phoneNumber,token} = req.body;
@@ -64,19 +92,25 @@ app.post('/create-user',async(req,res)=>{
 
 app.post('/sign-in-user',async(req,res)=>{
     const {username,email,password} = req.body;
+    console.log("username:")
+    console.log(username)
+    console.log("password")
+    console.log(password)
 
-    const foundUser = await User.findOne({email})
+    const foundUser = await User.findOne({username})
     if(!foundUser) {
         res.set({'isError': true}).send("user not found")
     }
 
+    console.log("foundUser")
+    console.log(foundUser.password)
     const isValidated = await bcrypt.compare(password,foundUser.password);
 
     if(!isValidated){
         res.set({'isError': true}).send("password not found")
     } else{
         console.log("validated") 
-        res.set({'Authorization': `${foundUser.token}`,'username':`${foundUser.email}`}).send("cookie sent")
+        res.set({'Authorization': `${foundUser.token}`,'username':`${foundUser.username}`}).send("cookie sent")
     }
     
     console.log("found user is " + foundUser.token)
@@ -466,6 +500,9 @@ app.post('/create-order',async (req,res)=>{
     JSON.stringify(cartTotal)
     console.log(typeof cartTotal)
 
+    const alerts = new Alert({})
+    alerts.save()
+
 const newCheckout = await new Checkout()
 newCheckout.order = cartTotal
 
@@ -493,8 +530,8 @@ const makeid = length => {
     }
     return result;
  }
- 
-    // newOrder.save()
+
+    // newOrder.save().then(docs => {
     // .then(order =>{
     //     return order.sendSmsNotification("You've created an order", ()=>console.log("something went wrong"))
     // })
@@ -615,4 +652,20 @@ app.get("/public-key", (req, res) => {
     res.send({ publicKey: process.env.PUBLISHABLE_KEY });
   });
 
-app.listen(5000,() => console.log("server running on port 5000"))
+  app.get("/fetch-all-orders", async (req, res) => {
+    const allOrders = await Checkout.find({})
+    console.log("allOrders")
+    console.log(allOrders)
+    res.send(allOrders)
+  });
+
+  app.get("/fetch-alerts", async (req, res) => {
+    console.log("fetch alerts hit")
+    const allAlerts = await Alert.find({})
+    console.log("allAlerts")
+    console.log(allAlerts)
+    res.send(allAlerts)
+  });
+
+  io.listen(5001);
+app.listen(5000,() => console.log("server running on port 5000"));

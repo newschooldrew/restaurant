@@ -37,7 +37,7 @@ const CheckoutForm = ({price,history}) => {
         setError(err.message);
       });
   }, []);
-
+  
   const handleSubmit = async (ev) => {
       console.log(clientSecret)
     ev.preventDefault();

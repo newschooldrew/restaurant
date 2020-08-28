@@ -42,7 +42,7 @@ const ViewProfile = () => {
     }
 
     return (
-        <div style={divStyle}>
+        <div style={divStyle}>test
             {profile && 
                     profile.orders.map(order=>{
                         console.log("order:")
@@ -76,12 +76,12 @@ const ViewProfile = () => {
                                 <CheckIcon style={{ color: "green" }}/>confirmed
                             </button>)}
                             {order.sent == false ?
-                        (<button onClick={() => handleSent(_id)}>
-                            Click to notify buyer their food is on the way
-                        </button>)
-                        :(<button onClick={() => handleSent(_id)}>
-                        <CheckIcon style={{ color: "green" }}/>Sent!
-                    </button>)}
+                                (<button onClick={() => handleSent(_id)}>
+                                    Click to notify buyer their food is on the way
+                                </button>)
+                                :(<button onClick={() => handleSent(_id)}>
+                                <CheckIcon style={{ color: "green" }}/>Sent!
+                            </button>)}
                         </li></ul></div>)
                     })
         }

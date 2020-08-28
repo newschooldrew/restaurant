@@ -155,6 +155,31 @@ const Reducer = (state, { type, payload }) => {
                     ...state,
                     toggleCart:!state.toggleCart
                 }   
+    case "FETCH_ALL_ORDERS":
+                return{
+                    ...state,
+                    allOrders:payload
+                }
+    case "ORDER_CREATED":
+                return{
+                    ...state,
+                    orderHit:payload
+                }
+    case "TOGGLE_ALERT_DROPDOWN":
+                return{
+                    ...state,
+                    toggleAlertDropDown:!state.toggleAlertDropDown
+                }
+    case "SET_ORDER_COUNT":
+                return{
+                    ...state,
+                    orderCount:payload
+                }
+    case "SET_ALERTS":
+                return{
+                    ...state,
+                    alerts:payload
+                }
     default:
         return state
     }

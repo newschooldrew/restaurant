@@ -33,8 +33,7 @@ export const signInUser = (user,history) =>{
          else{
             localStorage.setItem('username',res.headers['username'])
             localStorage.setItem('token',res.headers['authorization'])
-
-            history.push('/welcome')
+            history.push('/')
         }
     })
 }
@@ -57,6 +56,13 @@ export const fetchUser = async (username,dispatch) =>{
     dispatch({type:"FETCH_PROFILE",payload:res.data})
     console.log("res:")
     console.log(res)
+}
+
+export const fetchAllOrders = async dispatch =>{
+    const res = await axios.get('/fetch-all-orders')
+    console.log("fetch all orders:")
+    console.log(res.data)
+    dispatch({type:"FETCH_ALL_ORDERS",payload:res.data})
 }
 
 export const signOut = history =>{
@@ -249,7 +255,7 @@ export const getPublicStripeKey = options => {
   
   export const createOrder = async item =>{
     const res = await axios.post('/create-order', item);
-        console.log("new order created")
+        console.log("new order created")        
 }
 
 export const sendSms = async (id,username) =>{
@@ -264,4 +270,11 @@ export const sendDriver = async (id,username) =>{
     const res = await axios.post('/send-driver', {obj});
         console.log("driver sent!")
         console.log(res)
+}
+
+export const fetchAlerts = async (dispatch) =>{
+    const res = await axios.get('/fetch-alerts');
+        console.log("driver sent!")
+        console.log(res)
+        dispatch({type:"SET_ALERTS",payload:res.data})
 }
