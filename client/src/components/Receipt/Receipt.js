@@ -21,7 +21,15 @@ const Receipt = () => {
     const getData = item => {
         console.log("get Data ran");
         console.log(item)
+        let count = 0;
+        item.map(i =>{
+            if(i.read == false){
+                count++
+            }
+        })
         console.log(item.length)
+        console.log(count)
+
         if(username == "alert_tester"){
             sessionStorage.setItem('orderCount',item.length)
         }
@@ -40,12 +48,12 @@ const Receipt = () => {
         //     socket.on("get_data", getData);
         //     sessionStorage.setItem('orderCount',1)
         //     orderNotification = [];
-        //     let year = new Date().getFullYear()
-        //     let month = new Date().getMonth()
-        //     let date = new Date().getDate()
-        //     let hours = new Date().getHours()
-        //     let minutes = new Date().getMinutes()
-        //     let time = new Date(year,month,date,hours,minutes)
+            // let year = new Date().getFullYear()
+            // let month = new Date().getMonth()
+            // let date = new Date().getDate()
+            // let hours = new Date().getHours()
+            // let minutes = new Date().getMinutes()
+            // let time = new Date(year,month,date,hours,minutes)
         //     orderNotification.push({alert:"you have a new order",date:time})
             
         //     JSON.stringify(orderNotification)

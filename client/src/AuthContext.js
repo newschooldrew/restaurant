@@ -28,6 +28,7 @@ export const AuthContext = createContext({
     orderHit:false,
     orderCount:0,
     toggleAlertDropDown:null,
-    alerts:null
+    alerts:null,
+    fetchedOrderFromAlert:null
 })
 export default AuthContext;

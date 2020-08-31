@@ -274,7 +274,15 @@ export const sendDriver = async (id,username) =>{
 
 export const fetchAlerts = async (dispatch) =>{
     const res = await axios.get('/fetch-alerts');
-        console.log("driver sent!")
+        console.log("fetch alerts")
         console.log(res)
         dispatch({type:"SET_ALERTS",payload:res.data})
+}
+
+export const fetchOrderFromAlert = async (id,dispatch) =>{
+    const items = {id,dispatch}
+    const res = await axios.post('/fetch-order-from-alert',items);
+        console.log("fetch order from alerts")
+        console.log(res.data.order)
+        dispatch({type:"FETCH_ORDER_FROM_ALERT",payload:res.data})
 }

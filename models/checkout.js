@@ -15,7 +15,11 @@ const CheckoutSchema = new Schema({
       sent:{
         type:Boolean,
         default:false
-      }
+      },
+      alerts:[{
+        type:Schema.Types.ObjectId,
+        ref:'alert'
+      }]
 })
 
 module.exports = mongoose.model("checkout",CheckoutSchema)

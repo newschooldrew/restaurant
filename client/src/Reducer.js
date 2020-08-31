@@ -180,6 +180,11 @@ const Reducer = (state, { type, payload }) => {
                     ...state,
                     alerts:payload
                 }
+    case "FETCH_ORDER_FROM_ALERT":
+                return{
+                    ...state,
+                    fetchedOrderFromAlert:payload
+                }
     default:
         return state
     }

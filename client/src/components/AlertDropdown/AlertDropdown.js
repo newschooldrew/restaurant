@@ -1,22 +1,11 @@
 import React, {useEffect,useContext} from 'react'
-import CartItem from '../CartItem/CartItem'
-import AuthContext from '../../AuthContext'
 import './AlertDropdown.scss'
-import {withRouter} from 'react-router-dom'
+import {Link,withRouter} from 'react-router-dom'
 import { formatDistanceToNow } from 'date-fns'
-import {fetchAlerts} from '../../actions'
 
-const AlertDropdown = ({alerts}) =>
+const AlertDropdown = ({history,alerts}) =>
 {
-    const {state,dispatch} = useContext(AuthContext)
-    const {username} = state;
- 
-    useEffect(()=>{
-        
-        console.log("alerts:")
-        console.log(alerts)
-        console.log(state)
-    },[])
+
     return(
     <div className='cart-dropdown'>
         <div />
@@ -24,13 +13,15 @@ const AlertDropdown = ({alerts}) =>
             alerts ? 
             alerts.map(cartItem =>{
                 console.log(cartItem)
-                return(<ul>
-                    <li>{cartItem.alert} from {formatDistanceToNow(new Date(cartItem.date))} ago</li>
+                const {_id} = cartItem;
+                return(<ul key={cartItem._id}>
+                    <Link><li onClick={(e) => history.push(`/confirm-order/${cartItem._id}`)}>{cartItem.alert} from {formatDistanceToNow(new Date(cartItem.createdDate))} ago</li></Link>
                 </ul>)
             }) 
             :
             (<span className='empty-message'>No cart items</span>)
         }
+        <button onClick={()=> history.push('/view-all-orders')}>View All Orders</button>
         </div>
 )}
 

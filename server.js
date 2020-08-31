@@ -45,11 +45,22 @@ io.on("connection", (socket) => {
     console.log("New client connected");
   
     socket.on("initial_data", async () => {
-            const allAlerts = await Alert.find({})
-        
+            const allAlerts = await Alert.find({}).sort({createdDate:-1})
+            console.log("allAlerts:")
+            console.log(allAlerts)
         io.sockets.emit("get_data",allAlerts);
         // Checkout.find({}).then(docs => {
         });
+
+        socket.on("request_order_data", async id => {
+            console.log("id:")
+            console.log(id)
+            const getCheckout = await Checkout.findOne({alerts:id})
+            console.log("getCheckout:")
+            console.log(getCheckout)
+        io.sockets.emit("get_order_data",getCheckout);
+        });
+        
       });
 
     // socket.on("disconnect", () => {
@@ -500,11 +511,18 @@ app.post('/create-order',async (req,res)=>{
     JSON.stringify(cartTotal)
     console.log(typeof cartTotal)
 
-    const alerts = new Alert({})
-    alerts.save()
+    let year = new Date().getFullYear()
+    let month = new Date().getMonth()
+    let date = new Date().getDate()
+    let hours = new Date().getHours()
+    let minutes = new Date().getMinutes()
+    let time = new Date(year,month,date,hours,minutes)
+    const newAlert = new Alert({createdDate:time})
+    await newAlert.save()
 
 const newCheckout = await new Checkout()
-newCheckout.order = cartTotal
+newCheckout.order = cartTotal;
+newCheckout.alerts = newAlert;
 
 const newOrder = await User.findOneAndUpdate(
     {username},
@@ -661,10 +679,29 @@ app.get("/public-key", (req, res) => {
 
   app.get("/fetch-alerts", async (req, res) => {
     console.log("fetch alerts hit")
-    const allAlerts = await Alert.find({})
+    const allAlerts = await Alert.find({}).sort({createdDate:-1})
     console.log("allAlerts")
     console.log(allAlerts)
     res.send(allAlerts)
+  });
+
+  app.post("/fetch-order-from-alert", async (req, res) => {
+      console.log("fetch order from alerts hit")
+      console.log("req.body is...")
+      console.log(req.body)
+      const {id} = req.body;
+      console.log(id)
+
+      const foundComment = await Alert.findOneAndUpdate(
+        { _id: id}, 
+        { $set: { "alerts.$.read": true }},
+        { new: true })
+
+    const foundOrder = await Checkout.findOne({alerts:id})
+    // db.checkouts.findOne({alerts:ObjectId("5f4c15ecadecff10f4c8f8ef")})
+    console.log("foundOrder:")
+    console.log(foundOrder)
+    res.send(foundOrder)
   });
 
   io.listen(5001);

@@ -14,6 +14,7 @@ import NotifyMe from 'react-notification-timeline';
 import { useToasts } from 'react-toast-notifications'
 import io from "socket.io-client";
 
+let socket = io('http://localhost:5001');
 const Header = () => {
     const {state,dispatch} = useContext(AuthContext)
     const {username,cartItems,toggleCart,toggleAlertDropDown,alerts} = state;
@@ -22,8 +23,6 @@ const Header = () => {
     let cartItemCount = sessionStorage.getItem('cartTotal')
     let orderCountItems = sessionStorage.getItem('orderCount')
     let sessionCartItems = JSON.parse(sessionStorage.getItem('cart'))
-    const [endpoint,setEndpoint] = useState('http://localhost:5001')
-    let socket = io(endpoint);
     let newTotal;
 
     const getData = item => {
@@ -91,7 +90,13 @@ const handleCartClick = () =>{
         },
         title: {
             flexGrow: 1,
-          }
+          },
+        alertStyle:{
+            backgroundColor:'red',
+            width:'5%',
+            borderRadius:'55px',
+            textAlign:'center'
+        }
       })
     );
 
@@ -132,7 +137,7 @@ const handleCartClick = () =>{
                     <Typography className={classes.title}>
                         Hello, {username}
                     </Typography> 
-                    <div onClick={showAlerts}>{orderCountItems}</div>
+                    <div className={classes.alertStyle} onClick={showAlerts}>{orderCountItems}</div>
                     {toggleAlertDropDown ? (<AlertDropdown alerts={alerts}/>): null}
                     <Button edge="start" onClick={handleCartClick} className={classes.menuButton} color="inherit">
                         <ShoppingCartIcon />
@@ -144,22 +149,10 @@ const handleCartClick = () =>{
                         </Button>
                     </>
                 : <Typography className={classes.title}>Please log in</Typography>}
-                
-                <NotifyMe
-                    data={notifications}
-                    storageKey='notific_key'
-                    notific_key='timestamp'
-                    notific_value='update'
-                    heading='Notification Alerts'
-                    sortedByKey={false}
-                    showDate={true}
-                    size={24}
-                    color="yellow"
-                    />
             </Toolbar>
         </AppBar>
     </div>
     )        
 }
 
-export default Header;
+export {Header,socket};

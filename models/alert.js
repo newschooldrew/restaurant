@@ -7,10 +7,11 @@ alert:{
         type:String,
         default:"You have a new order"
       },
-createdDate:{
-    type:Date,
-    default:Date.now
-  },
+  createdDate:String,
+  read:{
+    type:Boolean,
+    default:false
+  }
 })
 
 module.exports = mongoose.model("alert",AlertSchema)
