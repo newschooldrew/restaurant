@@ -3,19 +3,15 @@ import AuthContext from '../../AuthContext'
 import {fetchAllMeals} from '../../actions'
 import EditTable from '../EditTable/EditTable_v2'
 
+
 const EditMealContainer = () => {
     const {state,dispatch} = useContext(AuthContext)
     const {username,allMeals} = state;
+    
     console.log("allMeals:")
     console.log(typeof allMeals)
-    // let res;
-    // res = Object.keys(allMeals).map(key =>[key,allMeals[key]])
-    // res = Object.entries(allMeals)
-    {allMeals && allMeals.map(meal =>{
-        console.log(meal)
-    })}
-    // console.log(res)
 
+    
     useEffect(() =>{
         fetchAllMeals(dispatch)
         console.log("allMeals:")

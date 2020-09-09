@@ -13,11 +13,13 @@ import AlertDropdown from '../AlertDropdown/AlertDropdown'
 import NotifyMe from 'react-notification-timeline';
 import { useToasts } from 'react-toast-notifications'
 import io from "socket.io-client";
+import HomeIcon from '@material-ui/icons/Home';
 
 let socket = io('http://localhost:5001');
-const Header = () => {
+
+const HeaderToBeWrapped = ({history}) => {
     const {state,dispatch} = useContext(AuthContext)
-    const {username,cartItems,toggleCart,toggleAlertDropDown,alerts} = state;
+    const {username,cartItems,toggleCart,toggleAlertDropDown,alerts,fetchedOrderFromAlert} = state;
     const { addToast } = useToasts()
     let cartAlerts = JSON.parse(sessionStorage.getItem('orderNotification'))
     let cartItemCount = sessionStorage.getItem('cartTotal')
@@ -28,7 +30,7 @@ const Header = () => {
     const getData = item => {
         console.log("get Data ran");
         console.log(item)
-        console.log(item.length)
+        
         if(username == "alert_tester"){
             sessionStorage.setItem('orderCount',item.length)
             dispatch({type:"SET_ORDER_COUNT",payload:item.length})
@@ -36,32 +38,29 @@ const Header = () => {
       };
 
     const handleSubmit = () =>{
-        signOut()
+        signOut(history)
         dispatch({type:"LOG_OUT",payload:null})
     }
 
-    console.log("cartAlerts")
-    console.log(cartAlerts)
-    console.log(typeof cartAlerts)
-
     useEffect(() =>{        
-        socket.emit("initial_data",cartItems);
+        socket.emit("initial_data");
         socket.on("get_data", getData);        
         sessionCartItems = JSON.parse(sessionStorage.getItem('cart'))
-        console.log("sessionCartItems:")
-        console.log(typeof sessionCartItems)
-        console.log(sessionCartItems)
+
         if(cartItemCount == null){
             sessionStorage.setItem('cartTotal',0)
         }
         showNotification()
-        // sessionStorage.getItem('cart')
-    },[username,cartItems])
+    },[username,cartItems,alerts])
+
+    useEffect(() =>{        
+        socket.emit("initial_data");
+        socket.on("get_data", getData);
+    },[fetchedOrderFromAlert])
 
 const handleCartClick = () =>{
     dispatch({type:"TOGGLE_CART",payload:toggleCart})
 }
-
 
     const useStyles = makeStyles(theme => ({
         root: {
@@ -100,6 +99,11 @@ const handleCartClick = () =>{
       })
     );
 
+    const clickable = {
+        cursor:'pointer',
+        margin: '0 25px 0 0'
+    }
+
     if(cartItems.length > 0){
         try{
             sessionStorage.setItem('cart',JSON.stringify(cartItems))
@@ -109,14 +113,9 @@ const handleCartClick = () =>{
             console.log("cartItems is empty")
         }
     }
-    let notifications =[]
-    let orderNotice = {
-          "update":"An order was created",
-          "timestamp":Date.now
-        }
       
     const classes = useStyles();
-
+    
     const showNotification = () =>{
         addToast('An order was created', { appearance: 'success' }, () => console.log("toast shown"))
     }
@@ -126,17 +125,17 @@ const handleCartClick = () =>{
         dispatch({type:"TOGGLE_ALERT_DROPDOWN",payload:!toggleAlertDropDown})
     }
 
-    console.log("sessionCartItems:")
-    console.log(sessionCartItems)
     return (
         <div className={classes.root}>
          <AppBar position="fixed">
          <Toolbar>
+             <HomeIcon onClick={() => history.push('/')} style={clickable}/>
                 {username ?
-                <>                
-                    <Typography className={classes.title}>
-                        Hello, {username}
-                    </Typography> 
+                <>  
+                        <Typography className={classes.title}>
+                            Hello, {username}
+                        </Typography>
+                    
                     <div className={classes.alertStyle} onClick={showAlerts}>{orderCountItems}</div>
                     {toggleAlertDropDown ? (<AlertDropdown alerts={alerts}/>): null}
                     <Button edge="start" onClick={handleCartClick} className={classes.menuButton} color="inherit">
@@ -154,5 +153,5 @@ const handleCartClick = () =>{
     </div>
     )        
 }
-
+const Header = withRouter(HeaderToBeWrapped);
 export {Header,socket};

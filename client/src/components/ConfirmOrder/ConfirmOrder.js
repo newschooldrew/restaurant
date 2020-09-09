@@ -15,28 +15,21 @@ const ConfirmOrder = ({match}) => {
     useEffect(()=>{
         const id = match.params.id;
         fetchOrderFromAlert(id,dispatch)
-    },[])
+    },[id])
 
-    useEffect(()=>{
-        socket.emit("request_order_data",id);
-        socket.on("get_order_data", getData);      
-    },[fetchedOrderFromAlert])
 
     const getData = item => {
         console.log("get Data ran");
         console.log(item)
-        console.log(item.length)
         dispatch({type:"FETCH_ORDER_FROM_ALERT",payload:item})
       };
 
     const handleConfirm = id =>{
-        sendSms(id,username)
-        fetchUser(username,dispatch)
+        sendSms(id,username,dispatch)
     }
 
     const handleSent = id =>{
-        sendDriver(id,username)
-        fetchUser(username,dispatch)
+        sendDriver(id,username,dispatch)
     }
 
     const divStyle = {
@@ -46,7 +39,8 @@ const ConfirmOrder = ({match}) => {
     return (
         <div style={divStyle}>
             {fetchedOrderFromAlert ?
-            (<> {fetchedOrderFromAlert.createdDate}
+            (<div key={match.params.id}>
+                {fetchedOrderFromAlert.createdDate}
                  {fetchedOrderFromAlert.order.map(fetched =>{
                      console.log("fetched:")
                      console.log(fetched)
@@ -63,14 +57,16 @@ const ConfirmOrder = ({match}) => {
                             :(<button onClick={() => handleConfirm(fetchedOrderFromAlert._id)}>
                                 <CheckIcon style={{ color: "green" }}/>confirmed
                             </button>)}
-                            {fetchedOrderFromAlert.sent == false ?
-                        (<button onClick={() => handleSent(fetchedOrderFromAlert._id)}>
+                        
+                        {fetchedOrderFromAlert.sent == false ?
+                        (<button disabled={fetchedOrderFromAlert.confirmed == false} onClick={() => handleSent(fetchedOrderFromAlert._id)}>
                             Click to notify buyer their food is on the way
                         </button>)
                         :(<button onClick={() => handleSent(fetchedOrderFromAlert._id)}>
                         <CheckIcon style={{ color: "green" }}/>Sent!
                     </button>)}
-            </>):null}
+
+            </div>):null}
         </div>
     )
 }

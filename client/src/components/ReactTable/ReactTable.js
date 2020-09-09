@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, {useState,useEffect} from "react";
+import React, {useState,useEffect, useContext} from "react";
 import {
   useTable,
   useFilters,
@@ -16,7 +16,9 @@ import Editable from 'react-x-editable';
 import AuthContext from '../../AuthContext'
 
 // reactstrap components
-import { Container, Row, Col, FormGroup, Input } from "reactstrap";
+import { Container, Row, Col, FormGroup, Input,Button, UncontrolledTooltip} from "reactstrap";
+import DeleteMeal from "../DeleteMeal/DeleteMeal";
+import {deleteMeal} from '../../actions'
 
 // Define a default UI for filtering
 function DefaultColumnFilter({
@@ -46,7 +48,11 @@ fuzzyTextFilterFn.autoRemove = (val) => !val;
 
 // Our table component
 function Table({ columns, data, editMode,selectedObject }) {
+  
+  const {state,dispatch} = useContext(AuthContext)
+  const {hitSwitch} = state;
   const [editSwitch,setEditSwitch] = useState(editMode)
+  const [deleteSwitch,setHitDelete] = useState(false)
   const [numberOfRows, setNumberOfRows] = React.useState({
     value: 10,
     label: "10 rows",
@@ -75,10 +81,6 @@ function Table({ columns, data, editMode,selectedObject }) {
     []
   );
 
-  useEffect(()=>{
-    console.log(editSwitch)
-  },[])
-
   const defaultColumn = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
@@ -93,13 +95,17 @@ function Table({ columns, data, editMode,selectedObject }) {
     console.log(editSwitch)
   }
 
+  const handleDelete = id =>{
+      deleteMeal(id)
+      dispatch({type:"HIT_DELETE_SWITCH",payload:!hitSwitch})
+  }
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     page,
     prepareRow,
-    state,
     visibleColumns,
     nextPage,
     pageOptions,
@@ -233,6 +239,7 @@ function Table({ columns, data, editMode,selectedObject }) {
           <tbody {...getTableBodyProps()} className="rt-tbody">
     {page.map((row, i) => {
       prepareRow(row);
+      const rowId = row.original.id;
       return (
         <tr
           {...row.getRowProps()}
@@ -250,6 +257,23 @@ function Table({ columns, data, editMode,selectedObject }) {
             )
           })
         }
+          <td className="td-actions">
+              <Button
+                  color="neutral"
+                  id="tooltip517344924"
+                  type="button"
+                  onClick={() => handleDelete(rowId)}
+              >
+                <i className="now-ui-icons ui-1_simple-remove" />
+              </Button>
+                  <UncontrolledTooltip
+                      delay={0}
+                      placement="left"
+                      target="tooltip517344924"
+                  >
+                    Remove item
+                  </UncontrolledTooltip>
+            </td>
         </tr>
       );
     }

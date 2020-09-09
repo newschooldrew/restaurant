@@ -8,25 +8,22 @@ import routes from "../../routes.js";
 const EditProfile = () => {
     const {state,dispatch} = useContext(AuthContext)
     const {username,profile} = state;
-    const [sidebarMini,setSidebarMini] = useState(true)
-    const [backgroundColor,setBackgroundColor] = useState('blue')
-
+    
     useEffect(() =>{
         fetchProfile(username,dispatch)
-        
+        console.log("profile:")
+        console.log(profile) 
     },[username])
 
       const divStyle = {
           margin:'8px 0 0 0'
       }
 
-console.log("profile:")
-console.log(profile)
 return(
     <>
     {profile ? (
         <div style={divStyle}>
-                <EditProfileModal key={profile._id} id={profile._id} email={profile.email} profileName={profile.username} password={profile.password} />  
+                <EditProfileModal key={profile._id} id={profile._id} email={profile.email} phoneNumber={profile.phoneNumber} profileName={profile.username} password={profile.password} />  
         </div>
             
         ) : (<div style={divStyle}>loading</div>)

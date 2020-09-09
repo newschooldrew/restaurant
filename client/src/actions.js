@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { responsiveFontSizes } from '@material-ui/core';
 
 export const createUser =  (user, dispatch,history) => {
     axios.post('/create-user',user,{ 
@@ -50,12 +51,11 @@ export const getUser = () =>{
 }
 
 export const fetchUser = async (username,dispatch) =>{
-    console.log("username:")
-    console.log(username)
     const res = await axios.post('/fetch-profile',{username})
-    dispatch({type:"FETCH_PROFILE",payload:res.data})
+    dispatch({type:"FETCH_PROFILE",payload:res.data.profile})
+    dispatch({type:"FETCH_ALL_ORDERS",payload:res.data.orders})
     console.log("res:")
-    console.log(res)
+    console.log(res.data.profile)
 }
 
 export const fetchAllOrders = async dispatch =>{
@@ -63,6 +63,13 @@ export const fetchAllOrders = async dispatch =>{
     console.log("fetch all orders:")
     console.log(res.data)
     dispatch({type:"FETCH_ALL_ORDERS",payload:res.data})
+}
+
+export const fetchOrderWithId = async (username,dispatch) =>{
+    const res = await axios.post('/fetch-orders-with-id',{username})
+    console.log("fetchOrderWithId")
+    console.log(res.data.orders)
+    dispatch({type:"FETCH_ORDERS_WITH_ID",payload:res.data.orders})
 }
 
 export const signOut = history =>{
@@ -89,8 +96,8 @@ export const fetchPosts = async (username,dispatch) =>{
     export const fetchProfile = async (username,dispatch) =>{
         const res = await axios.post('/fetch-profile',{username});
             console.log("fetch user response is: ")
-            console.log(res.data)
-            dispatch({type:"FETCH_PROFILE",payload:res.data})
+            console.log(res.data.profile)
+            dispatch({type:"FETCH_PROFILE",payload:res.data.profile})
         }
 
 export const fetchAllMeals = async (dispatch) =>{
@@ -125,6 +132,14 @@ export const postComment = async (comment,username,id,key,dispatch) =>{
         dispatch({type:"COMMENT_CREATE",payload:newComment})
 }
 
+export const createMeal = async (title,price,description,url,singleSelect) =>{
+    console.log("singleSelect:")
+    console.log(singleSelect)
+    const items = {title,price,description,url,singleSelect};
+    const res = await axios.post('/create-meal', items);
+        console.log(res.data)
+}
+
 export const updatePost = (post,dispatch) =>{
     axios.post('/update-post',post).then(res => {
         console.log("res:")
@@ -140,7 +155,7 @@ export const updateProfile = (profile,dispatch) =>{
         dispatch({type:"PROFILE_UPDATED",payload:res.data})
     })
 }
-export const updateMeal = (meal,dispatch) =>{
+export const updateMeal = (meal,dispatch) => {
     axios.post('/update-meal',meal).then(res => {
         console.log("res:")
         console.log(res.data)
@@ -258,18 +273,20 @@ export const getPublicStripeKey = options => {
         console.log("new order created")        
 }
 
-export const sendSms = async (id,username) =>{
+export const sendSms = async (id,username,dispatch) =>{
     const obj = {id,username}
     const res = await axios.post('/send-sms', {obj});
         console.log("sms sent!")
         console.log(res)
+        dispatch({type:"FETCH_ORDER_FROM_ALERT",payload:res.data})
 }
 
-export const sendDriver = async (id,username) =>{
+export const sendDriver = async (id,username,dispatch) =>{
     const obj = {id,username}
     const res = await axios.post('/send-driver', {obj});
         console.log("driver sent!")
         console.log(res)
+        dispatch({type:"FETCH_ORDER_FROM_ALERT",payload:res.data})
 }
 
 export const fetchAlerts = async (dispatch) =>{
@@ -280,9 +297,33 @@ export const fetchAlerts = async (dispatch) =>{
 }
 
 export const fetchOrderFromAlert = async (id,dispatch) =>{
-    const items = {id,dispatch}
-    const res = await axios.post('/fetch-order-from-alert',items);
+    const res = await axios.post('/fetch-order-from-alert',{id});
+        console.log("fetch order from alerts")
+        console.log(res.data)
+        dispatch({type:"FETCH_ORDER_FROM_ALERT",payload:res.data})
+}
+
+export const updateReadOnAlert = async id =>{
+    console.log("update read on alert id:")
+    console.log(id)
+    const res = await axios.post('/update-read-on-alert',{id});
         console.log("fetch order from alerts")
         console.log(res.data.order)
-        dispatch({type:"FETCH_ORDER_FROM_ALERT",payload:res.data})
+}
+
+export const deleteMeal = async id =>{
+    console.log("update read on alert id:")
+    console.log(id)
+    const res = await axios.post('/delete-meal',{id});
+        console.log("fetch order from alerts")
+        console.log(res)
+}
+
+export const filterMeals = async (value,dispatch) =>{
+    console.log("filter meals:")
+    console.log(value)
+    const res = await axios.post('/filter-meals',{value});
+        console.log("fetch order from alerts")
+        console.log(res.data)
+        dispatch({type:"FETCH_ALL_MEALS",payload:res.data})
 }

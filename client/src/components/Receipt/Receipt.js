@@ -21,15 +21,9 @@ const Receipt = () => {
     const getData = item => {
         console.log("get Data ran");
         console.log(item)
-        let count = 0;
-        item.map(i =>{
-            if(i.read == false){
-                count++
-            }
-        })
         console.log(item.length)
-        console.log(count)
-
+        sessionStorage.setItem('cart',0)
+        sessionStorage.setItem('cartTotal',null)
         if(username == "alert_tester"){
             sessionStorage.setItem('orderCount',item.length)
         }
@@ -37,11 +31,8 @@ const Receipt = () => {
 
     useEffect(()=>{
         let orderNotification;
-        sessionStorage.removeItem('cart')
-        sessionStorage.removeItem('cartTotal')
         socket.emit("initial_data",cartItems);
         socket.on("get_data", getData);
-        
 
         // if(orderCountItems == null){
         //     socket.emit("initial_data",cartItems);

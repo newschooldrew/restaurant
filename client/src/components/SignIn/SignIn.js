@@ -47,7 +47,7 @@ const SignIn = ({history}) => {
         e.preventDefault()
         localStorage.removeItem('sign_in_msg')
         const user = {username, password}
-        signInUser(user, history)
+        signInUser(user,history)
              
         dispatch({type:"SIGN_IN_USER",payload:user})
         

@@ -7,6 +7,7 @@ const ViewAllOrders = () => {
     const {state,dispatch} = useContext(AuthContext)
     const {username,profile,allOrders} = state;
     const [values,setValues] = useState({})
+    
     if(profile){
         const {orders} = profile;
         console.log("profile:")
@@ -26,8 +27,9 @@ const ViewAllOrders = () => {
     useEffect(()=>{
         fetchAllOrders(dispatch)
     },[])
-
+    
     useEffect(()=>{
+        // fetchAllOrders(dispatch)
         console.log("allOrders:")
         console.log(state)
         console.log(allOrders)
@@ -40,12 +42,12 @@ const ViewAllOrders = () => {
     }
 
     const handleConfirm = id =>{
-        sendSms(id,username)
+        sendSms(id,username,dispatch)
         fetchUser(username,dispatch)
     }
 
     const handleSent = id =>{
-        sendDriver(id,username)
+        sendDriver(id,username,dispatch)
         fetchUser(username,dispatch)
     }
 

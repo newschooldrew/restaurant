@@ -5,13 +5,13 @@ import Table from "../Table/Table.js";
 
 const ViewMealContainer = () => {
     const {state,dispatch} = useContext(AuthContext)
-    const {username,allMeals} = state;
+    const {username,allMeals,hitSwitch} = state;
     console.log("meals:")
     console.log(allMeals)
 
     useEffect(() =>{
         fetchAllMeals(dispatch)
-        
+        console.log("hit switch")
     },[username])
 
     const divStyle = {

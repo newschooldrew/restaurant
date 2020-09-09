@@ -45,21 +45,34 @@ io.on("connection", (socket) => {
     console.log("New client connected");
   
     socket.on("initial_data", async () => {
-            const allAlerts = await Alert.find({}).sort({createdDate:-1})
+            const allAlerts = await Alert.find({read:false}).sort({createdDate:-1})
             console.log("allAlerts:")
             console.log(allAlerts)
         io.sockets.emit("get_data",allAlerts);
         // Checkout.find({}).then(docs => {
         });
 
-        socket.on("request_order_data", async id => {
+        socket.on("request_confirm", async id => {
             console.log("id:")
             console.log(id)
-            const getCheckout = await Checkout.findOne({alerts:id})
-            console.log("getCheckout:")
+            const getCheckout = await Checkout.findById(
+                {_id:id}
+                )
+            console.log("request_confirm:")
             console.log(getCheckout)
-        io.sockets.emit("get_order_data",getCheckout);
-        });
+        io.sockets.emit("get_confirm_data",getCheckout);
+        })
+
+        socket.on("request_sent", async id => {
+            console.log("id:")
+            console.log(id)
+            const getCheckout = await Checkout.findById(
+                {_id:id}
+                )
+            console.log("request_sent:")
+            console.log(getCheckout)
+        io.sockets.emit("get_sent_data",getCheckout);
+        })
         
       });
 
@@ -90,11 +103,11 @@ app.post('/create-user',async(req,res)=>{
 
             const user = new User({username,email, password,posts:[], phoneNumber,token});
             await user.save()
-            .then(order =>{
-                console.log("order:")
-                console.log(order)
-                return order.sendSmsNotification("You've created a user", ()=>console.log("something went wrong"))
-            })
+            // .then(order =>{
+            //     console.log("order:")
+            //     console.log(order)
+            //     return order.sendSmsNotification("You've created a user", ()=>console.log("something went wrong"))
+            // })
         })
     })
     res.send(req.body.username)
@@ -150,6 +163,17 @@ app.post('/create-new-post', async (req,res) =>{
 
         res.send(foundUser)
     }
+})
+
+app.post('/create-meal', async (req,res) =>{
+    console.log("req.body:")
+    console.log(req.body)
+    const {title,price,description,url,singleSelect} = req.body;
+    const newMeal = new Meal({title,price,description,url,type:singleSelect})
+    newMeal.save()
+    console.log("newMeal:")
+    console.log(newMeal)
+    res.send(newMeal)
 })
 
 app.post('/fetch-posts',async (req,res)=>{
@@ -212,9 +236,6 @@ app.post('/fetch-profile',async (req,res)=>{
 
     const usersMeals = await User.findOne({username})
         .populate('orders')
-
-        console.log("usersMeals:")
-        console.log(usersMeals.orders)
 
         console.log("server profile:")
         console.log(profile)
@@ -630,11 +651,9 @@ app.post("/send-sms", async (req, res) => {
         console.log(foundCheckout)
         foundCheckout.save()
 
-    const username_test = User.findOne({username}).then(user =>{
-        return user.sendSmsNotification("Your order has been confirmed and is now being prepared!", ()=>console.log("something went wrong"))
-        console.log("order:")
-        console.log(order)
-    })
+    // const username_test = User.findOne({username}).then(user =>{
+    //     return user.sendSmsNotification("Your order has been confirmed and is now being prepared!", ()=>console.log("something went wrong"))
+    // })
 
     res.send(foundCheckout)
   });
@@ -652,16 +671,30 @@ app.post("/send-driver", async (req, res) => {
         {_id:id},
         {$set:{sent:true}},
         {new:true}
-        )
-        console.log("foundCheckout:")
-        console.log(foundCheckout)
+    )
         foundCheckout.save()
 
-    const username_test = User.findOne({username}).then(user =>{
-        return user.sendSmsNotification("Your driver is on the way!", ()=>console.log("something went wrong"))
-        console.log("order:")
-        console.log(order)
-    })
+    // const username_test = User.findOne({username}).then(user =>{
+    //     return user.sendSmsNotification("Your driver is on the way!", ()=>console.log("something went wrong"))
+    //     console.log("order:")
+    //     console.log(order)
+    // })
+
+    const foundComment = await Checkout.findOne(
+        { _id: id}).populate({
+                path:"alerts",
+                model:"alert"
+        })
+        console.log("foundComment:")
+        console.log(foundComment.alerts)
+        const alertID = foundComment.alerts[0]._id;
+
+    const updateAlert = await Alert.findOneAndUpdate(
+        {_id:alertID},
+        {$set:{read:true}},
+        {new:true}
+        )
+        updateAlert.save()
 
     res.send(foundCheckout)
   });
@@ -677,32 +710,79 @@ app.get("/public-key", (req, res) => {
     res.send(allOrders)
   });
 
+  app.post("/fetch-orders-with-id", async (req, res) => {
+    const {username} = req.body
+    const foundOrder = await User.findOne({username}).populate("orders")
+    res.send(foundOrder)
+  });
+
   app.get("/fetch-alerts", async (req, res) => {
     console.log("fetch alerts hit")
-    const allAlerts = await Alert.find({}).sort({createdDate:-1})
+    const allAlerts = await Alert.find({read:false}).sort({createdDate:-1})
     console.log("allAlerts")
     console.log(allAlerts)
     res.send(allAlerts)
   });
 
+  app.post("/update-read-on-alert", async (req, res) => {
+      const {id} = req.body;
+      console.log("update read on alert")
+
+    // const allAlerts = await Alert.findOneAndUpdate({})
+    // res.send(allAlerts)
+  });
+
   app.post("/fetch-order-from-alert", async (req, res) => {
-      console.log("fetch order from alerts hit")
-      console.log("req.body is...")
-      console.log(req.body)
       const {id} = req.body;
       console.log(id)
 
-      const foundComment = await Alert.findOneAndUpdate(
-        { _id: id}, 
-        { $set: { "alerts.$.read": true }},
-        { new: true })
-
     const foundOrder = await Checkout.findOne({alerts:id})
-    // db.checkouts.findOne({alerts:ObjectId("5f4c15ecadecff10f4c8f8ef")})
     console.log("foundOrder:")
     console.log(foundOrder)
     res.send(foundOrder)
   });
+
+  app.post("/delete-meal", async (req, res) => {
+      const {id} = req.body;
+      console.log(id)
+
+    const foundOrder = await Meal.findByIdAndDelete(
+        {_id:id}
+    )
+    console.log("foundOrder:")
+    console.log(foundOrder)
+    res.send(foundOrder)
+  })
+
+  let arr = [];
+  Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+  app.post("/filter-meals", async (req, res) => {
+      const {value} = req.body;
+      console.log(value)
+      if(arr.includes(value)){
+        arr.remove(value)
+        console.log(arr)
+    } else{
+      arr.push(value)
+      console.log(arr)
+    }
+      const foundMeal = await Meal.find(
+        {type:arr}
+    )
+    
+    console.log("foundMeal:")
+    console.log(foundMeal)
+    res.send(foundMeal)
+  })
 
   io.listen(5001);
 app.listen(5000,() => console.log("server running on port 5000"));

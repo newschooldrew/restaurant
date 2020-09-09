@@ -1,6 +1,12 @@
 import React,{useContext,useEffect,useState} from 'react'
 import AuthContext from '../../AuthContext'
 import {updateProfile} from '../../actions'
+import {
+    Form,
+    FormGroup,
+    Input,
+    Button
+  } from "reactstrap";
 
 const EditProfileModal = ({id,profileName,email,password,phoneNumber}) => {
 
@@ -16,7 +22,7 @@ const EditProfileModal = ({id,profileName,email,password,phoneNumber}) => {
     },[hasUpdatedPost])
 
     const divStyle = {
-        margin:'8% 0 0 0'
+        margin:'15%'
     }
 
     const handleChange = (event) => {
@@ -36,20 +42,34 @@ const EditProfileModal = ({id,profileName,email,password,phoneNumber}) => {
     }
     return (
         <div style={divStyle}>
-                    <form>
+                    <Form>
                         {msg && (<div>{msg}</div>)}
-                        <label>username</label>
-                            <input type="text" name="profileName" onChange={handleChange}  value={values.profileName || ""} />
+            <div className="form-row">
+                    <FormGroup className="col-md-6">
+                        <label htmlFor="username">username</label>
+                            <Input type="text" name="profileName" onChange={handleChange}  value={values.profileName || ""} />
+                    </FormGroup>
+                    <FormGroup className="col-md-6">
                         <label>email</label>
-                            <input type="text" name="email" onChange={handleChange}  value={values.email || ""} />
+                            <Input type="text" name="email" onChange={handleChange}  value={values.email || ""} />
+                    </FormGroup>
+            </div>
+            <div className="form-row">
+                    <FormGroup className="col-md-6">
                         <label>password</label>
-                            <input name="password" onChange={handleChange} value={values.password || ""} />
+                            <Input name="password" onChange={handleChange} value={values.password || ""} />
+                    </FormGroup>
+                    <FormGroup className="col-md-6">
                         <label>phoneNumber</label>
-                            <input name="phoneNumber" onChange={handleChange} value={values.phoneNumber || ""} />
-                        <button onClick={handleSubmit}>
-                            Submit
-                        </button>
-                    </form>
+                            <Input name="phoneNumber" onChange={handleChange} value={values.phoneNumber || ""} />
+                    </FormGroup>
+            </div>
+                        <FormGroup>
+                            <Button onClick={handleSubmit}>
+                                Submit
+                            </Button>
+                        </FormGroup>
+                    </Form>
         </div>
     )
 }

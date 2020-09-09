@@ -1,8 +1,10 @@
 import ViewMealContainer from "./components/ViewMealContainer/ViewMealContainer";
 import EditMealContainer from "./components/EditMealContainer/EditMealContainer";
+import DeleteMeal from "./components/DeleteMeal/DeleteMeal";
 import InputMeals from "./components/InputMeals/InputMeals";
 import EditProfile from "./components/EditProfile/EditProfile";
 import ViewProfile from "./components/ViewProfile/ViewProfile";
+import AddMeal from "./components/AddMeal/AddMeal";
 
 let routes = [
   {
@@ -14,6 +16,7 @@ let routes = [
       {
         path: "/edit-profile",
         name: "Edit Profile",
+        icon: "now-ui-icons design_app",
         component: EditProfile,
         layout: "/admin",
       },{
@@ -30,6 +33,13 @@ let routes = [
     state: "openMeals",
     icon: "now-ui-icons design_image",
     views: [
+    {
+      path: "/add-meal",
+      name: "Add Meal",
+      icon: "now-ui-icons design_app",
+      component: AddMeal,
+      layout: "/admin",
+    },    
   {
     path: "/view-meal",
     name: "View Meal",

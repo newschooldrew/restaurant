@@ -2,13 +2,9 @@ import React, {useContext, useEffect, useState} from 'react'
 import AuthContext from '../../AuthContext'
 import {fetchAllMeals,actionItemToCart,countAllItems} from '../../actions'
 import {Link,withRouter} from 'react-router-dom'
-import CssBaseline from '@material-ui/core/CssBaseline';
-// import Button from '@material-ui/core/Button';
-// import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from "@material-ui/core/Typography";
+import {filterMeals} from '../../actions'
+import update from 'react-addons-update';
 
 import Slider from "nouislider";
 // reactstrap components
@@ -34,11 +30,6 @@ import {
   UncontrolledTooltip,
 } from "reactstrap";
 
-// core components
-// import ScrollTransparentNavbar from "../Navbars/ScrollTransparentNavbar.js";
-// import EcommerceHeader from "components/Headers/EcommerceHeader.js";
-// import Footer from "components/Footers/Footer.js";
-
 const AllMeals = ({history}) => {
     let itemsArr = [];
     const {state,dispatch} = useContext(AuthContext)
@@ -60,6 +51,7 @@ const AllMeals = ({history}) => {
     // slider states and functions
     const [sliderMin, setSliderMin] = React.useState(0);
     const [sliderMax, setSliderMax] = React.useState(880);
+    const [values, setValues] = useState({breakfast:false,lunch:false});
     React.useEffect(() => {
       if (
         !document.getElementById("sliderRefine").classList.contains("noUi-target")
@@ -114,6 +106,18 @@ const AllMeals = ({history}) => {
       }));
     
     const classes = useStyles();
+
+    const handleChange = e =>{
+      console.log("e:")
+      console.log(e.target.value)
+      console.log(e.target)
+
+      
+      console.log(values)
+
+      const myValue = e.target.value;
+      filterMeals(myValue,dispatch)
+    }
 
     const addItemToCart = (id,title,price,url) =>{
         console.log(state)
@@ -185,21 +189,21 @@ const AllMeals = ({history}) => {
                           <CardBody>
                             <FormGroup check>
                               <Label check>
-                                <Input defaultChecked type="checkbox"></Input>
+                                <Input type="checkbox" checked={values["breakfast"]} value="Breakfast" onChange={e => handleChange(e)}></Input>
                                 <span className="form-check-sign"></span>
-                                Entrees
+                                Breakfast
                               </Label>
                             </FormGroup>
                             <FormGroup check>
                               <Label check>
-                                <Input type="checkbox"></Input>
+                                <Input type="checkbox" checked={values["lunch"]} value="Lunch" onChange={e => handleChange(e)}></Input>
                                 <span className="form-check-sign"></span>
                                 Lunch
                               </Label>
                             </FormGroup>
                             <FormGroup check>
                               <Label check>
-                                <Input defaultChecked type="checkbox"></Input>
+                                <Input type="checkbox"></Input>
                                 <span className="form-check-sign"></span>
                                 Appetizers
                               </Label>
@@ -209,6 +213,13 @@ const AllMeals = ({history}) => {
                                 <Input type="checkbox"></Input>
                                 <span className="form-check-sign"></span>
                                 Drinks
+                              </Label>
+                            </FormGroup>
+                            <FormGroup check>
+                              <Label check>
+                                <Input type="checkbox" checked={values["dinner"]} value="Dinner" onChange={e => handleChange(e)}></Input>
+                                <span className="form-check-sign"></span>
+                                Dinner
                               </Label>
                             </FormGroup>
                           </CardBody>

@@ -21,6 +21,7 @@ import {
 
 // core components
 import LandingPageHeader from "../Header/LandingPageHeader.js";
+import {withRouter} from 'react-router-dom'
 
 function LandingPage() {
   const [pills, setPills] = React.useState("1");
@@ -297,4 +298,4 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;
+export default withRouter(LandingPage);

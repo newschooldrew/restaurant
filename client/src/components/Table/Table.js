@@ -28,65 +28,6 @@ class ReactTables extends Component {
           description: prop.description,
           price: prop.price,
           url: prop.url,
-          actions: (
-            // we've added some custom button actions
-            <div className="actions-right">
-              {/* use this button to add a like kind of action */}
-              <Button
-                onClick={() => {
-                  let obj = this.state.data.find((o) => o.id === prop._id);
-                  console.log(obj)
-                  this.setState({
-                    editMode:!this.state.editMode,
-                    selectedObj:obj
-                  })
-                  }
-                }
-                className="btn-icon btn-round"
-                color="info"
-                size="sm"
-              >
-                <i className="fa fa-heart" />
-              </Button>{" "}
-
-              {/* use this button to add a edit kind of action */}
-              <Button
-                onClick={() => {
-                  let obj = this.state.data.find((o) => o.id === key);
-                  this.setState({editItem:obj})
-                }}
-                className="btn-icon btn-round"
-                color="warning"
-                size="sm"
-              >
-                <i className="fa fa-edit" />
-              </Button>{" "}
-
-              {/* use this button to remove the data row */}
-              <Button
-                onClick={() => {
-                  var data = this.state.data;
-                  data.find((o, i) => {
-                    if (o.id === key) {
-                      // here you should add some custom code so you can delete the data
-                      // from this component and from your server as well
-                      data.splice(i, 1);
-                      console.log(data);
-                      return true;
-                    }
-                    return false;
-                  });
-                  this.setState({ data: data });
-                }}
-                className="btn-icon btn-round"
-                color="danger"
-                size="sm"
-              >
-                <i className="fa fa-times" />
-              </Button>{" "}
-              
-            </div>
-          ),
         };
       }),
     };

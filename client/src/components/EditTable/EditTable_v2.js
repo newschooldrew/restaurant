@@ -1,6 +1,6 @@
 import React, {useState,useContext} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
+// import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -9,6 +9,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import AuthContext from '../../AuthContext'
 import {updateMeal} from '../../actions'
+import { Button, Table, UncontrolledTooltip } from "reactstrap";
+
 
 const useStyles = makeStyles({
   table: {
@@ -39,40 +41,33 @@ const handleSubmit = async e =>{
     await updateMeal(meal,dispatch)
 }
   
-  return (
-    <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="left">Title</TableCell>
-            <TableCell align="left">Description</TableCell>
-            <TableCell align="left">Price</TableCell>
-            <TableCell align="left">URL</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          
-            <TableRow key={values.id}>
-              <TableCell component="th" scope="row">
-              <input align="right" type="text" name="title" onChange={handleChange} value={values.title || ""}/>
-              </TableCell>
-              <TableCell component="th" scope="row">
-              <input align="right" type="text" name="description" onChange={handleChange} value={values.description || ""} />
-              </TableCell>
-              <TableCell component="th" scope="row">
-              <input align="right" type="text" name="price" onChange={handleChange} value={values.price || ""} />
-              </TableCell>
-              <TableCell component="th" scope="row">
-              <input align="right" type="text" name="url" onChange={handleChange} value={values.url || ""} />
-              </TableCell>
+  return (<>
+    <Table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>URL</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr key={values.id}>
+
+              <td><input type="text" name="title" onChange={handleChange} value={values.title || ""}/></td>
+              
+              <td><input type="text" name="description" onChange={handleChange} value={values.description || ""} /></td>
+              
+              <td><input type="text" name="price" onChange={handleChange} value={values.price || ""} /></td>
+              
+              <td><input type="text" name="url" onChange={handleChange} value={values.url || ""} /></td>
+              
               <button onClick={handleSubmit}>
                             Submit
                         </button>
-            </TableRow>
-          
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+            </tr>
+        </tbody>
+    </Table>
+  </>);
 }
 export default SimpleTable;

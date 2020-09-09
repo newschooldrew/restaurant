@@ -185,6 +185,22 @@ const Reducer = (state, { type, payload }) => {
                     ...state,
                     fetchedOrderFromAlert:payload
                 }
+    case "EMPTY_CART":
+                return{
+                    ...state,
+                    cart:null
+                }
+    case "FETCH_ORDERS_WITH_ID":
+                return{
+                    ...state,
+                    individualOrders:null
+                }
+    case "HIT_DELETE_SWITCH":
+                return{
+                    ...state,
+                    hitSwitch:payload
+                }
+
     default:
         return state
     }
