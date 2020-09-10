@@ -327,3 +327,28 @@ export const filterMeals = async (value,dispatch) =>{
         console.log(res.data)
         dispatch({type:"FETCH_ALL_MEALS",payload:res.data})
 }
+
+export const resetPassword = async (username,dispatch) =>{
+    console.log("reset password:")
+    console.log(username)
+    const res = await axios.post('/password-reset',{username});
+        console.log("res")
+        console.log(res.data)
+        dispatch({type:"SHOW_URL",payload:res.data})
+}
+
+export const finalizeResetPassword = async (id,password,dispatch) =>{
+    console.log("reset password:")
+    console.log(password)
+
+    const items = {id, password};
+
+    axios.post('/finalize-password-reset',items,{ 
+        headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'}
+    }).then(res => {
+        const {data} = res;
+        console.log(data)
+    })
+}

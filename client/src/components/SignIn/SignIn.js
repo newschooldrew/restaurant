@@ -8,9 +8,9 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
+import {Link} from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -118,6 +118,7 @@ const SignIn = ({history}) => {
                     >
                         Sign In
                     </Button>
+                    <div>Forgot Password? Click <Link to="/forgot-password">Here</Link> </div>
             </form>
         </div>
         

@@ -203,14 +203,14 @@ const AllMeals = ({history}) => {
                             </FormGroup>
                             <FormGroup check>
                               <Label check>
-                                <Input type="checkbox"></Input>
+                                <Input type="checkbox" checked={values["appetizers"]} value="Appetizers" onChange={e => handleChange(e)}></Input>
                                 <span className="form-check-sign"></span>
                                 Appetizers
                               </Label>
                             </FormGroup>
                             <FormGroup check>
                               <Label check>
-                                <Input type="checkbox"></Input>
+                                <Input type="checkbox" checked={values["drinks"]} value="Drinks" onChange={e => handleChange(e)}></Input>
                                 <span className="form-check-sign"></span>
                                 Drinks
                               </Label>

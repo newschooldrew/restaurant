@@ -200,6 +200,11 @@ const Reducer = (state, { type, payload }) => {
                     ...state,
                     hitSwitch:payload
                 }
+    case "SHOW_URL":
+                return{
+                    ...state,
+                    showURL:payload
+                }
 
     default:
         return state

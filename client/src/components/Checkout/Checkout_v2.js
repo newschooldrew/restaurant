@@ -29,7 +29,6 @@ const Checkout_v2 = () => {
           alignItems: "center"
         },
         icon: {
-          marginRight: theme.spacing.unit,
           color: "green",
           fontSize: 45
         },

@@ -28,9 +28,6 @@ const HeaderToBeWrapped = ({history}) => {
     let newTotal;
 
     const getData = item => {
-        console.log("get Data ran");
-        console.log(item)
-        
         if(username == "alert_tester"){
             sessionStorage.setItem('orderCount',item.length)
             dispatch({type:"SET_ORDER_COUNT",payload:item.length})
@@ -72,7 +69,6 @@ const handleCartClick = () =>{
           alignItems: "center"
         },
         icon: {
-          marginRight: theme.spacing.unit,
           color: "green",
           fontSize: 45
         },
@@ -81,8 +77,7 @@ const handleCartClick = () =>{
         },
         picture: {
           height: "50px",
-          borderRadius: "90%",
-          marginRight: theme.spacing.unit * 2
+          borderRadius: "90%"
         },
         menuButton: {
           marginRight: theme.spacing(2),

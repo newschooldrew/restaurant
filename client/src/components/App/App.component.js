@@ -12,6 +12,8 @@ import Dashboard from '../Dashboard/Dashboard'
 import Receipt from '../Receipt/Receipt'
 import ViewAllOrders from '../ViewAllOrders/ViewAllOrders'
 import ConfirmOrder from '../ConfirmOrder/ConfirmOrder'
+import ForgotPassword from '../ForgotPassword/ForgotPassword'
+import ResetPasswordForm from '../ResetPasswordForm/ResetPasswordForm'
 import AddMeal from '../AddMeal/AddMeal'
 import "../../assets/css/demo.css";
 
@@ -29,6 +31,8 @@ const App = () => {
                         <Route exact path="/create-post" render={() => localStorage.getItem('token') ?  <CreatePost /> : <SignIn /> } />
                         <Route exact path="/checkout" component={CheckoutPage} />
                         <Route exact path="/confirm-order/:id" render={(props) => (<ConfirmOrder key={props.match.params.pageid} {...props} />)} />
+                        <Route exact path="/forgot-password" component={ForgotPassword} />
+                        <Route path="/resetpassword/:id/:token" component={ResetPasswordForm} />
                         <Route path="/product-page/:id" component={ProductPage} />
                         <Route path="/all-meals" component={AllMeals} />
                         <Route path="/sign-up" component={SignUp} />

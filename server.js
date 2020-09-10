@@ -93,23 +93,19 @@ app.post('/create-user',async(req,res)=>{
     if(username_test){
         res.set({'isError': true}).send("user already exists")
     } else{
-    bcrypt.genSalt(10,(err,salt)=>{
-        console.log("salt is " + salt)
+
+        bcrypt.genSalt(10,(err,salt)=>{
+                console.log("salt is " + salt)
         bcrypt.hash(password,salt,async (err,hash)=>{
-            console.log(password)
-            console.log("hash " + hash)
-            if(err) console.log(err)
+                console.log(password)
+                console.log("hash " + hash)
+        if(err) console.log(err)
             password = hash;
 
             const user = new User({username,email, password,posts:[], phoneNumber,token});
             await user.save()
-            // .then(order =>{
-            //     console.log("order:")
-            //     console.log(order)
-            //     return order.sendSmsNotification("You've created a user", ()=>console.log("something went wrong"))
-            // })
+            })
         })
-    })
     res.send(req.body.username)
     }
 })
@@ -783,6 +779,88 @@ app.get("/public-key", (req, res) => {
     console.log(foundMeal)
     res.send(foundMeal)
   })
+
+app.post('/password-reset', async (req, res) => {
+    console.log(req.body)
+        const {username} = req.body;
+
+        const foundUser = await User.findOne(
+            {username}
+        )
+
+        console.log("foundId:")
+        const foundId = foundUser._id;
+
+        // TODO: Using email, find user from your database.
+        const payload = {
+            id: foundId        // User ID from database
+        };
+
+        // TODO: Make this a one-time-use token by using the user's
+        // current password hash from the database, and combine it
+        // with the user's created date to make a very unique secret key!
+        // For example:
+        const secret = foundUser.password + "-" + foundUser.joinedDate.getTime();
+        console.log("secret:")
+        console.log(secret)
+
+        const token = jwt.sign({foundId}, secret, {
+            expiresIn: 3600 // 1 hour
+          });
+        console.log("token")
+        console.log(token)
+        // TODO: Send email containing link to reset password.
+        // In our case, will just return a link to click.
+        const URL = '<a href="http://localhost:3000/resetpassword/' + foundId + '/' + token + '">Reset password</a>';
+        
+        // const URL = '/resetpassword/' + foundId + '/' + token;
+
+        const msg = {
+            to: 'drewwperez@gmail.com',
+            from: 'drewwperez@gmail.com', // Use the email address or domain you verified above
+            subject: 'Reset your password',
+            html:`<html>
+            <body>
+                <div style="width: 100%;">
+                    <div style="width: 80%;">
+                        <p style="text-align: center;">
+                            Click this URL to reset your password
+                        </p>
+                        <div style="background-color: #faf6ea;">
+                            <p>${URL}</p>
+                        </div>
+                    </div>
+                </div>
+            </body>
+        </html>`
+          };
+        
+        await sgMail.send(msg);
+        res.send(URL);
+});
+
+
+app.post("/finalize-password-reset", async (req, res) => {
+
+            console.log("req.body:")
+            console.log(req.body)
+            const {id,password} = req.body;
+
+        bcrypt.genSalt(10,(err,salt)=>{
+            console.log("salt is " + salt)
+        bcrypt.hash(password,salt,async (err,hash)=>{
+            console.log(password)
+            console.log("hash " + hash)
+        if(err) console.log(err)
+            const user = await User.findByIdAndUpdate(
+                {_id:id},
+                {$set:{password:hash}},
+                {new:true});
+                user.save()
+            })
+        })
+        res.send("password finalized")
+})
 
   io.listen(5001);
 app.listen(5000,() => console.log("server running on port 5000"));
